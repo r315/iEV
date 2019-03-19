@@ -1,3 +1,6 @@
+.settings/
+.project
+.cproject
 build/
-Lib/TouchGFX/generated/
+TouchGFX/generated/
 *.log
