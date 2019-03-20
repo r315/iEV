@@ -32,7 +32,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "otm8009a.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

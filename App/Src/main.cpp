@@ -22,7 +22,7 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "usb_device.h"
-
+#include "stm32f769i_discovery_qspi.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -115,28 +115,26 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
-  /* Initialise the graphical hardware */
-  //GRAPHICS_HW_Init();
-
-  /* Initialise the graphical stack engine */
-  //GRAPHICS_Init();
+  /* USER CODE BEGIN SysInit */  
 
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_CRC_Init();
+  MX_QUADSPI_Init();
   //MX_DMA2D_Init();
   //MX_DSIHOST_DSI_Init();
   //MX_FMC_Init();
-  MX_I2C4_Init();
-  //MX_LTDC_Init();
-  MX_QUADSPI_Init();
-  MX_RTC_Init();
-  //MX_GFXSIMULATOR_Init();
+  //MX_I2C4_Init();  
+  //MX_RTC_Init();
+  
   /* USER CODE BEGIN 2 */
+  /* Initialise the graphical hardware */
+  GRAPHICS_HW_Init();
 
+  /* Initialise the graphical stack engine */
+  GRAPHICS_Init();
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -185,6 +183,69 @@ int main(void)
   * @retval None
   */
 void SystemClock_Config(void)
+{
+    RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+    RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+
+    /**Configure LSE Drive Capability
+    */
+    HAL_PWR_EnableBkUpAccess();
+    /**Configure the main internal regulator output voltage
+    */
+    __HAL_RCC_PWR_CLK_ENABLE();
+    __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+    /**Initializes the CPU, AHB and APB busses clocks
+    */
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_HSE;
+    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+    RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+    RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+    RCC_OscInitStruct.PLL.PLLM = 25;
+    RCC_OscInitStruct.PLL.PLLN = 432;
+    RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+    RCC_OscInitStruct.PLL.PLLQ = 4;
+    if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    /**Activate the Over-Drive mode
+    */
+    if (HAL_PWREx_EnableOverDrive() != HAL_OK)
+    {
+        Error_Handler();
+    }
+    /**Initializes the CPU, AHB and APB busses clocks
+    */
+    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
+                                  | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+    RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+    RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+    RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+    RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+
+    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC | RCC_PERIPHCLK_USART1;
+    PeriphClkInitStruct.PLLSAI.PLLSAIN = 417;
+    PeriphClkInitStruct.PLLSAI.PLLSAIR = 5;
+    PeriphClkInitStruct.PLLSAI.PLLSAIQ = 3;
+    PeriphClkInitStruct.PLLSAI.PLLSAIP = RCC_PLLSAIP_DIV4;
+    PeriphClkInitStruct.PLLSAIDivQ = 1;
+    PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
+    PeriphClkInitStruct.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSI, RCC_MCODIV_1);
+}
+
+void _SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
@@ -351,7 +412,38 @@ static void MX_I2C4_Init(void)
   * @param None
   * @retval None
   */
-static void MX_QUADSPI_Init(void)
+ static void MX_QUADSPI_Init(void)
+{
+
+    /* USER CODE BEGIN QUADSPI_Init 0 */
+
+    /* USER CODE END QUADSPI_Init 0 */
+
+    /* USER CODE BEGIN QUADSPI_Init 1 */
+
+    /* USER CODE END QUADSPI_Init 1 */
+    /* QUADSPI parameter configuration*/
+    hqspi.Instance = QUADSPI;
+    hqspi.Init.ClockPrescaler = 1;
+    hqspi.Init.FifoThreshold = 16;
+    hqspi.Init.SampleShifting = QSPI_SAMPLE_SHIFTING_HALFCYCLE;
+    hqspi.Init.FlashSize = 26;
+    hqspi.Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_1_CYCLE;
+    hqspi.Init.ClockMode = QSPI_CLOCK_MODE_0;
+    hqspi.Init.FlashID = QSPI_FLASH_ID_1;
+    hqspi.Init.DualFlash = QSPI_DUALFLASH_DISABLE;
+    if (HAL_QSPI_Init(&hqspi) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    /* USER CODE BEGIN QUADSPI_Init 2 */
+    BSP_QSPI_Init();
+    BSP_QSPI_EnableMemoryMappedMode();
+    /* USER CODE END QUADSPI_Init 2 */
+
+}
+
+static void _MX_QUADSPI_Init(void)
 {
 
   /* USER CODE BEGIN QUADSPI_Init 0 */
@@ -575,7 +667,7 @@ void StartDefaultTask(void const * argument)
 
   /* USER CODE BEGIN 5 */
   /* Graphic application */
-  //GRAPHICS_MainTask();
+  GRAPHICS_MainTask();
 
   /* Infinite loop */
   for(;;)
