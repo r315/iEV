@@ -10,11 +10,11 @@ Console::Console(void) {
 
 }
 
-Console::Console(StdOut *sp, const char *prt) {
+Console::Console(SerialOut *sp, const char *prt) {
 	init(sp, prt);
 }
 
-void Console::init(StdOut *sp, const char *prt) {
+void Console::init(SerialOut *sp, const char *prt) {
 	memset(cmdList, '#', CONSOLE_MAX_COMMANDS * sizeof(ConsoleCommand*));
 	memset(line, '\0', COMMAND_MAX_LEN);
 	cmdListSize = 0;

@@ -1,5 +1,5 @@
-#ifndef _stdout_h_
-#define _stdout_h_
+#ifndef _serialout_h_
+#define _serialout_h_
 
 #include <stdint.h>
 
@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-	typedef struct _StdOut {
+	typedef struct _SerialOut {
 
 
 		void(*init)(void);
@@ -33,10 +33,10 @@ extern "C" {
 		 * */
 		uint8_t(*kbhit)(void);
 
-	}StdOut;
+	}SerialOut;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _stdout_h_ */
+#endif /* _serialout_h_ */

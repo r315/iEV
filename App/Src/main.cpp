@@ -25,7 +25,6 @@
 #include "stm32f769i_discovery_qspi.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "console.hpp"
 #include "usbd_cdc_if.h"
 /* USER CODE END Includes */
 
@@ -64,7 +63,7 @@ RTC_HandleTypeDef hrtc;
 
 osThreadId defaultTaskHandle;
 /* USER CODE BEGIN PV */
-extern StdOut vcom;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -86,32 +85,14 @@ void GRAPHICS_HW_Init();
 void GRAPHICS_MainTask(void);
 
 /* USER CODE BEGIN PFP */
-
+void appTask(void const * argument);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
  //CDC_Transmit_HS((uint8_t*)"Hello\n", 6);
 
-void ledTask(void const * argument){
 
-  for(;;){
-    HAL_GPIO_TogglePin(LD_USER1_GPIO_Port, LD_USER1_Pin);
-    osDelay(200);    
-  }
-}
-
-void consoleTask(void const * argument){
-  Console console;
-
-  vcom.init();
-  console.init(&vcom, "iEV>");   
-
-  for(;;){
-    console.process();
-    osDelay(100);
-  }
-}
 /* USER CODE END 0 */
 
 /**
@@ -158,7 +139,6 @@ int main(void)
   /* Initialise the graphical stack engine */
   GRAPHICS_Init();
 
-  
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -184,11 +164,9 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
-  osThreadDef(aliveLed, ledTask, osPriorityLow, 0, 128);
-  osThreadCreate(osThread(aliveLed), NULL);
 
-  osThreadDef(consoleProcess, consoleTask, osPriorityLow, 0, 512);
-  osThreadCreate(osThread(consoleProcess), NULL);
+  osThreadDef(applicationProcess, appTask, osPriorityNormal, 0, 512);
+  osThreadCreate(osThread(applicationProcess), NULL);
   
   /* USER CODE END RTOS_THREADS */
 

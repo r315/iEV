@@ -7,7 +7,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "stdout.h"
+#include "serialout.h"
 #include "console_command.h"
 
 #define NO        0
@@ -38,7 +38,7 @@ extern "C" {
 		char line[COMMAND_MAX_LEN];
 		uint8_t line_len;
 		const char *prompt;
-		StdOut *out;
+		SerialOut *out;
 		
 		char history[HISTORY_SIZE][COMMAND_MAX_LEN];
 		void historyDump(void);
@@ -54,9 +54,9 @@ extern "C" {
 
 	public:
 		Console(void);
-		Console(StdOut *sp, const char *prt);
+		Console(SerialOut *sp, const char *prt);
 
-		void init(StdOut *sp, const char *prt);
+		void init(SerialOut *sp, const char *prt);
 
 		char getLine(char *line, uint8_t max);
 		char getLineNonBlocking(char *line, uint8_t *cur_len, uint8_t max);
