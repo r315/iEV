@@ -25,16 +25,16 @@ makefile_name := $(subst $(call sq,$(application_path))/,,$(call sq,$(abspath $(
 makefile_path_relative := $(subst $(call sq,$(application_path))/,,$(call sq,$(abspath $(call sq,$(makefile_path)))))
 
 # Get path to Middlewares
-#Middlewares_path := Middlewares
-
-#Get BSP path
-bsp_path := BSP/$(board_name)
+Middlewares_path := Middlewares
 
 # Get path to Drivers
 Drivers_path := Drivers
 
+#Get BSP path
+bsp_path := $(Drivers_path)/BSP
+
 # Get OS path
-os_path := Middlewares/Third_Party/FreeRTOS
+os_path := $(Middlewares_path)/Third_Party/FreeRTOS
 
 #Get user application path
 user_app_path := App
@@ -56,6 +56,9 @@ include $(touchgfx_mk)
 usb_lib_path := Middlewares/ST/STM32_USB_Device_Library
 usb_device_path := USB_DEVICE
 
+#costum libs
+console_path := $(Middlewares_path)/Third_Party/console
+
 # Get identification of this system
 ifeq ($(OS),Windows_NT)
 UNAME := MINGW32_NT-6.2
@@ -74,8 +77,9 @@ flash intflash: all
 	@cd "$(application_path)" && "$(MAKE)" -r -f $(makefile_name) -s $(MFLAGS) _$@_
 
 test:
-	@echo ""; $(foreach d, $(c_source_files), echo $(d);)
-	@echo ""; $(foreach d, $(cpp_source_files), echo $(d);)
+#@echo ""; $(foreach d, $(c_source_files), echo $(d);)
+#@echo ""; $(foreach d, $(cpp_source_files), echo $(d);)
+	@echo ""; $(foreach d, $(board_include_paths), echo $(d);)
 
 # Directories containing application-specific source and header files.
 # Additional components can be added to this list. make will look for
@@ -284,7 +288,10 @@ board_c_files += \
 	$(usb_device_path)/App/usbd_desc.c \
 	$(usb_device_path)/App/usbd_cdc_if.c \
 	$(usb_device_path)/Target/usbd_conf.c \
-	
+	$(console_path)/strfunc.c \
+	$(console_path)/fifo.c \
+
+
 board_cpp_files := \
 	$(wildcard $(user_app_path)/Src/*.cpp) \
 	$(touchgfx_path)/target/STM32F7Instrumentation.cpp \
@@ -293,7 +300,9 @@ board_cpp_files := \
 	$(touchgfx_path)/target/STM32F7HAL_DSI.cpp \
 	$(touchgfx_path)/target/GPIO.cpp \
 	$(touchgfx_path)/target/HW_Init.cpp \
-	$(touchgfx_path)/target/BoardConfiguration.cpp
+	$(touchgfx_path)/target/BoardConfiguration.cpp \
+	$(console_path)/console.cpp \
+
 
 board_include_paths := \
 	$(touchgfx_path)/gui/include \
@@ -315,6 +324,7 @@ board_include_paths := \
 	$(usb_lib_path)/Class/CDC/Inc \
 	$(usb_device_path)/App \
 	$(usb_device_path)/Target \
+	$(console_path) \
 
 c_compiler_options += -DST -DSTM32F769xx
 cpp_compiler_options += -DST -DSTM32F769xx
@@ -364,7 +374,7 @@ _intflash_:
 	@$(st_link_executable) -c -P $(binary_output_path)/intflash.hex 0x08000000 -Rst
 
 generate_assets: _assets_
-	@"$(MAKE)" -f $(makefile_name) -r -s $(MFLAGS) build_executable
+	@"$(MAKE)" -r -s $(MFLAGS) build_executable
 
 build_executable: $(binary_output_path)/$(target_executable)
 
@@ -373,7 +383,7 @@ $(binary_output_path)/$(target_executable): $(object_files) $(object_asm_files)
 	@echo Linking $(@)
 	@mkdir -p $(@D)
 	@mkdir -p $(object_output_path)
-	@$(file >$(build_root_path)/objects.tmp) $(foreach F,$(object_files),$(file >>$(build_root_path)/objects.tmp,$F))
+	@$(file > $(build_root_path)/objects.tmp) $(foreach F,$(object_files),$(file >> $(build_root_path)/objects.tmp,$F))
 	@$(linker) \
 		$(linker_options) -T $(linker_script_path)/STM32F769NIHx_FLASH.ld -Wl,-Map=$(@D)/application.map $(linker_options_local) \
 		$(patsubst %,-L%,$(library_include_paths)) \

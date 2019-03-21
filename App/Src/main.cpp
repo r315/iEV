@@ -25,7 +25,8 @@
 #include "stm32f769i_discovery_qspi.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "console.hpp"
+#include "usbd_cdc_if.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,7 +64,7 @@ RTC_HandleTypeDef hrtc;
 
 osThreadId defaultTaskHandle;
 /* USER CODE BEGIN PV */
-
+extern StdOut vcom;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -90,7 +91,27 @@ void GRAPHICS_MainTask(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+ //CDC_Transmit_HS((uint8_t*)"Hello\n", 6);
 
+void ledTask(void const * argument){
+
+  for(;;){
+    HAL_GPIO_TogglePin(LD_USER1_GPIO_Port, LD_USER1_Pin);
+    osDelay(200);    
+  }
+}
+
+void consoleTask(void const * argument){
+  Console console;
+
+  vcom.init();
+  console.init(&vcom, "iEV>");   
+
+  for(;;){
+    console.process();
+    osDelay(100);
+  }
+}
 /* USER CODE END 0 */
 
 /**
@@ -128,13 +149,16 @@ int main(void)
   //MX_FMC_Init();
   //MX_I2C4_Init();  
   //MX_RTC_Init();
-  
+  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
+  
   /* Initialise the graphical hardware */
   GRAPHICS_HW_Init();
 
   /* Initialise the graphical stack engine */
   GRAPHICS_Init();
+
+  
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -160,6 +184,12 @@ int main(void)
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  osThreadDef(aliveLed, ledTask, osPriorityLow, 0, 128);
+  osThreadCreate(osThread(aliveLed), NULL);
+
+  osThreadDef(consoleProcess, consoleTask, osPriorityLow, 0, 512);
+  osThreadCreate(osThread(consoleProcess), NULL);
+  
   /* USER CODE END RTOS_THREADS */
 
   /* Start scheduler */
@@ -588,9 +618,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(DSI_RESET_GPIO_Port, DSI_RESET_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LD_USER1_Pin Audio_INT_Pin WIFI_RST_Pin ARD_D8_Pin 
+  /*Configure GPIO pins : Audio_INT_Pin WIFI_RST_Pin ARD_D8_Pin 
                            LD_USER2_Pin ARD_D7_Pin ARD_D4_Pin ARD_D2_Pin */
-  GPIO_InitStruct.Pin = LD_USER1_Pin|Audio_INT_Pin|WIFI_RST_Pin|ARD_D8_Pin 
+  GPIO_InitStruct.Pin = Audio_INT_Pin|WIFI_RST_Pin|ARD_D8_Pin 
                           |LD_USER2_Pin|ARD_D7_Pin|ARD_D4_Pin|ARD_D2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -647,6 +677,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
+   /*Configure GPIO pin : LD_USER1_Pin */
+  GPIO_InitStruct.Pin = LD_USER1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LD_USER1_GPIO_Port, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 4 */
@@ -662,17 +699,14 @@ static void MX_GPIO_Init(void)
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void const * argument)
 {
-  /* init code for USB_DEVICE */
-  MX_USB_DEVICE_Init();
-
   /* USER CODE BEGIN 5 */
-  /* Graphic application */
+  /* Graphic application, never return */
   GRAPHICS_MainTask();
 
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    osDelay(1);   
   }
   /* USER CODE END 5 */ 
 }

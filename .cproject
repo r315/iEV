@@ -49,7 +49,7 @@
 									<listOptionValue builtIn="false" value="../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc" />
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F7xx/Include" />
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include" />
-								<listOptionValue builtIn="false" value="../TouchGFX/target" /><listOptionValue builtIn="false" value="../TouchGFX/generated/fonts/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/texts/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/images/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/gui_generated/include" /><listOptionValue builtIn="false" value="../TouchGFX/gui/include" /><listOptionValue builtIn="false" value="../Middlewares/ST/TouchGFX/touchgfx/framework/include" /><listOptionValue builtIn="false" value="../Drivers/BSP/Components/otm8009a" /></option>
+								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.961663372" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__weak=__attribute__((weak))" />
 									<listOptionValue builtIn="false" value="__packed=__attribute__((__packed__))" />
@@ -76,7 +76,7 @@
 									<listOptionValue builtIn="false" value="../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc" />
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F7xx/Include" />
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include" />
-								<listOptionValue builtIn="false" value="../TouchGFX/target" /><listOptionValue builtIn="false" value="../TouchGFX/generated/fonts/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/texts/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/images/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/gui_generated/include" /><listOptionValue builtIn="false" value="../TouchGFX/gui/include" /><listOptionValue builtIn="false" value="../Middlewares/ST/TouchGFX/touchgfx/framework/include" /><listOptionValue builtIn="false" value="../Drivers/BSP/Components/otm8009a" /></option>
+								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.919394565" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__weak=__attribute__((weak))" />
 									<listOptionValue builtIn="false" value="__packed=__attribute__((__packed__))" />
@@ -176,7 +176,7 @@
 									<listOptionValue builtIn="false" value="../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc" />
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F7xx/Include" />
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include" />
-								<listOptionValue builtIn="false" value="../TouchGFX/target" /><listOptionValue builtIn="false" value="../TouchGFX/generated/fonts/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/texts/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/images/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/gui_generated/include" /><listOptionValue builtIn="false" value="../TouchGFX/gui/include" /><listOptionValue builtIn="false" value="../Middlewares/ST/TouchGFX/touchgfx/framework/include" /><listOptionValue builtIn="false" value="../Drivers/BSP/Components/otm8009a" /></option>
+								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.961663372" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__weak=__attribute__((weak))" />
 									<listOptionValue builtIn="false" value="__packed=__attribute__((__packed__))" />
@@ -203,7 +203,7 @@
 									<listOptionValue builtIn="false" value="../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc" />
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32F7xx/Include" />
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include" />
-								<listOptionValue builtIn="false" value="../TouchGFX/target" /><listOptionValue builtIn="false" value="../TouchGFX/generated/fonts/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/texts/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/images/include" /><listOptionValue builtIn="false" value="../TouchGFX/generated/gui_generated/include" /><listOptionValue builtIn="false" value="../TouchGFX/gui/include" /><listOptionValue builtIn="false" value="../Middlewares/ST/TouchGFX/touchgfx/framework/include" /><listOptionValue builtIn="false" value="../Drivers/BSP/Components/otm8009a" /></option>
+								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.symbols.178464580" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__weak=__attribute__((weak))" />
 									<listOptionValue builtIn="false" value="__packed=__attribute__((__packed__))" />

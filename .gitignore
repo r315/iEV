@@ -1,8 +1,8 @@
 .settings/
+build/
+.vscode/
+TouchGFX/generated/
+Core/
 .project
 .cproject
-build/
-TouchGFX/generated/
 *.log
-
-Core/
