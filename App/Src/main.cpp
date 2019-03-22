@@ -73,11 +73,12 @@ static void MX_CRC_Init(void);
 static void MX_QUADSPI_Init(void);
 static void MX_RTC_Init(void);
 static void MX_GFXSIMULATOR_Init(void);
-void StartDefaultTask(void const * argument);
+static void StartDefaultTask(void const * argument);
 
 void GRAPHICS_Init();
 void GRAPHICS_HW_Init();
 void GRAPHICS_MainTask(void);
+extern "C" void vc_init(void);
 
 /* USER CODE BEGIN PFP */
 void appTask(void const * argument);
@@ -623,7 +624,7 @@ static void MX_GPIO_Init(void)
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void const * argument)
+static void StartDefaultTask(void const * argument)
 {
   /* USER CODE BEGIN 5 */
   /* Graphic application, never return */

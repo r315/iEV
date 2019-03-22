@@ -12,15 +12,12 @@ void ledTask(void const * argument){
     osDelay(200);    
   }
 }
-extern UART_HandleTypeDef huart1;
+
 void consoleTask(void const * argument){
   Console console;
 
   vcom.init();
   console.init(&vcom, "iEV>");   
-//printf("Test\n");
-
-HAL_UART_Transmit(&huart1, (uint8_t *)"Teste\n", 6, 0xFFFF);
 
   for(;;){
     console.process();

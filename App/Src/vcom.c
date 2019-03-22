@@ -18,7 +18,12 @@ static fifo_t txfifo;
 static fifo_t rxfifo;
 
 UART_HandleTypeDef huart1;
+//DMA_HandleTypeDef hdma_usart1_rx;
+//DMA_HandleTypeDef hdma_usart1_tx;
 
+
+//HAL_DMA_RegisterCallback();
+//HAL_UART_Transmit_DMA
 
 /**
   * @brief USART1 Initialization Function
@@ -38,14 +43,10 @@ void vc_init(void)
   huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
   huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
   HAL_UART_Init(&huart1);
-
-  HAL_UART_Transmit(&huart1, (uint8_t *)"Teste\n", 6, 0xFFFF);
 }
 
 void vc_putchar(char c){
-    //while(!fifo_put(&txfifo, c));
-    //while(CDC_Transmit_HS(&c, 1) != USBD_OK);
-    putchar(c);
+  HAL_UART_Transmit(&huart1, (uint8_t *)&c, 1, 0xFFFF);
 }
 
 void vc_puts(const char* str){
@@ -75,26 +76,3 @@ SerialOut vcom = {
     .getCharNonBlocking = vc_getCharNonBlocking,
     .kbhit = vc_kbhit
 };
-
-/* USER CODE BEGIN 1 */
-#ifdef __GNUC__
-  /* With GCC/RAISONANCE, small printf (option LD Linker->Libraries->Small printf
-     set to 'Yes') calls __io_putchar() */
-  #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-#else
-  #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#endif /* __GNUC__ */
-/**
-  * @brief  Retargets the C library printf function to the USART.
-  * @param  None
-  * @retval None
-  */
-PUTCHAR_PROTOTYPE
-{
-  /* Place your implementation of fputc here */
-  /* e.g. write a character to the EVAL_COM1 and Loop until the end of transmission */
-  HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
-  
-  return ch;
-}
-/* USER CODE END 1 */
