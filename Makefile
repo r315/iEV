@@ -270,17 +270,19 @@ board_c_files += \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_rtc_ex.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_fmc.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_dsi.c \
-	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c \
-	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd_ex.c \
-	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_usb.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_uart.c \
+	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c \
+	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd_ex.c \
+	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_usb.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_spi.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_sdmmc.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_sd.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_nor.c \
 
 board_c_files += \
-	$(usb_lib_path)/Core/Src/usbd_ioreq.c \
+	$(console_path)/strfunc.c \
+	$(console_path)/fifo.c \
+	#$(usb_lib_path)/Core/Src/usbd_ioreq.c \
 	$(usb_lib_path)/Core/Src/usbd_ctlreq.c \
 	$(usb_lib_path)/Core/Src/usbd_core.c \
 	$(usb_lib_path)/Class/CDC/Src/usbd_cdc.c \
@@ -288,8 +290,7 @@ board_c_files += \
 	$(usb_device_path)/App/usbd_desc.c \
 	$(usb_device_path)/App/usbd_cdc_if.c \
 	$(usb_device_path)/Target/usbd_conf.c \
-	$(console_path)/strfunc.c \
-	$(console_path)/fifo.c \
+	
 
 
 board_cpp_files := \

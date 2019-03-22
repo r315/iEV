@@ -3,6 +3,8 @@ build/
 .vscode/
 TouchGFX/generated/
 Core/
+startup/
 .project
 .cproject
 *.log
+/Debug/

@@ -21,11 +21,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
-#include "usb_device.h"
+
 #include "stm32f769i_discovery_qspi.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "usbd_cdc_if.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,7 +51,7 @@ CRC_HandleTypeDef hcrc;
 
 //DSI_HandleTypeDef hdsi;
 
-I2C_HandleTypeDef hi2c4;
+//I2C_HandleTypeDef hi2c4;
 
 //LTDC_HandleTypeDef hltdc;
 
@@ -70,11 +70,6 @@ osThreadId defaultTaskHandle;
 extern "C" void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_CRC_Init(void);
-//static void MX_DMA2D_Init(void);
-//static void MX_DSIHOST_DSI_Init(void);
-//static void MX_FMC_Init(void);
-static void MX_I2C4_Init(void);
-//static void MX_LTDC_Init(void);
 static void MX_QUADSPI_Init(void);
 static void MX_RTC_Init(void);
 static void MX_GFXSIMULATOR_Init(void);
@@ -130,7 +125,6 @@ int main(void)
   //MX_FMC_Init();
   //MX_I2C4_Init();  
   //MX_RTC_Init();
-  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
   
   /* Initialise the graphical hardware */
@@ -366,52 +360,6 @@ static void MX_GFXSIMULATOR_Init(void)
   /* USER CODE BEGIN GFXSIMULATOR_Init 2 */
 
   /* USER CODE END GFXSIMULATOR_Init 2 */
-
-}
-
-/**
-  * @brief I2C4 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_I2C4_Init(void)
-{
-
-  /* USER CODE BEGIN I2C4_Init 0 */
-
-  /* USER CODE END I2C4_Init 0 */
-
-  /* USER CODE BEGIN I2C4_Init 1 */
-
-  /* USER CODE END I2C4_Init 1 */
-  hi2c4.Instance = I2C4;
-  hi2c4.Init.Timing = 0x20404768;
-  hi2c4.Init.OwnAddress1 = 0;
-  hi2c4.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c4.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c4.Init.OwnAddress2 = 0;
-  hi2c4.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
-  hi2c4.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c4.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c4) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure Analogue filter 
-  */
-  if (HAL_I2CEx_ConfigAnalogFilter(&hi2c4, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure Digital filter 
-  */
-  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c4, 0) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN I2C4_Init 2 */
-
-  /* USER CODE END I2C4_Init 2 */
 
 }
 

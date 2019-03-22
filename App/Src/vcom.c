@@ -4,7 +4,7 @@
 #include <serialout.h>
 
 #include "stm32f7xx_hal.h"
-#include "usbd_cdc_if.h"
+//#include "usbd_cdc_if.h"
 
 //#include "board.h"
 //#include "usbserial.h"
@@ -27,14 +27,6 @@ UART_HandleTypeDef huart1;
   */
 void vc_init(void)
 {
-
-  /* USER CODE BEGIN USART1_Init 0 */
-
-  /* USER CODE END USART1_Init 0 */
-
-  /* USER CODE BEGIN USART1_Init 1 */
-
-  /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
   huart1.Init.BaudRate = 115200;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
@@ -45,14 +37,9 @@ void vc_init(void)
   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
   huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
   huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART1_Init 2 */
+  HAL_UART_Init(&huart1);
 
-  /* USER CODE END USART1_Init 2 */
-
+  HAL_UART_Transmit(&huart1, (uint8_t *)"Teste\n", 6, 0xFFFF);
 }
 
 void vc_putchar(char c){
