@@ -1,7 +1,7 @@
 .settings/
 build/
 .vscode/
-TouchGFX/generated/
+ui/generated/
 Core/
 startup/
 .project
