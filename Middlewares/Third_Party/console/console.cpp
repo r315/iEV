@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "console.hpp"
+#include "console.h"
 
 Console::Console(void) {
 

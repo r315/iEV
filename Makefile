@@ -281,7 +281,6 @@ board_c_files += \
 
 board_c_files += \
 	$(console_path)/strfunc.c \
-	$(console_path)/fifo.c \
 	#$(usb_lib_path)/Core/Src/usbd_ioreq.c \
 	$(usb_lib_path)/Core/Src/usbd_ctlreq.c \
 	$(usb_lib_path)/Core/Src/usbd_core.c \

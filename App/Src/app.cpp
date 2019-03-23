@@ -1,6 +1,7 @@
 #include "main.h"
 #include "cmsis_os.h"
-#include "console.hpp"
+#include "console.h"
+#include "cmdhelp.h"
 #include <stdio.h>
 
 extern SerialOut vcom;
@@ -8,16 +9,19 @@ extern SerialOut vcom;
 void ledTask(void const * argument){
 
   for(;;){
-    HAL_GPIO_TogglePin(LD_USER1_GPIO_Port, LD_USER1_Pin);
+    HAL_GPIO_TogglePin(LD_USER2_GPIO_Port, LD_USER2_Pin);
     osDelay(200);    
   }
 }
 
 void consoleTask(void const * argument){
   Console console;
+  ConsoleHelp help;
 
   vcom.init();
-  console.init(&vcom, "iEV>");   
+  console.init(&vcom, "iEV>");
+
+  console.addCommand(&help);
 
   for(;;){
     console.process();

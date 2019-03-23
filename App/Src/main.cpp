@@ -604,8 +604,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
-   /*Configure GPIO pin : LD_USER1_Pin */
-  GPIO_InitStruct.Pin = LD_USER1_Pin;
+  /*Configure GPIO pin : LD_USER1_Pin */
+  GPIO_InitStruct.Pin = LD_USER1_Pin | LD_USER2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
