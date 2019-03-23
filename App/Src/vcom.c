@@ -5,21 +5,15 @@
 
 #include "main.h"
 #include "stm32f7xx_hal.h"
-//#include "usbd_cdc_if.h"
 #include "FreeRTOS.h"
 #include "queue.h"
-//#include "board.h"
-//#include "usbserial.h"
-//#include "strfunc.h"
-//#include "fifo.h"
 
-#define VCOM_QUEUE_LENGTH 10
+#define VCOM_QUEUE_LENGTH 128
 #define VCOM_QUEUE_ITEM_SIZE 1
 
 UART_HandleTypeDef huart1;
 
 QueueHandle_t vcQueue;
-
 
 /**
   * @brief USART1 Initialization Function
@@ -42,8 +36,7 @@ void vc_init(void){
   uint8_t data = 55;
   if(vcQueue != NULL){
     NVIC_SetPriority(USART1_IRQn, NVIC_PRIORITYGROUP_0);
-    NVIC_EnableIRQ(USART1_IRQn);  
-
+    NVIC_EnableIRQ(USART1_IRQn);
   }  
 }
 

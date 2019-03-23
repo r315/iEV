@@ -109,7 +109,8 @@ char Console::getLineNonBlocking(char *dst, uint8_t *cur_len, uint8_t maxLen) {
 	char c;
 	uint8_t len;
 
-	if (out->getCharNonBlocking(&c)) {
+	//if(out->getCharNonBlocking(&c)) {
+	while(out->getCharNonBlocking(&c)) {	
 		len = *cur_len;
 		
 		if ((c == '\n') || (c == '\r')) {

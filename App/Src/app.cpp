@@ -6,11 +6,11 @@
 
 extern SerialOut vcom;
 
-void ledTask(void const * argument){
-
+void ledAliveTask(void const * argument){
   for(;;){
     HAL_GPIO_TogglePin(LD_USER2_GPIO_Port, LD_USER2_Pin);
-    osDelay(200);    
+    vTaskDelay(pdMS_TO_TICKS(200));    
+    //osDelay(200);
   }
 }
 
@@ -34,7 +34,7 @@ void appTask(void const * argument){
     osThreadDef(consoleProcess, consoleTask, osPriorityLow, 0, 512);
   osThreadCreate(osThread(consoleProcess), NULL);
 
-    osThreadDef(aliveLed, ledTask, osPriorityLow, 0, 128);
+    osThreadDef(aliveLed, ledAliveTask, osPriorityLow, 0, 128);
   osThreadCreate(osThread(aliveLed), NULL);
 
   while(1){
