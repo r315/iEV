@@ -27,10 +27,14 @@ public:
 
     virtual ~MainPresenter() {};
 
+    virtual void notifyRpmChange(int newRpm);
+    //virtual void notifyDistanceChange(int newDistance);
+    //virtual void notifySpeedChange(int newSpeed);
 private:
     MainPresenter();
 
     MainView& view;
 };
+
 
 #endif // MAIN_PRESENTER_HPP

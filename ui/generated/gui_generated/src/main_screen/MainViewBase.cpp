@@ -3,43 +3,90 @@
 /*********************************************************************************/
 #include <gui_generated/main_screen/MainViewBase.hpp>
 #include <touchgfx/Color.hpp>
-#include "BitmapDatabase.hpp"
 #include <texts/TextKeysAndLanguages.hpp>
+#include "BitmapDatabase.hpp"
 
 MainViewBase::MainViewBase() :
-    buttonCallback(this, &MainViewBase::buttonCallbackHandler)
+    sliderValueChangedCallback(this, &MainViewBase::sliderValueChangedCallbackHandler)
 {
-    backgroundBox.setPosition(0, 0, 800, 480);
-    backgroundBox.setVisible(false);
-    backgroundBox.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    CanvasWidgetRenderer::setupBuffer(canvasBuffer, CANVAS_BUFFER_SIZE);
 
-    backgroundImage.setXY(160, 104);
-    backgroundImage.setBitmap(Bitmap(BITMAP_BG_ID));
+    Background.setPosition(0, 0, 800, 480);
+    Background.setColor(touchgfx::Color::getColorFrom24BitRGB(8, 73, 128));
 
-    counterBackgroundImage.setXY(210, 157);
-    counterBackgroundImage.setBitmap(Bitmap(BITMAP_COUNTER_BOX_ID));
+    boxWithBorder_rpm.setPosition(318, 254, 458, 210);
+    boxWithBorder_rpm.setColor(touchgfx::Color::getColorFrom24BitRGB(24, 57, 163));
+    boxWithBorder_rpm.setBorderColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    boxWithBorder_rpm.setBorderSize(5);
 
-    countTxt.setPosition(210, 190, 152, 89);
-    countTxt.setColor(touchgfx::Color::getColorFrom24BitRGB(255, 255, 255));
-    countTxt.setLinespacing(0);
-    Unicode::snprintf(countTxtBuffer, COUNTTXT_SIZE, "%s", TypedText(T_SINGLEUSEID1).getText());
-    countTxt.setWildcard(countTxtBuffer);
-    countTxt.setTypedText(TypedText(T_TEXTID1));
+    textArea_rpm_unit.setXY(716, 343);
+    textArea_rpm_unit.setColor(touchgfx::Color::getColorFrom24BitRGB(207, 219, 209));
+    textArea_rpm_unit.setLinespacing(0);
+    textArea_rpm_unit.setTypedText(TypedText(T_SINGLEUSEID1));
 
-    buttonUp.setXY(384, 162);
-    buttonUp.setBitmaps(Bitmap(BITMAP_UP_BTN_ID), Bitmap(BITMAP_UP_BTN_PRESSED_ID));
-    buttonUp.setAction(buttonCallback);
+    boxRpm.setXY(350, 267);
+    boxRpm.setProgressIndicatorPosition(2, 2, 400, 30);
+    boxRpm.setRange(0, 100);
+    boxRpm.setDirection(AbstractDirectionProgress::RIGHT);
+    boxRpm.setBackground(Bitmap(BITMAP_BLUE_PROGRESSINDICATORS_BG_LARGE_PROGRESS_INDICATOR_BG_SQUARE_0_DEGREES_ID));
+    boxRpm.setColor(touchgfx::Color::getColorFrom24BitRGB(17, 143, 60));
+    boxRpm.setValue(60);
+    boxRpm.setAlpha(174);
 
-    buttonDown.setXY(384, 251);
-    buttonDown.setBitmaps(Bitmap(BITMAP_DOWN_BTN_ID), Bitmap(BITMAP_DOWN_BTN_PRESSED_ID));
-    buttonDown.setAction(buttonCallback);
+    textArea1_rpm_unit.setXY(754, 343);
+    textArea1_rpm_unit.setColor(touchgfx::Color::getColorFrom24BitRGB(207, 219, 209));
+    textArea1_rpm_unit.setLinespacing(0);
+    textArea1_rpm_unit.setTypedText(TypedText(T_SINGLEUSEID2));
 
-    add(backgroundBox);
-    add(backgroundImage);
-    add(counterBackgroundImage);
-    add(countTxt);
-    add(buttonUp);
-    add(buttonDown);
+    boxWithBorder_km.setPosition(318, 46, 458, 194);
+    boxWithBorder_km.setColor(touchgfx::Color::getColorFrom24BitRGB(24, 57, 163));
+    boxWithBorder_km.setBorderColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    boxWithBorder_km.setBorderSize(5);
+
+    TextArea_km_unit.setXY(705, 82);
+    TextArea_km_unit.setColor(touchgfx::Color::getColorFrom24BitRGB(207, 219, 209));
+    TextArea_km_unit.setLinespacing(0);
+    TextArea_km_unit.setTypedText(TypedText(T_SINGLEUSEID4));
+
+    slider1.setXY(93, 71);
+    slider1.setBitmaps(Bitmap(BITMAP_BLUE_SLIDER_VERTICAL_MEDIUM_SLIDER3_VERTICAL_BACK_ID), Bitmap(BITMAP_BLUE_SLIDER_VERTICAL_MEDIUM_SLIDER3_VERTICAL_FILL_ID), Bitmap(BITMAP_BLUE_SLIDER_VERTICAL_MEDIUM_INDICATORS_SLIDER3_VERTICAL_NOB_ID));
+    slider1.setupVerticalSlider(7, 3, 0, 0, 285);
+    slider1.setValueRange(0, 100);
+    slider1.setValue(0);
+    slider1.setNewValueCallback(sliderValueChangedCallback);
+
+    TextAreaSpeed.setPosition(394, 82, 311, 122);
+    TextAreaSpeed.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    TextAreaSpeed.setLinespacing(0);
+    Unicode::snprintf(TextAreaSpeedBuffer, TEXTAREASPEED_SIZE, "%s", TypedText(T_SINGLEUSEID5).getText());
+    TextAreaSpeed.setWildcard(TextAreaSpeedBuffer);
+    TextAreaSpeed.setTypedText(TypedText(T_SPEEDID1));
+
+    TextAreaRpm.setPosition(394, 342, 311, 122);
+    TextAreaRpm.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    TextAreaRpm.setLinespacing(0);
+    Unicode::snprintf(TextAreaRpmBuffer, TEXTAREARPM_SIZE, "%s", TypedText(T_SINGLEUSEID6).getText());
+    TextAreaRpm.setWildcard(TextAreaRpmBuffer);
+    TextAreaRpm.setTypedText(TypedText(T_CURRENTRPM));
+
+    TextAreaDistance.setPosition(473, 191, 153, 49);
+    TextAreaDistance.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    TextAreaDistance.setLinespacing(0);
+    Unicode::snprintf(TextAreaDistanceBuffer, TEXTAREADISTANCE_SIZE, "%s", TypedText(T_SINGLEUSEID7).getText());
+    TextAreaDistance.setWildcard(TextAreaDistanceBuffer);
+    TextAreaDistance.setTypedText(TypedText(T_TOTALDISTANCE));
+
+    add(Background);
+    add(boxWithBorder_rpm);
+    add(textArea_rpm_unit);
+    add(boxRpm);
+    add(textArea1_rpm_unit);
+    add(boxWithBorder_km);
+    add(TextArea_km_unit);
+    add(slider1);
+    add(TextAreaSpeed);
+    add(TextAreaRpm);
+    add(TextAreaDistance);
 }
 
 void MainViewBase::setupScreen()
@@ -47,20 +94,13 @@ void MainViewBase::setupScreen()
 
 }
 
-void MainViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
+void MainViewBase::sliderValueChangedCallbackHandler(const touchgfx::Slider& src, int value)
 {
-    if (&src == &buttonUp)
+    if (&src == &slider1)
     {
-        //IncreaseValue
-        //When buttonUp clicked call virtual function
-        //Call increaseValue
-        increaseValue();
-    }
-    else if (&src == &buttonDown)
-    {
-        //DecreaseValue
-        //When buttonDown clicked call virtual function
-        //Call decreaseValue
-        decreaseValue();
+        //Interaction1
+        //When slider1 value changed call virtual function
+        //Call testValues
+        testValues(value);
     }
 }

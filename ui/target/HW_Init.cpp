@@ -606,7 +606,7 @@ static void HAL_FMC_MspInit(void)
     GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
     HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = FMC_SDNCAS_Pin | FMC_SDCLK_Pin | FMC_A11_Pin
+    GPIO_InitStruct.Pin = FMC_SDNCAS_Pin | FMC_SDCLK_Pin | FMC_A11_Pin | FMC_A12_Pin
                           | FMC_A10_Pin | FMC_BA1_Pin | FMC_BA0_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -743,7 +743,7 @@ static void HAL_FMC_MspDeInit(void)
                     | FMC_D8_Pin | FMC_D11_Pin | FMC_D4_Pin | FMC_D7_Pin
                     | FMC_D9_Pin | FMC_D12_Pin | FMC_D10_Pin);
 
-    HAL_GPIO_DeInit(GPIOG, FMC_SDNCAS_Pin | FMC_SDCLK_Pin | FMC_A11_Pin
+    HAL_GPIO_DeInit(GPIOG, FMC_SDNCAS_Pin | FMC_SDCLK_Pin | FMC_A11_Pin | FMC_A12_Pin
                     | FMC_A10_Pin | FMC_BA1_Pin | FMC_BA0_Pin);
 
     HAL_GPIO_DeInit(GPIOD, FMC_D2_Pin | FMC_D3_Pin | FMC_D1_Pin | FMC_D15_Pin

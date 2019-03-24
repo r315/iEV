@@ -6,6 +6,6 @@
 
 static unsigned short SIM_WIDTH = 800;
 static unsigned short SIM_HEIGHT = 480;
-static const char* SIM_TITLE = "Button";
+static const char* SIM_TITLE = "iEV";
 
 #endif // SIMCONSTANTS_HPP

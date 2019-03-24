@@ -8,8 +8,16 @@ MainPresenter::MainPresenter(MainView& v)
 
 void MainPresenter::activate()
 {
+
 }
 
 void MainPresenter::deactivate()
 {
+
 }
+
+
+void MainPresenter::notifyRpmChange(int newRpm){
+    view.setRpm(newRpm);
+}
+    

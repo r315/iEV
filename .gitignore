@@ -8,3 +8,5 @@ startup/
 .cproject
 *.log
 /Debug/
+STM32F769NIHx_FLASH.ld
+startup_stm32f769xx.s

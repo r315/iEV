@@ -51,7 +51,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "otm8009a.h"
+
 /* Exported constants --------------------------------------------------------*/
 
 #define OTM8009A_FORMAT          OTM8009A_FORMAT_RGB888

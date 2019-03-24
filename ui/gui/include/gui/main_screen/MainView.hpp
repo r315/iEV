@@ -11,17 +11,9 @@ public:
     virtual ~MainView() {}
     virtual void setupScreen();
     virtual void tearDownScreen();
-
-    virtual void increaseValue();
-    virtual void decreaseValue();
-
-    void setCount(uint8_t countValue);
-    void setLimitEffects(bool belowUpper, bool aboveLower);
-
+    void testValues(int value);
+    void setRpm(int rpm);
 protected:
-
-private:
-    uint8_t count;
 };
 
 #endif // MAIN_VIEW_HPP
