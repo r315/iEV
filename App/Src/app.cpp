@@ -1,9 +1,11 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "console.h"
-#include "cmdhelp.h"
+#include "commands.h"
+#include "gui/main_screen/MainPresenter.hpp"
 #include <stdio.h>
 
+Console console;
 extern SerialOut vcom;
 
 void ledAliveTask(void const * argument){
@@ -14,14 +16,15 @@ void ledAliveTask(void const * argument){
   }
 }
 
-void consoleTask(void const * argument){
-  Console console;
-  ConsoleHelp help;
+void consoleTask(void const * argument){  
+  Help help;
+  Rpm rpm;
 
   vcom.init();
   console.init(&vcom, "iEV>");
 
   console.addCommand(&help);
+  console.addCommand(&rpm);
 
   for(;;){
     console.process();
@@ -31,14 +34,17 @@ void consoleTask(void const * argument){
 
 void appTask(void const * argument){
 
-    osThreadDef(consoleProcess, consoleTask, osPriorityLow, 0, 512);
+  osThreadDef(consoleProcess, consoleTask, osPriorityLow, 0, 512);
   osThreadCreate(osThread(consoleProcess), NULL);
 
-    osThreadDef(aliveLed, ledAliveTask, osPriorityLow, 0, 128);
+  osThreadDef(aliveLed, ledAliveTask, osPriorityLow, 0, 128);
   osThreadCreate(osThread(aliveLed), NULL);
 
   while(1){
+    
+      
+
       osDelay(100);
   }
-
 }
+

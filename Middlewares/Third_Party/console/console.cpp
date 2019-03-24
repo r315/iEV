@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
-#include <stdarg.h>
+
 
 #include "console.h"
 
@@ -322,4 +322,8 @@ void Console::changeLine(char *new_line) {
 	for(i = 0; i < line_len; i++){
 		*(line + i) = *new_line++;
 	}
+}
+
+void Console::log(const char* str, ...){
+	print(str);
 }

@@ -7,6 +7,8 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include <stdarg.h>
+
 #include "serialout.h"
 #include "console_command.h"
 
@@ -72,6 +74,8 @@ extern "C" {
 		char getline(char *line, uint8_t max);
 		void print(const char* str, ...);
 		uint8_t kbhit(void);
+
+		void log(const char* str, ...);
 
 		uint8_t getCmdListSize(void) { return cmdListSize; }
 		ConsoleCommand *getCmdIndexed(uint8_t idx) { return cmdList[idx]; } // security issues??

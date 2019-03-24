@@ -1,6 +1,5 @@
-#ifndef _cmdhelp_h_
-#define _cmdhelp_h_
-
+#ifndef _commands_h_
+#define _commands_h_
 
 #ifdef __cplusplus
 extern "C" {
@@ -8,10 +7,10 @@ extern "C" {
 
 #include "console.h"
 
-class ConsoleHelp : public ConsoleCommand {
+class Help : public ConsoleCommand {
 	Console *console;
 public:
-    ConsoleHelp() : ConsoleCommand("help") {}	
+    Help() : ConsoleCommand("help") {}	
 	void init(void *params) { console = static_cast<Console*>(params); }
 
 	void help(void) {
@@ -25,6 +24,23 @@ public:
 
 	char execute(void *ptr) {
 		help();
+		return CMD_OK;
+	}	
+};
+
+
+
+class Rpm : public ConsoleCommand {
+	Console *console;
+public:
+    Rpm() : ConsoleCommand("rpm") {}	
+	void init(void *params) { console = static_cast<Console*>(params); }
+
+	void help(void) {
+		console->puts("set rpm\n\n");
+	}
+
+	char execute(void *ptr) {
 		return CMD_OK;
 	}	
 };
