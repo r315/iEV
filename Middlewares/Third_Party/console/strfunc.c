@@ -167,35 +167,40 @@ void xstrcpy(char *dst, char *src, uint8_t maxLen) {
  * */
 uint8_t yatoi(char *str, int32_t *value){
 int val = 0;	
-char c, s = 0;
+char c;
+uint8_t s = 0;
 
 	if(*str == '-'){
-		s = (1 << 0); // Signal flag
+		s = (1 << 7); // Signal flag
 		str++;
 	}
 
-	while(*str){
-		c = *str;
+	while( (c = *str) != '\0'){
 		if(c < '0' || c > '9'){
             // check is number is ended or parse failed
-            // by having a non numeric char 
+            // by having a non numeric char in middle
 			if(c == ' ' || c == '\n' || c == '\r'){                
-                s |= (1 << 1); // success flag
+                s |= (1 << 6); // Set end flag 
 			}
 			break;			
 		}
 
 		c -= '0';
 		val = val * 10 + c;
-		str +=1;
+		str += 1;
+		s += 1;
 	}
 
-    if( !(s&(1<<1))){
-        // parse fail
-        return 0;
+	// check end flag
+    if( !(s & ( 1 << 6))){
+        // Check if successfull conversion was 
+		//made with a '\0' ending string
+		if(!((*str == '\0') && ((s & 0x3F) != 0)))
+        	return 0;
     } 
 
-    *value = (s & (1 << 0))? -val : val;
+	// check signal flag
+    *value = (s & (1 << 7))? -val : val;
 
 	return 1;
 }

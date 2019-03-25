@@ -11,8 +11,9 @@ public:
     virtual ~MainView() {}
     virtual void setupScreen();
     virtual void tearDownScreen();
-    void testValues(int value);
-    void setRpm(int rpm);
+    void setDistance(int value);
+    void setRpm(int value);
+    void setSpeed(int value);
 protected:
 };
 

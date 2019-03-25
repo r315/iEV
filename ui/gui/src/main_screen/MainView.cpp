@@ -15,19 +15,18 @@ void MainView::tearDownScreen()
     MainViewBase::tearDownScreen();
 }
 
-void MainView::testValues(int value){
-    Unicode::snprintf(TextAreaSpeedBuffer, 4, "%d", value);
-    // Invalidate text area, which will result in it being redrawn in next tick.
-    //TextAreaSpeedBuffer[0] = 31;
-    //TextAreaSpeedBuffer[1] = 31;
-    //TextAreaSpeedBuffer[2] = 31;
-    //TextAreaSpeed.resizeToCurrentText(); 
-    TextAreaSpeed.invalidate();
-     Unicode::snprintf(TextAreaDistanceBuffer, 7, "%06d", value *999);
+void MainView::setDistance(int value){
+     Unicode::snprintf(TextAreaDistanceBuffer, 7, "%06d", value);
     TextAreaDistance.invalidate();
 }
 
-void MainView::setRpm(int rpm){
-    Unicode::snprintf(TextAreaRpmBuffer, 6, "%d", rpm);
+void MainView::setRpm(int value){
+    Unicode::snprintf(TextAreaRpmBuffer, 6, "%d", value);
     TextAreaRpm.invalidate();
+}
+
+
+void MainView::setSpeed(int value){
+    Unicode::snprintf(TextAreaSpeedBuffer, 4, "%d", value);
+    TextAreaSpeed.invalidate();
 }

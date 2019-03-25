@@ -3,22 +3,37 @@
 
 #include "iev.h"
 
-#define RPM_QUEUE_LENGTH 1
+#define RPM_QUEUE_LENGTH 2
 #define RPM_QUEUE_ITEM_SIZE sizeof(QuadrantData)
 
-QueueHandle_t rpmQueue;
+QueueHandle_t qdataQueue;
+QuadrantData qdata;
 
-
+#define FRAMES_SECOND 60
 
 Model::Model() : modelListener(0)
 {
-    rpmQueue = xQueueCreate( RPM_QUEUE_LENGTH, RPM_QUEUE_ITEM_SIZE );
-    if(rpmQueue == NULL){
-        console.log("Fail to create rpmQueue\n");
+    qdataQueue = xQueueCreate( RPM_QUEUE_LENGTH, RPM_QUEUE_ITEM_SIZE );
+    if(qdataQueue == NULL){
+        //console.log("Fail to create qdataQueue\n");
+    }else{
+        //console.log("qdataQueue created\n");
     }
+    tickCount = 0;
+    distance = (double)qstate.distance;
 }
+
 
 void Model::tick()
 {
+    if(xQueueReceive(qdataQueue, &qdata, 0) == pdPASS){
+        // update ui
+        modelListener->notifyRpmChange(qdata.rpm);
+    }
 
+    if(++tickCount >= FRAMES_SECOND){
+        distance += (double)qdata.rpm / qstate.gearRacio;
+        modelListener->notifyDistanceChange(distance);
+        modelListener->notifySpeedChange(qdata.rpm / qstate.gearRacio);
+    }
 }

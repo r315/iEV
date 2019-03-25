@@ -28,9 +28,9 @@ public:
         model = m;
     }
 
-    virtual void notifyRpmChange(int newRpm);
-    //virtual void notifyDistanceChange(int newDistance);
-    //virtual void notifySpeedChange(int newSpeed);
+    virtual void notifyRpmChange(int value);
+    virtual void notifyDistanceChange(int value);
+    virtual void notifySpeedChange(int value);
 protected:
     Model* model;
 };

@@ -1,11 +1,12 @@
 #include "main.h"
 #include "cmsis_os.h"
-#include "console.h"
-#include "commands.h"
+#include "iev.h"
 #include "gui/main_screen/MainPresenter.hpp"
 #include <stdio.h>
 
+
 Console console;
+QuadrantState qstate;
 extern SerialOut vcom;
 
 void ledAliveTask(void const * argument){
@@ -33,6 +34,11 @@ void consoleTask(void const * argument){
 }
 
 void appTask(void const * argument){
+
+  // load data from NVRAM
+
+  qstate.gearRacio = 3000;
+
 
   osThreadDef(consoleProcess, consoleTask, osPriorityLow, 0, 512);
   osThreadCreate(osThread(consoleProcess), NULL);

@@ -37,12 +37,10 @@ public:
 	void init(void *params) { console = static_cast<Console*>(params); }
 
 	void help(void) {
-		console->puts("set rpm\n\n");
+		console->puts("usage rpm <0-20000>\n\n");
 	}
 
-	char execute(void *ptr) {
-		return CMD_OK;
-	}	
+	char execute(void *ptr);
 };
 
 

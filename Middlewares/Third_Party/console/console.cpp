@@ -109,8 +109,8 @@ char Console::getLineNonBlocking(char *dst, uint8_t *cur_len, uint8_t maxLen) {
 	char c;
 	uint8_t len;
 
-	//if(out->getCharNonBlocking(&c)) {
-	while(out->getCharNonBlocking(&c)) {	
+	if(out->getCharNonBlocking(&c)) {
+	//while(out->getCharNonBlocking(&c)) {	
 		len = *cur_len;
 		
 		if ((c == '\n') || (c == '\r')) {
@@ -325,5 +325,7 @@ void Console::changeLine(char *new_line) {
 }
 
 void Console::log(const char* str, ...){
+	xputc('\r');
 	print(str);
+	print(prompt);
 }
