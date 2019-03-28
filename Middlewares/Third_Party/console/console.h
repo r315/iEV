@@ -49,7 +49,7 @@ extern "C" {
 		char *historyForward(void);
 		char *historyGet(void);
 		void historyClear(void);
-		void changeLine(char *new_line);
+		uint8_t changeLine(char *new_line);
 		uint8_t hist_idx;
 		uint8_t hist_cur;
 		uint8_t hist_size;

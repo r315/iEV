@@ -19,6 +19,6 @@ typedef struct {
 
 extern Console console;
 extern QueueHandle_t qdataQueue;
-extern QuadrantState qstate;
+extern volatile QuadrantState qstate;
 
 #endif

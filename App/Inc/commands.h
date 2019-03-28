@@ -14,7 +14,7 @@ public:
 	void init(void *params) { console = static_cast<Console*>(params); }
 
 	void help(void) {
-		console->puts("Available commands:\n\n");
+		console->puts("Available commands:\n");
 		
 		for (uint8_t i = 0; i < console->getCmdListSize(); i++) {			
 				console->print("\t%s\n", console->getCmdIndexed(i)->getName());
@@ -37,11 +37,26 @@ public:
 	void init(void *params) { console = static_cast<Console*>(params); }
 
 	void help(void) {
-		console->puts("usage rpm <0-20000>\n\n");
+		console->puts("usage rpm <0-20000>");
 	}
 
 	char execute(void *ptr);
 };
+
+
+class Racio : public ConsoleCommand {
+	Console *console;
+public:
+    Racio() : ConsoleCommand("racio") {}	
+	void init(void *params) { console = static_cast<Console*>(params); }
+
+	void help(void) {
+		console->puts("usage racio <0-20000>");
+	}
+
+	char execute(void *ptr);
+};
+
 
 
 #ifdef __cplusplus

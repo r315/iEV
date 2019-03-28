@@ -230,11 +230,6 @@ fontconvert_font_files := \
 
 asm_source_files := $(bsp_path)/startup/startup_stm32f769xx.s
 
-gcc_source_files := \
-	$(touchgfx_path)/framework/config/gcc/stdio.c \
-  	$(touchgfx_path)/framework/config/gcc/stdlib.c \
-  	$(touchgfx_path)/framework/config/gcc/string.c
-
 board_c_files := \
 	$(bsp_path)/Src/stm32f769i_discovery.c \
 	$(bsp_path)/Src/stm32f769i_discovery_sdram.c \
@@ -332,14 +327,13 @@ cpp_compiler_options += -DST -DSTM32F769xx
 
 include_paths += $(board_include_paths) $(os_include_paths)
 
-c_source_files := $(os_source_files) $(board_c_files) #$(call find, $(source_paths),*.c)
+c_source_files := $(os_source_files) $(board_c_files)
 cpp_source_files := $(os_wrapper) $(board_cpp_files) $(call find, $(source_paths),*.cpp)
 
 object_files := $(cpp_source_files) $(c_source_files)
 # Start converting paths
 object_files := $(object_files:$(ui_path)/%.cpp=$(object_output_path)/ui/%.o)
 object_files := $(object_files:%.cpp=$(object_output_path)/%.o)
-#object_files := $(object_files:$(Middlewares_path)/%.c=$(object_output_path)/Middlewares/%.o)
 object_files := $(object_files:$(Drivers_path)/%.c=$(object_output_path)/Drivers/%.o)
 object_files := $(object_files:%.c=$(object_output_path)/%.o)
 dependency_files := $(object_files:%.o=%.d)
