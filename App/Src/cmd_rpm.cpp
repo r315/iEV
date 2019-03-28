@@ -9,11 +9,11 @@ char Rpm::execute(void *ptr) {
 		// check parameters
 	if( p1 == NULL || *p1 == '\0' || !nextInt(&p1, (int32_t*)&qdata.rpm)){
 		help();
-		return CMD_OK;
-	}
+		//console.print("rpm:%u", qdata.)
+	}else{
 
 	xQueueSend(qdataQueue, &qdata, portMAX_DELAY);
-
+	}
 	return CMD_OK;
 }	
 
