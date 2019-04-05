@@ -27,6 +27,7 @@ void consoleTask(void *argument){
   Help help;
   Rpm rpm;
   Racio racio;
+  CmdMem mem;
 
   vcom.init();
   console.init(&vcom, "iEV>");
@@ -34,6 +35,7 @@ void consoleTask(void *argument){
   console.addCommand(&help);
   console.addCommand(&rpm);
   console.addCommand(&racio);
+  console.addCommand(&mem);
 
   for(;;){
     console.process();

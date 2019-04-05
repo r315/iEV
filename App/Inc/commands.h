@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "console.h"
+#include "cmd_mem.h"
 
 class Help : public ConsoleCommand {
 	Console *console;

@@ -71,6 +71,13 @@ int8_t nextInt(char **line, int32_t *value){
     return 0;
 }
 
+/** 
+ * Get first char of sprint pointed by line, and advance that pointer to next char
+ * by skiping space character
+ * \param line		pointer string pointer
+ * \return		first char of current word
+ * 
+ * */
 char nextChar(char **line){
 char c;    
     c = *line[0];
