@@ -23,7 +23,7 @@ Model::Model() : modelListener(0)
     distance = (double)qstate.distance;
 }
 
-
+// Called every 15.66ms
 void Model::tick()
 {
     if(xQueueReceive(qdataQueue, &qdata, 0) == pdPASS){
@@ -31,9 +31,9 @@ void Model::tick()
         modelListener->notifyRpmChange(qdata.rpm);
     }
 
-    if(++tickCount >= FRAMES_SECOND){
-        distance += (double)qdata.rpm / qstate.gearRacio;
-        modelListener->notifyDistanceChange(distance);
-        modelListener->notifySpeedChange(qdata.rpm / qstate.gearRacio);
-    }
+    
+    distance += (double)qdata.rpm / qstate.gearRacio;
+    modelListener->notifyDistanceChange(distance);
+    modelListener->notifySpeedChange(qdata.rpm / qstate.gearRacio);
+    HAL_GPIO_TogglePin(LD_USER3_GPIO_Port, LD_USER3_Pin);
 }

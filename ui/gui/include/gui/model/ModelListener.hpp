@@ -2,7 +2,7 @@
 #define MODELLISTENER_HPP
 
 #include <gui/model/Model.hpp>
-
+#include "main.h"
 /**
  * ModelListener is the interface through which the Model can inform the currently
  * active presenter of events. All presenters should derive from this class.

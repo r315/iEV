@@ -545,6 +545,9 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(DSI_RESET_GPIO_Port, DSI_RESET_Pin, GPIO_PIN_RESET);
 
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(LD_USER3_GPIO_Port, LD_USER3_Pin, GPIO_PIN_RESET);
+
   /*Configure GPIO pins : Audio_INT_Pin WIFI_RST_Pin ARD_D8_Pin 
                            LD_USER2_Pin ARD_D7_Pin ARD_D4_Pin ARD_D2_Pin */
   GPIO_InitStruct.Pin = Audio_INT_Pin|WIFI_RST_Pin|ARD_D8_Pin 
@@ -610,6 +613,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD_USER1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LD_USER3_Pin */
+  GPIO_InitStruct.Pin = LD_USER3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LD_USER3_GPIO_Port, &GPIO_InitStruct);
 
 }
 
