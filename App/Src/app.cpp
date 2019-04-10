@@ -10,16 +10,13 @@
 #define STACK_MINIMUM configMINIMAL_STACK_SIZE
 #define STACK_MEDIUM (configMINIMAL_STACK_SIZE * 8)
 
-
+static const char prompt[] = "iEV>";
 Console console;
-volatile QuadrantState qstate;
-extern SerialOut vcom;
 
 void ledAliveTask(void *argument){
   for(;;){
-    HAL_GPIO_TogglePin(LD_USER2_GPIO_Port, LD_USER2_Pin);
-    vTaskDelay(pdMS_TO_TICKS(200));    
-    //osDelay(200);
+    BSP_LED_Toggle(LED_GREEN);    
+    vTaskDelay(pdMS_TO_TICKS(400));
   }
 }
 
@@ -30,7 +27,7 @@ void consoleTask(void *argument){
   CmdMem mem;
 
   vcom.init();
-  console.init(&vcom, "iEV>");
+  console.init(&vcom, prompt);
 
   console.addCommand(&help);
   console.addCommand(&rpm);
@@ -59,9 +56,6 @@ void appTask(void const * argument){
   //osThreadCreate(osThread(aliveLed), NULL);
 
   while(1){
-    
-      
-
       osDelay(100);
   }
 }

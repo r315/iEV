@@ -21,11 +21,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
-
 #include "stm32f769i_discovery_qspi.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "fatfs.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,6 +58,8 @@ QSPI_HandleTypeDef hqspi;
 
 RTC_HandleTypeDef hrtc;
 
+SD_HandleTypeDef hsd2;
+
 //SDRAM_HandleTypeDef hsdram1;
 
 osThreadId defaultTaskHandle;
@@ -72,13 +73,12 @@ static void MX_GPIO_Init(void);
 static void MX_CRC_Init(void);
 static void MX_QUADSPI_Init(void);
 static void MX_RTC_Init(void);
-static void MX_GFXSIMULATOR_Init(void);
+static void MX_SDMMC2_SD_Init(void);
 static void StartDefaultTask(void const * argument);
 
 void GRAPHICS_Init();
 void GRAPHICS_HW_Init();
 void GRAPHICS_MainTask(void);
-extern "C" void vc_init(void);
 
 /* USER CODE BEGIN PFP */
 void appTask(void const * argument);
@@ -133,7 +133,8 @@ int main(void)
 
   /* Initialise the graphical stack engine */
   GRAPHICS_Init();
-
+  MX_SDMMC2_SD_Init();
+  MX_FATFS_Init();
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -248,69 +249,6 @@ void SystemClock_Config(void)
     HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSI, RCC_MCODIV_1);
 }
 
-void _SystemClock_Config(void)
-{
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
-
-  /** Configure LSE Drive Capability 
-  */
-  HAL_PWR_EnableBkUpAccess();
-  /** Configure the main internal regulator output voltage 
-  */
-  __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-  /** Initializes the CPU, AHB and APB busses clocks 
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 25;
-  RCC_OscInitStruct.PLL.PLLN = 432;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 4;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Activate the Over-Drive mode 
-  */
-  if (HAL_PWREx_EnableOverDrive() != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Initializes the CPU, AHB and APB busses clocks 
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
-
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_7) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_LTDC|RCC_PERIPHCLK_RTC
-                              |RCC_PERIPHCLK_I2C4;
-  PeriphClkInitStruct.PLLSAI.PLLSAIN = 192;
-  PeriphClkInitStruct.PLLSAI.PLLSAIR = 2;
-  PeriphClkInitStruct.PLLSAI.PLLSAIQ = 3;
-  PeriphClkInitStruct.PLLSAI.PLLSAIP = RCC_PLLSAIP_DIV4;
-  PeriphClkInitStruct.PLLSAIDivQ = 1;
-  PeriphClkInitStruct.PLLSAIDivR = RCC_PLLSAIDIVR_2;
-  PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
-  PeriphClkInitStruct.I2c4ClockSelection = RCC_I2C4CLKSOURCE_PCLK1;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-}
-
 /**
   * @brief CRC Initialization Function
   * @param None
@@ -339,28 +277,6 @@ static void MX_CRC_Init(void)
   /* USER CODE BEGIN CRC_Init 2 */
 
   /* USER CODE END CRC_Init 2 */
-
-}
-
-
-/**
-  * @brief GFXSIMULATOR Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_GFXSIMULATOR_Init(void)
-{
-
-  /* USER CODE BEGIN GFXSIMULATOR_Init 0 */
-
-  /* USER CODE END GFXSIMULATOR_Init 0 */
-
-  /* USER CODE BEGIN GFXSIMULATOR_Init 1 */
-
-  /* USER CODE END GFXSIMULATOR_Init 1 */
-  /* USER CODE BEGIN GFXSIMULATOR_Init 2 */
-
-  /* USER CODE END GFXSIMULATOR_Init 2 */
 
 }
 
@@ -397,36 +313,6 @@ static void MX_GFXSIMULATOR_Init(void)
     BSP_QSPI_Init();
     BSP_QSPI_EnableMemoryMappedMode();
     /* USER CODE END QUADSPI_Init 2 */
-
-}
-
-static void _MX_QUADSPI_Init(void)
-{
-
-  /* USER CODE BEGIN QUADSPI_Init 0 */
-
-  /* USER CODE END QUADSPI_Init 0 */
-
-  /* USER CODE BEGIN QUADSPI_Init 1 */
-
-  /* USER CODE END QUADSPI_Init 1 */
-  /* QUADSPI parameter configuration*/
-  hqspi.Instance = QUADSPI;
-  hqspi.Init.ClockPrescaler = 255;
-  hqspi.Init.FifoThreshold = 1;
-  hqspi.Init.SampleShifting = QSPI_SAMPLE_SHIFTING_NONE;
-  hqspi.Init.FlashSize = 1;
-  hqspi.Init.ChipSelectHighTime = QSPI_CS_HIGH_TIME_1_CYCLE;
-  hqspi.Init.ClockMode = QSPI_CLOCK_MODE_0;
-  hqspi.Init.FlashID = QSPI_FLASH_ID_1;
-  hqspi.Init.DualFlash = QSPI_DUALFLASH_DISABLE;
-  if (HAL_QSPI_Init(&hqspi) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN QUADSPI_Init 2 */
-
-  /* USER CODE END QUADSPI_Init 2 */
 
 }
 
@@ -620,6 +506,34 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD_USER3_GPIO_Port, &GPIO_InitStruct);
+
+}
+
+/**
+  * @brief SDMMC2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SDMMC2_SD_Init(void)
+{
+
+  /* USER CODE BEGIN SDMMC2_Init 0 */
+
+  /* USER CODE END SDMMC2_Init 0 */
+
+  /* USER CODE BEGIN SDMMC2_Init 1 */
+
+  /* USER CODE END SDMMC2_Init 1 */
+  hsd2.Instance = SDMMC2;
+  hsd2.Init.ClockEdge = SDMMC_CLOCK_EDGE_RISING;
+  hsd2.Init.ClockBypass = SDMMC_CLOCK_BYPASS_DISABLE;
+  hsd2.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
+  hsd2.Init.BusWide = SDMMC_BUS_WIDE_1B;
+  hsd2.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
+  hsd2.Init.ClockDiv = 0;
+  /* USER CODE BEGIN SDMMC2_Init 2 */
+
+  /* USER CODE END SDMMC2_Init 2 */
 
 }
 

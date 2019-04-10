@@ -39,6 +39,9 @@ os_path := $(Middlewares_path)/Third_Party/FreeRTOS
 #Get user application path
 user_app_path := App
 
+#FatFS
+fatfs_path := $(Middlewares_path)/Third_Party/FatFs
+
 #Get linker script path
 linker_script_path := $(bsp_path)
 
@@ -122,7 +125,7 @@ os_source_files := $(os_path)/Source/croutine.c \
 
 os_include_paths := $(os_path)/Source/include \
                     $(os_path)/Source/portable/GCC/ARM_CM7/r0p1 \
-									  $(os_path)/Source/CMSIS_RTOS
+					$(os_path)/Source/CMSIS_RTOS
 
 os_wrapper := $(touchgfx_path)/os/OSWrappers.cpp
 
@@ -234,6 +237,7 @@ board_c_files := \
 	$(bsp_path)/Src/stm32f769i_discovery.c \
 	$(bsp_path)/Src/stm32f769i_discovery_sdram.c \
 	$(bsp_path)/Src/stm32f769i_discovery_ts.c \
+	$(bsp_path)/Src/stm32f769i_discovery_sd.c \
 	$(bsp_path)/Src/stm32f769i_discovery_qspi.c \
 	$(bsp_path)/Components/otm8009a/otm8009a.c \
 	$(bsp_path)/Components/ft6x06/ft6x06.c
@@ -267,16 +271,18 @@ board_c_files += \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_fmc.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_dsi.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_uart.c \
+	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_sd.c \
+	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_sdmmc.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd_ex.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_usb.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_spi.c \
-	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_sdmmc.c \
-	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_sd.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_nor.c \
 
 board_c_files += \
 	$(console_path)/strfunc.c \
+	$(fatfs_path)/src/ff.c \
+	$(fatfs_path)/src/ff_gen_drv.c \
 	#$(usb_lib_path)/Core/Src/usbd_ioreq.c \
 	$(usb_lib_path)/Core/Src/usbd_ctlreq.c \
 	$(usb_lib_path)/Core/Src/usbd_core.c \
@@ -316,11 +322,13 @@ board_include_paths := \
 	$(bsp_path)/Components/otm8009a \
 	$(bsp_path)/Components/qspi \
 	$(user_app_path)/Inc \
+	Core/Inc \
 	$(usb_lib_path)/Core/Inc \
 	$(usb_lib_path)/Class/CDC/Inc \
 	$(usb_device_path)/App \
 	$(usb_device_path)/Target \
 	$(console_path) \
+	$(fatfs_path)/src \
 
 c_compiler_options += -DST -DSTM32F769xx
 cpp_compiler_options += -DST -DSTM32F769xx
