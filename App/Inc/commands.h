@@ -3,7 +3,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+
 
 #include "console.h"
 #include "cmd_mem.h"
@@ -60,7 +60,7 @@ public:
 
 
 
-#ifdef __cplusplus
+
 }
 #endif
 

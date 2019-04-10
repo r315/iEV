@@ -1,9 +1,20 @@
 #ifndef _iev_h_
 #define _iev_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
+
+/* board related includes */
+#include "stm32f769i_discovery.h"
+/* RTOS includes */
 #include "FreeRTOS.h"
 #include "queue.h"
+/* Application includes */
+#include "main.h"
+#include "console.h"
 #include "commands.h"
 
 
@@ -17,8 +28,13 @@ typedef struct {
     
 }QuadrantState;
 
-extern Console console;
-extern QueueHandle_t qdataQueue;
-extern volatile QuadrantState qstate;
+static QueueHandle_t qdataQueue;
+static volatile QuadrantState qstate; /* Not protected with mutex */
+extern SerialOut vcom;
+static QueueHandle_t vcQueue;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

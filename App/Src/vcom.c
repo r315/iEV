@@ -3,17 +3,12 @@
 #include <stdio.h>
 #include <serialout.h>
 
-#include "main.h"
-#include "stm32f7xx_hal.h"
-#include "FreeRTOS.h"
-#include "queue.h"
+#include "iev.h"
 
 #define VCOM_QUEUE_LENGTH 128
 #define VCOM_QUEUE_ITEM_SIZE 1
 
 UART_HandleTypeDef huart1;
-
-QueueHandle_t vcQueue;
 
 /**
   * @brief USART1 Initialization Function
@@ -78,8 +73,6 @@ SerialOut vcom = {
     .kbhit = vc_kbhit
 };
 
-
-
 /**
   * @brief This function handles USART1 global interrupt.
   */
@@ -87,5 +80,5 @@ void USART1_IRQHandler(void)
 {
   uint8_t data = USART1->RDR;
   xQueueSendToBackFromISR(vcQueue, &data, pdFALSE);  
-  HAL_GPIO_TogglePin(LD_USER1_GPIO_Port, LD_USER1_Pin);
+  BSP_LED_Toggle(LED_RED);
 }

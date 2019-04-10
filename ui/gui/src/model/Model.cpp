@@ -6,7 +6,6 @@
 #define RPM_QUEUE_LENGTH 2
 #define RPM_QUEUE_ITEM_SIZE sizeof(QuadrantData)
 
-QueueHandle_t qdataQueue;
 QuadrantData qdata;
 
 #define FRAMES_SECOND 60
@@ -35,5 +34,4 @@ void Model::tick()
     distance += (double)qdata.rpm / qstate.gearRacio;
     modelListener->notifyDistanceChange(distance);
     modelListener->notifySpeedChange(qdata.rpm / qstate.gearRacio);
-    HAL_GPIO_TogglePin(LD_USER3_GPIO_Port, LD_USER3_Pin);
 }

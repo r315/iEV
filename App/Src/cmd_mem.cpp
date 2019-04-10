@@ -35,6 +35,7 @@ uint8_t *pdata = (uint8_t*)add;
 
 void CmdMem::help(void){
     console->print("Usage: mem [option] \n\n");  
+    console->print("\t r <address>, Read starting from address\n");
     console->print("\t n, number of bytes\n");
 }
 
