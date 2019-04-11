@@ -2,7 +2,7 @@
 build/
 .vscode/
 ui/generated/
-Core/
+Core/Src
 startup/
 .project
 .cproject
@@ -10,4 +10,4 @@ startup/
 /Debug/
 STM32F769NIHx_FLASH.ld
 startup_stm32f769xx.s
-FATFS/Target
+FATFS/

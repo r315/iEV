@@ -80,6 +80,9 @@ all clean assets:
 flash intflash: all
 	@cd "$(application_path)" && "$(MAKE)" -r -f $(makefile_name) -s $(MFLAGS) _$@_
 
+flash-openocd: all
+	openocd -f iEV.cfg -c "program $(binary_output_path)/intflash.hex verify reset exit"
+
 test:
 #@echo ""; $(foreach d, $(c_source_files), echo $(d);)
 #@echo ""; $(foreach d, $(cpp_source_files), echo $(d);)
@@ -237,10 +240,11 @@ board_c_files := \
 	$(bsp_path)/Src/stm32f769i_discovery.c \
 	$(bsp_path)/Src/stm32f769i_discovery_sdram.c \
 	$(bsp_path)/Src/stm32f769i_discovery_ts.c \
-	$(bsp_path)/Src/stm32f769i_discovery_sd.c \
 	$(bsp_path)/Src/stm32f769i_discovery_qspi.c \
 	$(bsp_path)/Components/otm8009a/otm8009a.c \
-	$(bsp_path)/Components/ft6x06/ft6x06.c
+	$(bsp_path)/Components/ft6x06/ft6x06.c \
+	$(bsp_path)/Src/stm32f769i_discovery_sd.c \
+	
 
 board_c_files += \
 	$(wildcard $(user_app_path)/Src/*.c) \
@@ -283,6 +287,8 @@ board_c_files += \
 	$(console_path)/strfunc.c \
 	$(fatfs_path)/src/ff.c \
 	$(fatfs_path)/src/ff_gen_drv.c \
+	$(fatfs_path)/src/diskio.c \
+	$(fatfs_path)/src/option/syscall.c \
 	#$(usb_lib_path)/Core/Src/usbd_ioreq.c \
 	$(usb_lib_path)/Core/Src/usbd_ctlreq.c \
 	$(usb_lib_path)/Core/Src/usbd_core.c \

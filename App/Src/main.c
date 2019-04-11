@@ -66,19 +66,15 @@ osThreadId defaultTaskHandle;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-extern "C" void SystemClock_Config(void);
+static void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_CRC_Init(void);
 static void MX_QUADSPI_Init(void);
 static void MX_RTC_Init(void);
 static void StartDefaultTask(void const * argument);
 
-void GRAPHICS_Init();
-void GRAPHICS_HW_Init();
-void GRAPHICS_MainTask(void);
-
 /* USER CODE BEGIN PFP */
-void appTask(void const * argument);
+void appMain(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -123,13 +119,7 @@ int main(void)
   //MX_FMC_Init();
   //MX_I2C4_Init();  
   //MX_RTC_Init();
-  /* USER CODE BEGIN 2 */
-  
-  /* Initialise the graphical hardware */
-  GRAPHICS_HW_Init();
-
-  /* Initialise the graphical stack engine */  
-  GRAPHICS_Init();
+  /* USER CODE BEGIN 2 */ 
 
   /* USER CODE END 2 */
 
@@ -150,21 +140,15 @@ int main(void)
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 4096);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+ 
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
 
-  osThreadDef(applicationProcess, appTask, osPriorityNormal, 0, 512);
-  osThreadCreate(osThread(applicationProcess), NULL);
   
   /* USER CODE END RTOS_THREADS */
 
-  /* Start scheduler */
-  osKernelStart();
-  
+  appMain();
   /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
@@ -515,26 +499,6 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE END 4 */
 
-/* USER CODE BEGIN Header_StartDefaultTask */
-/**
-  * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used 
-  * @retval None
-  */
-/* USER CODE END Header_StartDefaultTask */
-static void StartDefaultTask(void const * argument)
-{
-  /* USER CODE BEGIN 5 */
-  /* Graphic application, never return */
-  GRAPHICS_MainTask();
-
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);   
-  }
-  /* USER CODE END 5 */ 
-}
 
 /**
   * @brief  Period elapsed callback in non blocking mode

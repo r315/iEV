@@ -10,6 +10,10 @@
 #define STACK_MINIMUM configMINIMAL_STACK_SIZE      // 128 * 4
 #define STACK_MEDIUM (configMINIMAL_STACK_SIZE * 8) // 128 * 8 * 4
 
+void GRAPHICS_MainTask(void);
+void GRAPHICS_Init(void);
+void GRAPHICS_HW_Init(void);
+
 static const char prompt[] = "iEV>";
 Console console;
 
@@ -17,6 +21,18 @@ void ledAliveTask(void *argument){
   for(;;){
     BSP_LED_Toggle(LED_GREEN);    
     vTaskDelay(pdMS_TO_TICKS(400));
+  }
+}
+
+void graphicsTask(void *argument)
+{  
+  /* Graphic application, never return */
+  GRAPHICS_MainTask();
+
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);   
   }
 }
 
@@ -42,14 +58,24 @@ void consoleTask(void *argument){
   }
 }
 
-void appTask(void const * argument){
+extern "C" void appMain(void){
 
   // load data from NVRAM
 
   qstate.gearRacio = 3000;
 
-  xTaskCreate(ledAliveTask, "Alive Led", STACK_MINIMUM, NULL, LOW_PRIORITY_TASK, NULL);
-  xTaskCreate(consoleTask, "Console", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
+  /* Initialise the graphical hardware */
+  GRAPHICS_HW_Init();
+
+  /* Initialise the graphical stack engine */  
+  GRAPHICS_Init();
+
+  xTaskCreate(graphicsTask, "Graphics Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
+  xTaskCreate(ledAliveTask, "Alive Led Task", STACK_MINIMUM, NULL, LOW_PRIORITY_TASK, NULL);
+  xTaskCreate(consoleTask, "Console Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
+
+  /* Start scheduler */
+  osKernelStart();
 
   while(1){
       osDelay(100);
