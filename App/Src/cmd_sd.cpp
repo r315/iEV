@@ -17,7 +17,7 @@ uint8_t wtext[] = "text to write logical disk"; /* File write buffer */
 		return;
 	}
 
-	fr = f_mount(&SDFatFS, (TCHAR const*)SDPath, 0);
+	fr = f_mount(&SDFatFS, (TCHAR const*)SDPath, 1);
 	
 	if(fr != FR_OK){
 		console->print("FATFS Fail to mount: %x\n", fr);
@@ -60,9 +60,12 @@ char SDCard::execute(void *ptr) {
      while( !(operation & OPT_DONE) ){
         c = nextChar(&p1);
         switch(c){
+			case 's':
+				BSP_SD_Init();
+				break;
+
 			case 'i':
 				HAL_SD_CardInfoTypeDef ci;
-				BSP_SD_Init();
 				BSP_SD_GetCardInfo(&ci);
 				console->print("\nType: %x\n", ci.CardType);
 				console->print("Version: %x\n", ci.CardVersion);

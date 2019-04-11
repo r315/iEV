@@ -189,7 +189,7 @@ Stat = STA_NOINIT;
     if ((Stat != STA_NOINIT) && (SDQueueID == NULL))
     {
       osMessageQDef(SD_Queue, QUEUE_SIZE, uint16_t);
-      SDQueueID = osMessageCreate (osMessageQ(SD_Queue), NULL);
+     SDQueueID = osMessageCreate (osMessageQ(SD_Queue), NULL);
     }
   }
   return Stat;
@@ -216,8 +216,18 @@ DSTATUS SD_status(BYTE lun)
   * @param  count: Number of sectors to read (1..128)
   * @retval DRESULT: Operation result
   */
-   
 DRESULT SD_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
+{
+ DRESULT res = RES_ERROR;
+ if (BSP_SD_ReadBlocks((uint32_t*)buff, (uint32_t) (sector), count, SDMMC_DATATIMEOUT) == MSD_OK) {
+    // wait until the read operation is finished
+    while (BSP_SD_GetCardState()!= MSD_OK);
+    res = RES_OK;
+ }
+ return res;
+}
+
+DRESULT _SD_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
 {
   DRESULT res = RES_ERROR;
   osEvent event;
@@ -309,8 +319,21 @@ DRESULT SD_read(BYTE lun, BYTE *buff, DWORD sector, UINT count)
   * @retval DRESULT: Operation result
   */
 #if _USE_WRITE == 1
-   
 DRESULT SD_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
+{
+ DRESULT res = RES_ERROR;
+ if (BSP_SD_WriteBlocks((uint32_t*)buff,
+ (uint32_t)(sector),
+ count,
+ SDMMC_DATATIMEOUT) == MSD_OK) {
+ // wait until the Write operation is finished
+ while (BSP_SD_GetCardState() != MSD_OK);
+ res = RES_OK;
+ }
+ return res;
+}
+
+DRESULT _SD_write(BYTE lun, const BYTE *buff, DWORD sector, UINT count)
 {
   osEvent event;
   DRESULT res = RES_ERROR;
