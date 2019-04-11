@@ -58,8 +58,6 @@ QSPI_HandleTypeDef hqspi;
 
 RTC_HandleTypeDef hrtc;
 
-SD_HandleTypeDef hsd2;
-
 //SDRAM_HandleTypeDef hsdram1;
 
 osThreadId defaultTaskHandle;
@@ -73,7 +71,6 @@ static void MX_GPIO_Init(void);
 static void MX_CRC_Init(void);
 static void MX_QUADSPI_Init(void);
 static void MX_RTC_Init(void);
-static void MX_SDMMC2_SD_Init(void);
 static void StartDefaultTask(void const * argument);
 
 void GRAPHICS_Init();
@@ -120,7 +117,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_CRC_Init();
-  MX_QUADSPI_Init();
+  MX_QUADSPI_Init();  
   //MX_DMA2D_Init();
   //MX_DSIHOST_DSI_Init();
   //MX_FMC_Init();
@@ -131,10 +128,9 @@ int main(void)
   /* Initialise the graphical hardware */
   GRAPHICS_HW_Init();
 
-  /* Initialise the graphical stack engine */
+  /* Initialise the graphical stack engine */  
   GRAPHICS_Init();
-  MX_SDMMC2_SD_Init();
-  MX_FATFS_Init();
+
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -443,7 +439,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOJ, &GPIO_InitStruct);
 
   /*Configure GPIO pins : NC4_Pin NC5_Pin uSD_Detect_Pin LCD_BL_CTRL_Pin */
-  GPIO_InitStruct.Pin = NC4_Pin|NC5_Pin|uSD_Detect_Pin|LCD_BL_CTRL_Pin;
+  GPIO_InitStruct.Pin = NC4_Pin|NC5_Pin|LCD_BL_CTRL_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
@@ -507,33 +503,11 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD_USER3_GPIO_Port, &GPIO_InitStruct);
 
-}
-
-/**
-  * @brief SDMMC2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_SDMMC2_SD_Init(void)
-{
-
-  /* USER CODE BEGIN SDMMC2_Init 0 */
-
-  /* USER CODE END SDMMC2_Init 0 */
-
-  /* USER CODE BEGIN SDMMC2_Init 1 */
-
-  /* USER CODE END SDMMC2_Init 1 */
-  hsd2.Instance = SDMMC2;
-  hsd2.Init.ClockEdge = SDMMC_CLOCK_EDGE_RISING;
-  hsd2.Init.ClockBypass = SDMMC_CLOCK_BYPASS_DISABLE;
-  hsd2.Init.ClockPowerSave = SDMMC_CLOCK_POWER_SAVE_DISABLE;
-  hsd2.Init.BusWide = SDMMC_BUS_WIDE_1B;
-  hsd2.Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_DISABLE;
-  hsd2.Init.ClockDiv = 0;
-  /* USER CODE BEGIN SDMMC2_Init 2 */
-
-  /* USER CODE END SDMMC2_Init 2 */
+  /*Configure GPIO pins : uSD_Detect_Pin */
+  GPIO_InitStruct.Pin = uSD_Detect_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
 
 }
 

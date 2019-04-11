@@ -5,6 +5,7 @@
 
 #include "iev.h"
 
+#define UART_BAUDRATE 115200
 #define VCOM_QUEUE_LENGTH 128
 #define VCOM_QUEUE_ITEM_SIZE 1
 
@@ -17,7 +18,7 @@ UART_HandleTypeDef huart1;
   */
 void vc_init(void){
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
+  huart1.Init.BaudRate = UART_BAUDRATE;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -28,7 +29,6 @@ void vc_init(void){
   huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
   HAL_UART_Init(&huart1);
   vcQueue = xQueueCreate( VCOM_QUEUE_LENGTH, VCOM_QUEUE_ITEM_SIZE );
-  uint8_t data = 55;
   if(vcQueue != NULL){
     NVIC_SetPriority(USART1_IRQn, NVIC_PRIORITYGROUP_0);
     NVIC_EnableIRQ(USART1_IRQn);

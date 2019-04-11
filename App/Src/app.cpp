@@ -5,10 +5,10 @@
 #include <stdio.h>
 
 #define LOW_PRIORITY_TASK (tskIDLE_PRIORITY + 2)
-#define NORMAL_PRIORITY_TASK (tskIDLE_PRIORITY + 2)
-#define HIGH_PRIORITY_TASK (tskIDLE_PRIORITY + 5)
-#define STACK_MINIMUM configMINIMAL_STACK_SIZE
-#define STACK_MEDIUM (configMINIMAL_STACK_SIZE * 8)
+#define NORMAL_PRIORITY_TASK (tskIDLE_PRIORITY + 5)
+#define HIGH_PRIORITY_TASK (tskIDLE_PRIORITY + 7)
+#define STACK_MINIMUM configMINIMAL_STACK_SIZE      // 128 * 4
+#define STACK_MEDIUM (configMINIMAL_STACK_SIZE * 8) // 128 * 8 * 4
 
 static const char prompt[] = "iEV>";
 Console console;
@@ -25,6 +25,7 @@ void consoleTask(void *argument){
   Rpm rpm;
   Racio racio;
   CmdMem mem;
+  SDCard sd;
 
   vcom.init();
   console.init(&vcom, prompt);
@@ -33,6 +34,7 @@ void consoleTask(void *argument){
   console.addCommand(&rpm);
   console.addCommand(&racio);
   console.addCommand(&mem);
+  console.addCommand(&sd);
 
   for(;;){
     console.process();
@@ -48,12 +50,6 @@ void appTask(void const * argument){
 
   xTaskCreate(ledAliveTask, "Alive Led", STACK_MINIMUM, NULL, LOW_PRIORITY_TASK, NULL);
   xTaskCreate(consoleTask, "Console", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
-
-  //osThreadDef(consoleProcess, consoleTask, osPriorityLow, 0, 512);
-  //osThreadCreate(osThread(consoleProcess), NULL);
-
-  //osThreadDef(aliveLed, ledAliveTask, osPriorityLow, 0, 128);
-  //osThreadCreate(osThread(aliveLed), NULL);
 
   while(1){
       osDelay(100);
