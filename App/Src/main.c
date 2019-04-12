@@ -91,7 +91,11 @@ void appMain(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+  /* Enable I-Cache */
+  SCB_EnableICache();
 
+  /* Enable D-Cache */
+  SCB_EnableDCache();
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -422,7 +426,7 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOJ, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : NC4_Pin NC5_Pin uSD_Detect_Pin LCD_BL_CTRL_Pin */
+  /*Configure GPIO pins : NC4_Pin NC5_Pin LCD_BL_CTRL_Pin */
   GPIO_InitStruct.Pin = NC4_Pin|NC5_Pin|LCD_BL_CTRL_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -486,13 +490,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD_USER3_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : uSD_Detect_Pin */
-  GPIO_InitStruct.Pin = uSD_Detect_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
-
 }
 
 /* USER CODE BEGIN 4 */

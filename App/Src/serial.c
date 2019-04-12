@@ -9,6 +9,7 @@
 #define VCOM_QUEUE_LENGTH 128
 #define VCOM_QUEUE_ITEM_SIZE 1
 
+static QueueHandle_t uartQueue;
 UART_HandleTypeDef huart1;
 
 /**
@@ -28,8 +29,8 @@ void vc_init(void){
   huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
   huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
   HAL_UART_Init(&huart1);
-  vcQueue = xQueueCreate( VCOM_QUEUE_LENGTH, VCOM_QUEUE_ITEM_SIZE );
-  if(vcQueue != NULL){
+  uartQueue = xQueueCreate( VCOM_QUEUE_LENGTH, VCOM_QUEUE_ITEM_SIZE );
+  if(uartQueue != NULL){
     NVIC_SetPriority(USART1_IRQn, NVIC_PRIORITYGROUP_0);
     NVIC_EnableIRQ(USART1_IRQn);
   }  
@@ -48,7 +49,7 @@ void vc_puts(const char* str){
 
 uint8_t vc_kbhit(void){
   char c;
-  return (xQueuePeek(vcQueue, &c, 0) == pdPASS) ? 1 : 0;
+  return (xQueuePeek(uartQueue, &c, 0) == pdPASS) ? 1 : 0;
 }
 
 /**
@@ -56,15 +57,15 @@ uint8_t vc_kbhit(void){
  * */
 char vc_getchar(void){
     char c;
-    xQueueReceive(vcQueue, &c, portMAX_DELAY);    
+    xQueueReceive(uartQueue, &c, portMAX_DELAY);    
     return c;
 }
 
 uint8_t vc_getCharNonBlocking(char *c){
-   return (xQueueReceive(vcQueue, c, 0) == pdPASS) ? 1 : 0;
+   return (xQueueReceive(uartQueue, c, 0) == pdPASS) ? 1 : 0;
 }
 
-SerialOut vcom = {
+SerialOut uart = {
     .init = vc_init,
     .xgetchar = vc_getchar,
     .xputchar = vc_putchar,
@@ -79,6 +80,6 @@ SerialOut vcom = {
 void USART1_IRQHandler(void)
 {
   uint8_t data = USART1->RDR;
-  xQueueSendToBackFromISR(vcQueue, &data, pdFALSE);  
+  xQueueSendToBackFromISR(uartQueue, &data, pdFALSE);  
   BSP_LED_Toggle(LED_RED);
 }

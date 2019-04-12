@@ -219,6 +219,37 @@ void DSI_IRQHandler(void)
   /* USER CODE END DSI_IRQn 1 */
 }
 
+
+
+extern SD_HandleTypeDef uSdHandle;
+
+/**
+  * @brief  This function handles DMA2 Stream 0 interrupt request.
+  * @param  None
+  * @retval None
+  */
+void DMA2_Stream0_IRQHandler(void)
+{
+    HAL_DMA_IRQHandler(uSdHandle.hdmarx);
+ 
+}
+
+/**
+  * @brief  This function handles DMA2 Stream 5 interrupt request.
+  * @param  None
+  * @retval None
+  */
+void DMA2_Stream5_IRQHandler(void)
+{
+  HAL_DMA_IRQHandler(uSdHandle.hdmatx);
+}
+
+void BSP_SDMMC_IRQHandler(void)
+{
+  HAL_SD_IRQHandler(&uSdHandle);
+}
+
+
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

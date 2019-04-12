@@ -3,6 +3,8 @@
 
 char SDPath[4];   /* SD logical drive path */
 FATFS SDFatFS;    /* File system object for SD logical drive */
+uint8_t sector_data[BLOCKSIZE];
+
 
 void SDCard::fatFs_Init(void){
 FRESULT fr;
@@ -39,14 +41,13 @@ uint8_t wtext[] = "text to write logical disk"; /* File write buffer */
 void SDCard::help(void){}
 
 char SDCard::execute(void *ptr) {
-	uint32_t operation = 0;
-	FRESULT fr;
-
-	char *p1, c;
+uint32_t operation = 0;
+FRESULT fr;
+uint32_t sector = 0;
+uint8_t sdRes;
+char c, *p1 = (char*)ptr;
 	
-	p1 = (char*)ptr;
-	
-		// check parameters
+	// check parameters
 	if( p1 == NULL || *p1 == '\0'){
 		help();
 		return CMD_OK;        
@@ -57,14 +58,42 @@ char SDCard::execute(void *ptr) {
 		return CMD_OK;
 	}
 
-     while( !(operation & OPT_DONE) ){
+    while( !(operation & OPT_DONE) ){
         c = nextChar(&p1);
         switch(c){
 			case 's':
-				BSP_SD_Init();
+				
+				break;
+			case 'd':
+				if(!nextHex(&p1, &sector)){
+                    sector = 0;                    
+                }
+    			//res = BSP_SD_ReadBlocks_DMA((uint32_t*)sector_data, 0, 1);
+				sdRes = BSP_SD_ReadBlocks((uint32_t*)sector_data, sector, 1, 1024);
+				while(BSP_SD_GetCardState() != SD_TRANSFER_OK);
+
+				if(sdRes != MSD_OK){
+					console->print("Fail to read: %x\n", sdRes);
+					break;
+				}
+
+				for(uint32_t i = 0; i < BLOCKSIZE; i++){
+					if((i & 0x0F) == 0){
+						console->xputc('\n');
+						console->print("%08X: ", sector + i);
+					}
+					console->print("%02X ", sector_data[i] );
+				}
+				console->xputc('\n');
 				break;
 
 			case 'i':
+				sdRes = BSP_SD_Init();
+				if (sdRes != MSD_OK){
+					console->print("Fail to init card\n");
+					break;
+				}
+
 				HAL_SD_CardInfoTypeDef ci;
 				BSP_SD_GetCardInfo(&ci);
 				console->print("\nType: %x\n", ci.CardType);

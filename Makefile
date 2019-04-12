@@ -160,7 +160,7 @@ c_compiler_options += -g \
                     -mthumb -fno-exceptions \
                     -mno-thumb-interwork -std=c99 \
                     $(no_libs) \
-                    -Os -fno-strict-aliasing -fdata-sections -ffunction-sections
+                    -Og -fno-strict-aliasing -fdata-sections -ffunction-sections
 #TODO removed -Wall
 
 c_compiler_options += $(float_options)
@@ -169,7 +169,7 @@ cpp_compiler         := arm-none-eabi-g++
 cpp_compiler_options += -g -mthumb \
                     $(no_libs) \
                     -mno-thumb-interwork -fno-rtti -fno-exceptions  \
-                    -Os -fno-strict-aliasing -fdata-sections -ffunction-sections
+                    -Og -fno-strict-aliasing -fdata-sections -ffunction-sections
 
 #TODO removed -Wall
 

@@ -1,5 +1,6 @@
 #include "iev.h"
 
+volatile QuadrantState qstate; /* Not protected with mutex */
 
 char Racio::execute(void *ptr) {
 	char *p1;

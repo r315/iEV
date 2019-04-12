@@ -43,8 +43,8 @@ void consoleTask(void *argument){
   CmdMem mem;
   SDCard sd;
 
-  vcom.init();
-  console.init(&vcom, prompt);
+  uart.init();
+  console.init(&uart, prompt);
 
   console.addCommand(&help);
   console.addCommand(&rpm);

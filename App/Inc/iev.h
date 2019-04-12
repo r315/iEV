@@ -28,10 +28,10 @@ typedef struct {
     
 }QuadrantState;
 
-static QueueHandle_t qdataQueue;
-static volatile QuadrantState qstate; /* Not protected with mutex */
-extern SerialOut vcom;
-static QueueHandle_t vcQueue;
+extern QueueHandle_t qdataQueue;
+extern volatile QuadrantState qstate; /* Not protected with mutex */
+extern SerialOut uart;
+
 
 #ifdef __cplusplus
 }
