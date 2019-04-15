@@ -7,7 +7,7 @@
 # in ST-TouchGFX Designer or in your ST-TouchGFX installation directory.
 ###############################################################################
 # Relative location of the TouchGFX framework from root of application
-#touchgfx_path := ../Middlewares/ST/TouchGFX/touchgfx/
+touchgfx_path := ../Middlewares/ST/TouchGFX/touchgfx/
 
 # Optional additional compiler flags
 user_cflags := -DUSE_BPP=24

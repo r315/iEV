@@ -63,13 +63,29 @@ uint8_t nextHex(char **line, uint32_t *value){
  * \param  value - pointer to output value
  * \return 1 - if success and move to next substring, 0 - on failure no parameters are affected
  * */
-int8_t nextInt(char **line, int32_t *value){
+uint8_t nextInt(char **line, int32_t *value){
     if(yatoi(*line, value)){
     	*line = nextWord(*line);
 		return 1;
 	}
     return 0;
 }
+
+/**
+ * Try to parse a double number from a given string
+  * 
+ * \param  line - pointer to string pointer
+ * \param  value - pointer to output value
+ * \return 1:if success and move to next substring, 0:on failure no parameters are affected
+ * */
+uint8_t nextDouble(char **line, double *value){
+    if(fatoi(*line, value)){
+    	*line = nextWord(*line);
+		return 1;
+	}
+    return 0;
+}
+
 
 /** 
  * Get first char of sprint pointed by line, and advance that pointer to next char
@@ -242,7 +258,16 @@ char c = *str;
 	return 1;
 }
 
-
+/**
+ * Try to parse a string representing a double
+ * 
+ * \param  str - pointer to input string
+ * \param  value - pointer to output value
+ * \return 1:success, 0:failed
+ * */
+uint8_t fatoi(char *str, double *value){
+	return 0;
+}
 /**
 * Original code by ELM_ChaN. Modified by Martin Thomas 
 * 

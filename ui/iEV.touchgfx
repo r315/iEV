@@ -4,18 +4,14 @@
       {
         "Components": [
           {
-            "Color": {
-              "Red": 8,
-              "Green": 73,
-              "Blue": 128
-            },
+            "RelativeFilename": "fon-41111.png",
             "Alpha": 255,
-            "Name": "Background",
+            "Name": "fon_411111",
             "X": 0,
             "Y": 0,
             "Width": 800,
             "Height": 480,
-            "Type": "Box",
+            "Type": "Image",
             "Visible": true,
             "Draggable": false,
             "Clickable": false,
@@ -24,9 +20,9 @@
           },
           {
             "Color": {
-              "Red": 24,
-              "Green": 57,
-              "Blue": 163
+              "Red": 56,
+              "Green": 56,
+              "Blue": 56
             },
             "BorderColor": {
               "Red": 0,
@@ -36,10 +32,10 @@
             "BorderSize": 5,
             "Alpha": 255,
             "Name": "boxWithBorder_rpm",
-            "X": 318,
-            "Y": 254,
-            "Width": 458,
-            "Height": 210,
+            "X": 316,
+            "Y": 51,
+            "Width": 358,
+            "Height": 106,
             "Type": "BoxWithBorder",
             "Visible": true,
             "Draggable": false,
@@ -59,89 +55,11 @@
             "AutoSize": true,
             "LineSpacing": 0,
             "Name": "textArea_rpm_unit",
-            "X": 716,
-            "Y": 343,
-            "Width": 38,
+            "X": 627,
+            "Y": 51,
+            "Width": 40,
             "Height": 25,
             "Type": "TextArea",
-            "Visible": true,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Color": {
-              "Red": 17,
-              "Green": 143,
-              "Blue": 60
-            },
-            "Direction": "Right",
-            "Alpha": 174,
-            "FileNameBackground": "__designer\\blue_progressindicators_bg_large_progress_indicator_bg_square_0_degrees.png",
-            "IndicatorPositionX": 2,
-            "IndicatorPositionY": 2,
-            "IndicatorPositionWidth": 400,
-            "IndicatorPositionHeight": 30,
-            "ProgressRangeMin": 0,
-            "ProgressRangeMax": 100,
-            "ProgressRangeSteps": 0,
-            "ProgressRangeStepsMin": 0,
-            "ProgressInitialValue": 60,
-            "Name": "boxRpm",
-            "X": 350,
-            "Y": 267,
-            "Width": 404,
-            "Height": 34,
-            "Type": "BoxProgress",
-            "Visible": true,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "TextId": "SingleUseId2",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 207,
-              "Green": 219,
-              "Blue": 209
-            },
-            "Alpha": 255,
-            "AutoSize": true,
-            "LineSpacing": 0,
-            "Name": "textArea1_rpm_unit",
-            "X": 754,
-            "Y": 343,
-            "Width": 11,
-            "Height": 13,
-            "Type": "TextArea",
-            "Visible": true,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "Color": {
-              "Red": 24,
-              "Green": 57,
-              "Blue": 163
-            },
-            "BorderColor": {
-              "Red": 0,
-              "Green": 0,
-              "Blue": 0
-            },
-            "BorderSize": 5,
-            "Alpha": 255,
-            "Name": "boxWithBorder_km",
-            "X": 318,
-            "Y": 46,
-            "Width": 458,
-            "Height": 194,
-            "Type": "BoxWithBorder",
             "Visible": true,
             "Draggable": false,
             "Clickable": false,
@@ -160,64 +78,10 @@
             "AutoSize": true,
             "LineSpacing": 0,
             "Name": "TextArea_km_unit",
-            "X": 705,
-            "Y": 82,
-            "Width": 44,
+            "X": 181,
+            "Y": 436,
+            "Width": 31,
             "Height": 25,
-            "Type": "TextArea",
-            "Visible": true,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "IsHorizontalSlider": false,
-            "BackgroundUnselected": "__designer\\blue_slider_vertical_medium_slider3_vertical_back.png",
-            "BackgroundSelected": "__designer\\blue_slider_vertical_medium_slider3_vertical_fill.png",
-            "Indicator": "__designer\\blue_slider_vertical_medium_indicators_slider3_vertical_nob.png",
-            "BackgroundX": 7,
-            "BackgroundY": 3,
-            "IndicatorPos": 0,
-            "IndicatorMax": 285,
-            "IndicatorMin": 0,
-            "ValueMax": 100,
-            "ValueMin": 0,
-            "InitValue": 0,
-            "Style": "Style6",
-            "Name": "slider1",
-            "X": 93,
-            "Y": 71,
-            "Width": 34,
-            "Height": 339,
-            "Type": "Slider",
-            "Visible": true,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
-            "TextId": "speedId1",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 0,
-              "Green": 0,
-              "Blue": 0
-            },
-            "Alpha": 255,
-            "AutoSize": false,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId5",
-              "UseBuffer": true,
-              "BufferSize": 4
-            },
-            "Name": "TextAreaSpeed",
-            "X": 394,
-            "Y": 82,
-            "Width": 311,
-            "Height": 122,
             "Type": "TextArea",
             "Visible": true,
             "Draggable": false,
@@ -229,9 +93,9 @@
             "TextId": "currentRpm",
             "TextRotation": "0",
             "Color": {
-              "Red": 0,
-              "Green": 0,
-              "Blue": 0
+              "Red": 17,
+              "Green": 194,
+              "Blue": 32
             },
             "Alpha": 255,
             "AutoSize": false,
@@ -242,10 +106,10 @@
               "BufferSize": 7
             },
             "Name": "TextAreaRpm",
-            "X": 394,
-            "Y": 342,
+            "X": 324,
+            "Y": 40,
             "Width": 311,
-            "Height": 122,
+            "Height": 117,
             "Type": "TextArea",
             "Visible": true,
             "Draggable": false,
@@ -258,8 +122,8 @@
             "TextRotation": "0",
             "Color": {
               "Red": 0,
-              "Green": 0,
-              "Blue": 0
+              "Green": 173,
+              "Blue": 217
             },
             "Alpha": 255,
             "AutoSize": false,
@@ -270,8 +134,8 @@
               "BufferSize": 7
             },
             "Name": "TextAreaDistance",
-            "X": 473,
-            "Y": 191,
+            "X": 22,
+            "Y": 417,
             "Width": 153,
             "Height": 49,
             "Type": "TextArea",
@@ -282,20 +146,7 @@
             "Moveable": false
           }
         ],
-        "Interactions": [
-          {
-            "InteractionName": "Interaction1",
-            "HasCompletedTrigger": false,
-            "Trigger": {
-              "TriggerComponent": "slider1",
-              "Type": "TriggerSliderValueChanged"
-            },
-            "Action": {
-              "FunctionName": "testValues",
-              "Type": "ActionCustom"
-            }
-          }
-        ],
+        "Interactions": [],
         "Name": "Main",
         "OverrideDefaultBufferSize": true,
         "CanvasBufferSize": 12000
@@ -308,16 +159,8 @@
         "IsResource": false
       },
       {
-        "TextEntryId": "SingleUseId2",
-        "IsResource": false
-      },
-      {
         "TextEntryId": "SingleUseId4",
         "IsResource": false
-      },
-      {
-        "TextEntryId": "speedId1",
-        "IsResource": true
       },
       {
         "TextEntryId": "currentRpm",
@@ -326,10 +169,6 @@
       {
         "TextEntryId": "totalDistance",
         "IsResource": true
-      },
-      {
-        "TextEntryId": "SingleUseId5",
-        "IsResource": false
       },
       {
         "TextEntryId": "SingleUseId6",

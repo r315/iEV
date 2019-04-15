@@ -21,7 +21,7 @@ class Model
 {
 private:
     uint32_t tickCount;
-    double distance;
+    
 public:
     Model();
 

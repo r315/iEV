@@ -1,22 +1,26 @@
 #include "iev.h"
 
-QueueHandle_t qdataQueue;
-
-char Rpm::execute(void *ptr) {
+char Rpm::execute(void *ptr)
+{
 	char *p1;
-	QuadrantData qdata;
-	p1 = (char*)ptr;
-	
+	p1 = (char *)ptr;
+	uint32_t rpm, operation = 0;
 	// check parameters
-	if( p1 == NULL || *p1 == '\0' || !nextInt(&p1, (int32_t*)&qdata.rpm)){
+	if (p1 == NULL || *p1 == '\0' || !nextInt(&p1, (int32_t *)&rpm))
+	{
 		help();
 		//console.print("rpm:%u", qdata.)
-	}else{
-
-	xQueueSend(qdataQueue, &qdata, portMAX_DELAY);
 	}
+	else
+	{
+
+		if (xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS)
+		{
+			qconfig.rpm = rpm;
+			qconfig.updated = TRUE;
+			xSemaphoreGive(qconfig.mutex);
+		}
+	}
+
 	return CMD_OK;
-}	
-
-
-
+}

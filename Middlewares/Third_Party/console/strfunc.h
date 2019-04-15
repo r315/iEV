@@ -9,8 +9,9 @@ extern "C" {
 #include <stdlib.h>
 
     char *nextWord(char *line);
-    int8_t nextInt(char **line, int32_t *value);
+    uint8_t nextInt(char **line, int32_t *value);
     uint8_t nextHex(char **line, uint32_t *value);
+    uint8_t nextDouble(char **line, double *value);
     char nextChar(char **line);
     uint8_t isNextWord(char **str, const char *word);
     char *strsub(char *str, const char token, uint8_t len, char **saveptr);
@@ -19,6 +20,7 @@ extern "C" {
     size_t strlen(const char *str);
     uint8_t yatoi(char *str, int32_t *value);
     uint8_t hatoi(char *str, uint32_t *value);
+    uint8_t fatoi(char *str, double *value);
     int xatoi(char **str, long *res);
     char *pftoa(double f, char places);
     char* pitoa(long val, int radix, int len);

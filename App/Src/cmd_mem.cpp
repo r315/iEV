@@ -1,24 +1,27 @@
-#include "cmd_mem.h"
+#include "iev.h"
 
 
 /*  
   b15-b8     b7 b3   b2-b1    b0
 |   size  | -      | OP    | start | */
-#define MEM_OP_READ  1
-#define MEM_OP_WRITE  2
-#define MEM_OP_START (1 << 0)
-#define MEM_OP_SET_FLAG(_o, _f) _o |= _f
-#define MEM_OP_SET_OPER(o, n) o = ((o & ~(3 << MEM_OP_START)) | (n << MEM_OP_START))
-#define MEM_OP_SET_RANGE(_o, _n) _o |= (_n << 8)
-#define MEM_OPER(x) ((x>>MEM_OP_START) & 3)
 
-enum {
-    READY = 0,
-    ERROR,
-    READ,
-    WRITE,
-    NOP
-};
+#define MEM_OP_SET_OPER(o, n) o = ((o & ~(3 << OPT_DONE)) | (n << OPT_DONE))
+#define MEM_OP_SET_RANGE(_o, _n) _o |= (_n << 8)
+
+
+void readMem(uint32_t address, uint8_t *dst, uint32_t count){
+uint8_t *pdata = (uint8_t*)address;
+    while(count--){
+        *dst++ = *pdata++;
+    }
+}
+
+void writeMem(uint32_t address, uint8_t *data, uint32_t count){
+uint8_t *pdata = (uint8_t*)address;
+    while(count--){
+        *pdata++ = *data++;
+    }
+}
 
 void CmdMem::dumpMem(uint32_t add, uint32_t cnt){
 uint8_t *pdata = (uint8_t*)add;
@@ -36,13 +39,14 @@ uint8_t *pdata = (uint8_t*)add;
 void CmdMem::help(void){
     console->print("Usage: mem [option] \n\n");  
     console->print("\t r <address>, Read starting from address\n");
-    console->print("\t n, number of bytes\n");
+    console->print("\t w, <address> <data>\n");
+    console->print("\t n, number of bytes\n\n");
 }
 
 char CmdMem::execute(void *ptr){
 uint32_t operation, n = 1;
 char *p1, c;
-uint32_t address;
+uint32_t address, data;
 
     MEM_OP_SET_RANGE(operation,n); // set default size
 
@@ -54,20 +58,24 @@ uint32_t address;
         return CMD_OK;
     }
 
-    while( !(operation & MEM_OP_START) ){
+    while( !(operation & OPT_DONE) ){
         c = nextChar(&p1);
         switch(c){
             case 'r':                
-                MEM_OP_SET_OPER(operation, MEM_OP_READ);
+                MEM_OP_SET_OPER(operation, OPT_READ);
             case 'w':
                 if(!nextHex(&p1, &address)){
                     console->print("Invalid address\n");
                     return CMD_BAD_PARAM;
                 }
-                if(MEM_OPER(operation) != MEM_OP_READ){
-                    MEM_OP_SET_OPER(operation, MEM_OP_WRITE);
+                if(OPT_OPER(operation) != OPT_READ){
+                    MEM_OP_SET_OPER(operation, OPT_WRITE);
+                    if(!nextHex(&p1, &data)){
+                        console->print("Invalid data\n");
+                          return CMD_BAD_PARAM;
+                    }
                 }
-                break;
+                break;          
 
             case 'n':
                 if(!nextInt(&p1, (int32_t*)&n)){
@@ -80,16 +88,17 @@ uint32_t address;
             case '\n':
             case '\r':    
             case '\0':
-                MEM_OP_SET_FLAG(operation, MEM_OP_START);
+                OPT_SET_FLAG(operation, OPT_DONE);
         }
     }
 
-    switch(MEM_OPER(operation)){
-        case MEM_OP_READ:
+    switch(OPT_OPER(operation)){
+        case OPT_READ:
             dumpMem(address, n);
             break;
-        case MEM_OP_WRITE:
-            console->print("Not implemented\n");
+        case OPT_WRITE:
+            //console->print("Not implemented\n");
+            writeMem(address, (uint8_t*)&data, n);
             break;
     }
     

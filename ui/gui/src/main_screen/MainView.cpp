@@ -8,6 +8,14 @@ MainView::MainView()
 void MainView::setupScreen()
 {
     MainViewBase::setupScreen();
+    
+    gauge.setBitmaps(Bitmap(BITMAP_DIAL_ID), Bitmap(BITMAP_DIAL_CENTER_ID));
+    gauge.setXY(250,187);
+    gauge.setLimits(0, 160, 270, 270 + 180);
+    gauge.setValue(0);
+    gauge.setAnimationDuration(20);
+    gauge.setVisible(true);
+    add(gauge);
 }
 
 void MainView::tearDownScreen()
@@ -27,6 +35,5 @@ void MainView::setRpm(int value){
 
 
 void MainView::setSpeed(int value){
-    Unicode::snprintf(TextAreaSpeedBuffer, 4, "%d", value);
-    TextAreaSpeed.invalidate();
+    gauge.setValue(value);
 }

@@ -48,7 +48,7 @@ linker_script_path := $(bsp_path)
 # corrects TouchGFX Path
 #touchgfx_path := ${subst ../,,$(touchgfx_path)}
 #touchgfx_path := $(subst $(call sq,$(makefile_path))/,,$(call sq,$(abspath $(call sq,$(touchgfx_path)))))
-touchgfx_path := $(Middlewares_path)/ST/touchgfx
+touchgfx_framework_path := $(Middlewares_path)/ST/touchgfx
 ui_path := ui
 ui_mk := $(ui_path)/config/gcc/app.mk
 
@@ -130,16 +130,16 @@ os_include_paths := $(os_path)/Source/include \
                     $(os_path)/Source/portable/GCC/ARM_CM7/r0p1 \
 					$(os_path)/Source/CMSIS_RTOS
 
-os_wrapper := $(touchgfx_path)/os/OSWrappers.cpp
+os_wrapper := $(touchgfx_framework_path)/os/OSWrappers.cpp
 
 ### END OF USER SECTION. THE FOLLOWING SHOULD NOT BE MODIFIED ###
 
 ifeq ($(UNAME), Linux)
-imageconvert_executable := $(touchgfx_path)/framework/tools/imageconvert/build/linux/imageconvert.out
-fontconvert_executable := $(touchgfx_path)/framework/tools/fontconvert/build/linux/fontconvert.out
+imageconvert_executable := $(touchgfx_framework_path)/framework/tools/imageconvert/build/linux/imageconvert.out
+fontconvert_executable := $(touchgfx_framework_path)/framework/tools/fontconvert/build/linux/fontconvert.out
 else
-imageconvert_executable := $(touchgfx_path)/framework/tools/imageconvert/build/win/imageconvert.out
-fontconvert_executable := $(touchgfx_path)/framework/tools/fontconvert/build/win/fontconvert.out
+imageconvert_executable := $(touchgfx_framework_path)/framework/tools/imageconvert/build/win/imageconvert.out
+fontconvert_executable := $(touchgfx_framework_path)/framework/tools/fontconvert/build/win/fontconvert.out
 st_link_executable := "$(PROGRAMFILES)\\STMicroelectronics\\STM32 ST-LINK Utility\\ST-LINK Utility\\ST-LINK_CLI.exe"
 st_link_external_loader := "$(PROGRAMFILES)\\STMicroelectronics\\STM32 ST-LINK Utility\\ST-LINK Utility\\ExternalLoader\\MX25L512G_STM32F769I-DISCO.stldr"
 endif
@@ -196,7 +196,7 @@ cpp_compiler_options += -mthumb -mcpu=cortex-m7 -Wno-psabi $(float_options) -DCO
 linker_options += -mcpu=cortex-m7 -Wno-psabi $(float_options)
 
 #include everything + specific vendor folders
-framework_includes := $(touchgfx_path)/framework/include
+framework_includes := $(touchgfx_framework_path)/framework/include
 
 #this needs to change when assset include folder changes.
 all_components := $(components) \
@@ -320,7 +320,7 @@ board_include_paths := \
 	$(ui_path)/generated/images/include \
 	$(ui_path)/generated/texts/include \
 	$(ui_path)/generated/gui_generated/include \
-	$(touchgfx_path)/framework/include \
+	$(touchgfx_framework_path)/framework/include \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Inc \
 	$(Drivers_path)/CMSIS/Include \
 	$(Drivers_path)/CMSIS/Device/ST/STM32f7xx/Include \
@@ -355,13 +355,13 @@ dependency_files := $(object_files:%.o=%.d)
 object_asm_files := $(asm_source_files:%.s=$(object_output_path)/%.o)
 object_asm_files := $(patsubst $(object_output_path)/%,$(object_output_path)/%,$(object_asm_files))
 
-textconvert_script_path := $(touchgfx_path)/framework/tools/textconvert
+textconvert_script_path := $(touchgfx_framework_path)/framework/tools/textconvert
 textconvert_executable := $(call find, $(textconvert_script_path), *.rb)
 
 text_database := $(asset_texts_input)/texts.xlsx
 
 libraries := touchgfx
-library_include_paths := $(touchgfx_path)/lib/core/$(platform)/gcc
+library_include_paths := $(touchgfx_framework_path)/lib/core/$(platform)/gcc
 
 .PHONY: _all_ _clean_ _assets_ _flash_ _intflash_ generate_assets build_executable
 
@@ -409,7 +409,7 @@ $(binary_output_path)/$(target_executable): $(object_files) $(object_asm_files)
 	@echo "  extflash.bin - External flash, binary"
 	@$(objcopy) -O binary --only-section=ExtFlashSection $@ $(@D)/extflash.bin
 
-$(object_output_path)/touchgfx/%.o: $(touchgfx_path)/%.cpp $(ui_mk)
+$(object_output_path)/touchgfx/%.o: $(touchgfx_framework_path)/%.cpp $(ui_mk)
 	@echo Compiling $<
 	@mkdir -p $(@D)
 	@$(cpp_compiler) \
@@ -425,7 +425,7 @@ $(object_output_path)/%.o: %.cpp $(ui_mk)
 		$(patsubst %,-I%,$(include_paths)) \
 		-c $< -o $@
 
-$(object_output_path)/touchgfx/%.o: $(touchgfx_path)/%.c $(ui_mk)
+$(object_output_path)/touchgfx/%.o: $(touchgfx_framework_path)/%.c $(ui_mk)
 	@echo Compiling $<
 	@mkdir -p $(@D)
 	@$(c_compiler) \

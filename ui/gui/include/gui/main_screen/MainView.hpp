@@ -3,6 +3,7 @@
 
 #include <gui_generated/main_screen/MainViewBase.hpp>
 #include <gui/main_screen/MainPresenter.hpp>
+#include <gui/main_screen/Gauge.hpp>
 
 class MainView : public MainViewBase
 {
@@ -15,6 +16,8 @@ public:
     void setRpm(int value);
     void setSpeed(int value);
 protected:
+
+    Gauge gauge;
 };
 
 #endif // MAIN_VIEW_HPP

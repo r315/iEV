@@ -6,7 +6,6 @@ extern "C" {
 
 
 #include "console.h"
-#include "cmd_mem.h"
 
 /*  
   b15-b8     b7 b3   b2-b1    b0
@@ -55,17 +54,25 @@ public:
 };
 
 
-class Racio : public ConsoleCommand {
+class Config : public ConsoleCommand {
 	Console *console;
 public:
-    Racio() : ConsoleCommand("racio") {}	
+    Config() : ConsoleCommand("conf") {}	
 	void init(void *params) { console = static_cast<Console*>(params); }
 
-	void help(void) {
-		console->puts("usage racio <0-20000>");
-	}
+	void help(void);
 
 	char execute(void *ptr);
+};
+
+class CmdMem : public ConsoleCommand{
+    Console *console;
+public:
+    CmdMem () : ConsoleCommand("mem") {}
+    void init(void *params) { console = static_cast<Console*>(params); }
+    char execute(void *ptr);
+    void help(void);
+    void dumpMem(uint32_t add, uint32_t cnt);
 };
 
 class SDCard : public ConsoleCommand {

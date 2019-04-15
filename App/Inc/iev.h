@@ -12,6 +12,7 @@ extern "C" {
 /* RTOS includes */
 #include "FreeRTOS.h"
 #include "queue.h"
+#include "semphr.h"
 /* Application includes */
 #include "main.h"
 #include "console.h"
@@ -20,16 +21,21 @@ extern "C" {
 
 typedef struct {
     uint32_t rpm;
+    uint32_t distance;
+    uint32_t speed;
 }QuadrantData;
 
 typedef struct {
-    uint32_t gearRacio;
-    uint32_t distance;
-    
-}QuadrantState;
+    double gearRacio;
+    double distance;    
+    double wheelCircumference;
+    uint32_t rpm;
+    uint8_t updated;
+    SemaphoreHandle_t mutex;
+}QuadrantConfiguration;
 
 extern QueueHandle_t qdataQueue;
-extern volatile QuadrantState qstate; /* Not protected with mutex */
+extern QuadrantConfiguration qconfig;
 extern SerialOut uart;
 
 
