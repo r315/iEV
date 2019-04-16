@@ -18,7 +18,10 @@ extern "C" {
 #include "console.h"
 #include "commands.h"
 
-#define LED3_TOGGLE HAL_GPIO_TogglePin(LD_USER3_GPIO_Port, LD_USER3_Pin);
+#define RPM_QUEUE_LENGTH        2
+#define UPDATE_RATE             100
+
+#define LED3_TOGGLE             HAL_GPIO_TogglePin(LD_USER3_GPIO_Port, LD_USER3_Pin);
 
 typedef struct {
     uint32_t rpm;

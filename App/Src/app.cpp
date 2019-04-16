@@ -11,12 +11,10 @@
 #define STACK_MINIMUM configMINIMAL_STACK_SIZE      // 128 * 4
 #define STACK_MEDIUM (configMINIMAL_STACK_SIZE * 8) // 128 * 8 * 4
 
-#define UPDATE_RATE 100
 #define SECONDS_MINUTE 60
 #define ITERATIONS_SECOND (1000/UPDATE_RATE)
 #define SECONDS_HOUR 3600
 
-#define RPM_QUEUE_LENGTH 2
 #define RPM_QUEUE_ITEM_SIZE sizeof(QuadrantData)
 
 void GRAPHICS_MainTask(void);
@@ -34,6 +32,7 @@ void updateTask(void *argument)
     QuadrantData qdata;
 
     qdataQueue = xQueueCreate(RPM_QUEUE_LENGTH, RPM_QUEUE_ITEM_SIZE);
+
     if (qdataQueue == NULL)
     {
         //console.log("Fail to create qdataQueue\n");
@@ -50,7 +49,7 @@ void updateTask(void *argument)
     
     xSemaphoreGive(qconfig.mutex);    
 
-    while (1)
+    while (true)
     {
         /* Read rpm */
         if (xSemaphoreTake(qconfig.mutex, pdMS_TO_TICKS(UPDATE_RATE)) == pdPASS)
@@ -63,9 +62,9 @@ void updateTask(void *argument)
             qconfig.distance += distanceIteration;
 
             // If integer part of distance or configuration has changed update screen 
-            if ((uint32_t)qconfig.distance != curDistance || qconfig.updated == TRUE)
+            if ((uint32_t)qconfig.distance != curDistance || qconfig.updated == true)
             {
-                qconfig.updated = FALSE;
+                qconfig.updated = false;
                 qdata.rpm = qconfig.rpm;
                 qdata.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);
                 qdata.distance = (uint32_t)(qconfig.distance/1000); // display in km
@@ -98,12 +97,6 @@ void graphicsTask(void *argument)
     GRAPHICS_Init();
     /* Graphic application, never return */
     GRAPHICS_MainTask();
-
-    /* Infinite loop */
-    for (;;)
-    {
-        osDelay(100);
-    }
 }
 
 void consoleTask(void *argument)
@@ -149,7 +142,7 @@ extern "C" void appMain(void)
     /* Start scheduler */
     osKernelStart();
 
-    while (1)
+    while (true)
     {
         osDelay(100);
     }

@@ -18,33 +18,37 @@ double value;
 	// check parameters
 	if( p1 == NULL || *p1 == '\0'){
 		help();
-        console->print("racio: %f\n", qconfig.gearRacio);		
+        console->print("racio: %.2f\n", qconfig.gearRacio);		
 		console->print("wheel: %.8fm\n\n", qconfig.wheelCircumference);		
 	}else{
-
 		while( !(operation & OPT_DONE) ){
 			if(isNextWord(&p1, "racio")){
-				if(nextDouble(&p1, &value)){
-					 qconfig.gearRacio = value;
+				if(nextDouble(&p1, &value)){					 
+					 OPT_SET_OPER(operation, OPT_READ);
 					 OPT_SET_FLAG(operation, OPT_DONE);
 				}				
 			}
 
 			if(isNextWord(&p1, "wheel")){
-				if(nextDouble(&p1, &value)){
-					 qconfig.wheelCircumference = value * PI;
+				if(nextDouble(&p1, &value)){					 
 					 OPT_SET_FLAG(operation, OPT_DONE);
-					 OPT_SET_OPER(operation, OPT_READ);
 				}				
-			}			
+			}
 
+			if (*p1 == '\0'){
+				OPT_SET_FLAG(operation, OPT_DONE);
+			}else
+			p1 = nextWord(p1);
 		}
 
 		if(xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS){
-			if(OPT_OPER(operation) == OPT_READ){
-				qconfig.gearRacio = value;
-			}else{
-				qconfig.rpm = value;
+			switch(OPT_OPER(operation)){
+				case OPT_READ:
+					qconfig.gearRacio = value;
+					break;
+				case OPT_WRITE:			
+					qconfig.wheelCircumference = value * PI;
+					break;
 			}
 			qconfig.updated= TRUE;
 			xSemaphoreGive(qconfig.mutex);
