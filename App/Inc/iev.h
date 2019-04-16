@@ -18,6 +18,7 @@ extern "C" {
 #include "console.h"
 #include "commands.h"
 
+#define LED3_TOGGLE HAL_GPIO_TogglePin(LD_USER3_GPIO_Port, LD_USER3_Pin);
 
 typedef struct {
     uint32_t rpm;
@@ -29,7 +30,7 @@ typedef struct {
     double gearRacio;
     double distance;    
     double wheelCircumference;
-    uint32_t rpm;
+    double rpm;
     uint8_t updated;
     SemaphoreHandle_t mutex;
 }QuadrantConfiguration;

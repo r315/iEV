@@ -12,6 +12,9 @@
 #define STACK_MEDIUM (configMINIMAL_STACK_SIZE * 8) // 128 * 8 * 4
 
 #define UPDATE_RATE 100
+#define SECONDS_MINUTE 60
+#define ITERATIONS_SECOND (1000/UPDATE_RATE)
+#define SECONDS_HOUR 3600
 
 #define RPM_QUEUE_LENGTH 2
 #define RPM_QUEUE_ITEM_SIZE sizeof(QuadrantData)
@@ -52,17 +55,21 @@ void updateTask(void *argument)
         /* Read rpm */
         if (xSemaphoreTake(qconfig.mutex, pdMS_TO_TICKS(UPDATE_RATE)) == pdPASS)
         {
+            double wheelRpm = qconfig.rpm / qconfig.gearRacio;
+            //get distance in respect to wheel revolutions in 100ms
+            double distanceIteration = (wheelRpm / (SECONDS_MINUTE * ITERATIONS_SECOND)) * qconfig.wheelCircumference;
+            // add to total distance
             uint32_t curDistance = (uint32_t)qconfig.distance;
-            // increment distance counter by wheel revolutions per frame
-            qconfig.distance += (((double)qconfig.rpm / qconfig.gearRacio) / 10) * qconfig.wheelCircumference;
+            qconfig.distance += distanceIteration;
 
-            // If integer part is changed update total distance counter
+            // If integer part of distance or configuration has changed update screen 
             if ((uint32_t)qconfig.distance != curDistance || qconfig.updated == TRUE)
             {
                 qconfig.updated = FALSE;
                 qdata.rpm = qconfig.rpm;
-                qdata.speed = qconfig.rpm / qconfig.gearRacio;
-                qdata.distance = (uint32_t)qconfig.distance;
+                qdata.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);
+                qdata.distance = (uint32_t)(qconfig.distance/1000); // display in km
+                // send to display
                 xQueueSend(qdataQueue, &qdata, pdMS_TO_TICKS(UPDATE_RATE));
             }
             xSemaphoreGive(qconfig.mutex);
@@ -131,6 +138,7 @@ extern "C" void appMain(void)
 
     qconfig.gearRacio = 1;
     qconfig.wheelCircumference = 1.928f; //16" wheel
+    qconfig.rpm = 518.67f;
 
     /* Create tasks */
     xTaskCreate(graphicsTask, "Graphics Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
