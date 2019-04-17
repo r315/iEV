@@ -1,5 +1,5 @@
-#ifndef _serialout_h_
-#define _serialout_h_
+#ifndef _stdout_h_
+#define _stdout_h_
 
 #include <stdint.h>
 
@@ -7,16 +7,16 @@
 extern "C" {
 #endif
 
-	typedef struct _SerialOut {
+	typedef struct _StdOut {
 
 
 		void(*init)(void);
 		/**
-		 * std function
+		 * C library stdio functions
 		 * */
 		char(*xgetchar)(void);
 		void(*xputchar)(char c);
-		void(*puts)(const char* str);
+		void(*xputs)(const char* str);
 
 		/**
 		 * Checks if any char was received and return it on parameter c,
@@ -33,10 +33,10 @@ extern "C" {
 		 * */
 		uint8_t(*kbhit)(void);
 
-	}SerialOut;
+	}StdOut;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _serialout_h_ */
+#endif /* _stdout_h_ */

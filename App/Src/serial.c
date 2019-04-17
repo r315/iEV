@@ -1,7 +1,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include <serialout.h>
+#include <stdout.h>
 
 #include "iev.h"
 
@@ -65,13 +65,13 @@ uint8_t vc_getCharNonBlocking(char *c){
    return (xQueueReceive(uartQueue, c, 0) == pdPASS) ? 1 : 0;
 }
 
-SerialOut uart = {
-    .init = vc_init,
-    .xgetchar = vc_getchar,
-    .xputchar = vc_putchar,
-    .puts = vc_puts,
-    .getCharNonBlocking = vc_getCharNonBlocking,
-    .kbhit = vc_kbhit
+StdOut uart = {
+    vc_init,
+    vc_getchar,
+    vc_putchar,
+    vc_puts,
+    vc_getCharNonBlocking,
+    vc_kbhit
 };
 
 /**

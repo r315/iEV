@@ -4,9 +4,9 @@
 static const double PI = 3.14159265358979323846f;    ///< PI
 
 void Config::help(void) {
-		console->puts("usage: conf <option>\n");
-		console->puts("racio <float> - Rotation racio between wheel and motor");
-		console->puts("wheel <float> - Wheel diameter in meters\n");
+		console->xputs("usage: conf <option>\n");
+		console->xputs("racio <float> - Rotation racio between wheel and motor");
+		console->xputs("wheel <float> - Wheel diameter in meters\n");
 }
 
 char Config::execute(void *ptr) {

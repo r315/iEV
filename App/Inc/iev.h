@@ -40,7 +40,7 @@ typedef struct {
 
 extern QueueHandle_t qdataQueue;
 extern QuadrantConfiguration qconfig;
-extern SerialOut uart;
+extern StdOut uart;
 
 
 #ifdef __cplusplus

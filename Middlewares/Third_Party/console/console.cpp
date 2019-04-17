@@ -10,11 +10,11 @@ Console::Console(void) {
 
 }
 
-Console::Console(SerialOut *sp, const char *prt) {
+Console::Console(StdOut *sp, const char *prt) {
 	init(sp, prt);
 }
 
-void Console::init(SerialOut *sp, const char *prt) {
+void Console::init(StdOut *sp, const char *prt) {
 	memset(cmdList, '#', CONSOLE_MAX_COMMANDS * sizeof(ConsoleCommand*));
 	memset(line, '\0', COMMAND_MAX_LEN);
 	cmdListSize = 0;
@@ -84,31 +84,42 @@ void Console::process(void) {
 }
 
 /**
- * libc functions *
+ * libc compatible functions *
  * */
-void Console::puts(const char* str)
+int Console::xputs(const char* str)
 {
-	out->puts(str);
+	out->xputs(str);
 	out->xputchar('\n');
+	return 1;
 }
 
-void Console::gets(char* str)
+char *Console::xgets(char* str)
 {
+	uint8_t i = 0;
 	char c;
+
 	c = out->xgetchar();
+
 	while ((c != '\n') && (c != '\r'))
 	{
-		*str++ = c;
+		*(str + i++) = c;		
 		c = out->xgetchar();
 	}
-	*str = '\0';
+	*(str + i) = '\0';
+
+	return str;
 }
 
-char Console::xgetchar(void)
+int Console::xputchar(int c) {
+	out->xputchar(c);
+	return (int)c;
+}
+
+int Console::xgetchar(void)
 {
 	char c = out->xgetchar();
 	out->xputchar(c);
-	return c;
+	return (int)c;
 }
 
 /**
@@ -124,14 +135,16 @@ char Console::getLineNonBlocking(char *dst, uint8_t *cur_len, uint8_t maxLen) {
 		len = *cur_len;
 		
 		if ((c == '\n') || (c == '\r')) {
-			*(dst + (len++)) = '\0';
+			// *(dst + (len++)) = '\0';
+			//Remove all extra text from previous commands
+			memset(dst + len, '\0', COMMAND_MAX_LEN - len);
 			out->xputchar(c);
 			*cur_len = 0;
-			return len;
+			return len + 1;
 		}
 		else if (c == '\b') {
 			if (len > 0) {
-				out->puts("\b \b");
+				out->xputs("\b \b");
 				(*cur_len)--;
 			}
 		}
@@ -165,9 +178,9 @@ char Console::getline(char *dst, uint8_t max)
 	uint8_t len = 0, hasLine = 0;
 	char c;
 
-	while(!hasLine){
+	while (!hasLine) {
 		c = out->xgetchar();
-		switch(c){
+		switch (c) {
 			case '\b':			
 			if (len != 0) {
 				out->xputchar(c);
@@ -213,8 +226,8 @@ char Console::getline(char *dst, uint8_t max)
 		}
 	}
 
-	//dst[len] = '\0';
-	memset(dst + len , '\0', COMMAND_MAX_LEN - len);
+	//Remove all extra text from previous commands
+	memset(dst + len, '\0', COMMAND_MAX_LEN - len);
 	return len;
 }
 
@@ -246,7 +259,7 @@ void Console::print(const char* str, ...)
 		}
 		if (!d) break;
 		if (d == 's') {
-			out->puts(va_arg(arp, char*));
+			out->xputs(va_arg(arp, char*));
 			continue;
 		}
 		if (d == 'c') {
@@ -260,19 +273,19 @@ void Console::print(const char* str, ...)
 		if (d == 'f') {
 			if (!f)
 				w = 6;						// dafault 6 decimal places
-			out->puts(pftoa(va_arg(arp, double), w));
+			out->xputs(pftoa(va_arg(arp, double), w));
 			continue;
 		}
 		if (!r) break;
 		if (s) w = -w;
 		if (l) {
-			out->puts(pitoa((long)va_arg(arp, long), r, w));
+			out->xputs(pitoa((long)va_arg(arp, long), r, w));
 		}
 		else {
 			if (r > 0)
-				out->puts(pitoa((unsigned long)va_arg(arp, int), r, w));
+				out->xputs(pitoa((unsigned long)va_arg(arp, int), r, w));
 			else
-				out->puts(pitoa((long)va_arg(arp, int), r, w));
+				out->xputs(pitoa((long)va_arg(arp, int), r, w));
 		}
 	}
 
@@ -282,26 +295,6 @@ void Console::print(const char* str, ...)
 
 uint8_t Console::kbhit(void) {
 	return out->kbhit();
-}
-
-void Console::xputc(char c) {
-	out->xputchar(c);
-}
-
-uint8_t Console::changeLine(char *new_line) {
-	uint8_t i;
-	while (line_len--) {
-		out->puts("\b \b");
-	}
-
-	out->puts(new_line);
-	line_len = strlen(new_line);
-	
-	for(i = 0; i < line_len; i++){
-		*(line + i) = *new_line++;
-	}
-	
-	return line_len;
 }
 
 char *Console::historyGet(void) {
@@ -371,8 +364,18 @@ void Console::historyClear(void) {
 	hist_idx = hist_cur = hist_size = 0;
 }
 
-void Console::log(const char* str, ...){
-	xputc('\r');
-	print(str);
-	print(prompt);
+uint8_t Console::changeLine(char *new_line) {
+	uint8_t i;
+	while (line_len--) {
+		out->xputs("\b \b");
+	}
+
+	out->xputs(new_line);
+	line_len = strlen(new_line);
+
+	for (i = 0; i < line_len; i++) {
+		*(line + i) = *new_line++;
+	}
+
+	return line_len;
 }

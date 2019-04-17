@@ -24,12 +24,12 @@ public:
 	void init(void *params) { console = static_cast<Console*>(params); }
 
 	void help(void) {
-		console->puts("Available commands:\n");
+		console->xputs("Available commands:\n");
 		
 		for (uint8_t i = 0; i < console->getCmdListSize(); i++) {			
 				console->print("\t%s\n", console->getCmdIndexed(i)->getName());
 		}
-		console->xputc('\n');
+		console->xputchar('\n');
 	}
 
 	char execute(void *ptr) {
@@ -47,7 +47,7 @@ public:
 	void init(void *params) { console = static_cast<Console*>(params); }
 
 	void help(void) {
-		console->puts("usage rpm <0-20000>");
+		console->xputs("usage rpm <0-20000>");
 	}
 
 	char execute(void *ptr);

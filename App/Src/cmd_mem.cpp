@@ -28,12 +28,12 @@ uint8_t *pdata = (uint8_t*)add;
 
     for(uint32_t i = 0; i < cnt; i++){
         if((i & 0x0F) == 0){
-            console->xputc('\n');
+            console->xputchar('\n');
             console->print("%08X: ", add + i);
         }
         console->print("%02X ", *(pdata++) );
     }
-    console->xputc('\n');
+    console->xputchar('\n');
 }
 
 void CmdMem::help(void){

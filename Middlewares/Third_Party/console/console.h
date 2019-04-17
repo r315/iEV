@@ -6,9 +6,7 @@
 extern "C" {
 
 #include <stdint.h>
-#include <stdarg.h>
-
-#include "serialout.h"
+#include "stdout.h"
 #include "console_command.h"
 
 #define NO        0
@@ -39,7 +37,7 @@ extern "C" {
 		char line[COMMAND_MAX_LEN];
 		uint8_t line_len;
 		const char *prompt;
-		SerialOut *out;
+		StdOut *out;
 		
 		char history[HISTORY_SIZE][COMMAND_MAX_LEN];
 		void historyDump(void);
@@ -55,9 +53,9 @@ extern "C" {
 
 	public:
 		Console(void);
-		Console(SerialOut *sp, const char *prt);
+		Console(StdOut *sp, const char *prt);
 
-		void init(SerialOut *sp, const char *prt);
+		void init(StdOut *sp, const char *prt);
 
 		char getLine(char *line, uint8_t max);
 		char getLineNonBlocking(char *line, uint8_t *cur_len, uint8_t max);
@@ -66,15 +64,13 @@ extern "C" {
 		void addCommand(ConsoleCommand *cmd);
 		char parseCommand(char *line);
 		char executeCommand(void *ptr);
-		void xputc(char c);
-		void puts(const char* str);
-		char xgetchar(void);
-		void gets(char* str);
+		int xputchar(int c);
+		int xputs(const char* str);
+		int xgetchar(void);
+		char *xgets(char* str);
 		char getline(char *line, uint8_t max);
 		void print(const char* str, ...);
 		uint8_t kbhit(void);
-
-		void log(const char* str, ...);
 
 		uint8_t getCmdListSize(void) { return cmdListSize; }
 		ConsoleCommand *getCmdIndexed(uint8_t idx) { return cmdList[idx]; } // security issues??

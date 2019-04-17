@@ -79,12 +79,12 @@ char c, *p1 = (char*)ptr;
 
 				for(uint32_t i = 0; i < BLOCKSIZE; i++){
 					if((i & 0x0F) == 0){
-						console->xputc('\n');
+						console->xputchar('\n');
 						console->print("%08X: ", sector + i);
 					}
 					console->print("%02X ", sector_data[i] );
 				}
-				console->xputc('\n');
+				console->xputchar('\n');
 				break;
 
 			case 'i':
