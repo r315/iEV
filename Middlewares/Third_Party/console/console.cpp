@@ -213,7 +213,8 @@ char Console::getline(char *dst, uint8_t max)
 		}
 	}
 
-	dst[len] = '\0';
+	//dst[len] = '\0';
+	memset(dst + len , '\0', COMMAND_MAX_LEN - len);
 	return len;
 }
 

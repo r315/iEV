@@ -30,8 +30,9 @@ double value;
 			}
 
 			if(isNextWord(&p1, "wheel")){
-				if(nextDouble(&p1, &value)){					 
-					 OPT_SET_FLAG(operation, OPT_DONE);
+				if(nextDouble(&p1, &value)){
+					OPT_SET_OPER(operation, OPT_WRITE);					 
+					OPT_SET_FLAG(operation, OPT_DONE);
 				}				
 			}
 
