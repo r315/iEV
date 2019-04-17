@@ -38,7 +38,12 @@ uint8_t wtext[] = "text to write logical disk"; /* File write buffer */
  	FATFS_UnLinkDriver(SDPath);
 }
 
-void SDCard::help(void){}
+void SDCard::help(void){
+	console->xputs("usage: sd\n");
+	console->xputs("i - initialise sd card");
+	console->xputs("m - mount fs");
+	console->xputs("d <sector> - dump sector\n");
+}
 
 char SDCard::execute(void *ptr) {
 uint32_t operation = 0;

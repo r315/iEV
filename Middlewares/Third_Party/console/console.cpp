@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
-
+#include <stdarg.h>
 
 #include "console.h"
 
@@ -30,7 +30,7 @@ void Console::init(StdOut *sp, const char *prt) {
 void Console::addCommand(ConsoleCommand *cmd) {
 	if (cmd == NULL || cmdListSize == CONSOLE_MAX_COMMANDS)
 	{
-		puts("Invalid command or command list full!");
+		xputs("Invalid command or command list full!");
 		return;
 	}
 
@@ -60,10 +60,10 @@ char Console::parseCommand(char *line) {
 	memset(line, '\0', COMMAND_MAX_LEN);
 
 	if (res == CMD_NOT_FOUND) {
-		puts("Command not found\r");
+		xputs("Command not found\r");
 	}
 	else if (res == CMD_BAD_PARAM) {
-		puts("Bad parameter ");
+		xputs("Bad parameter ");
 	}
 
 	return res;
@@ -130,12 +130,10 @@ char Console::getLineNonBlocking(char *dst, uint8_t *cur_len, uint8_t maxLen) {
 	char c;
 	uint8_t len;
 
-	//if(out->getCharNonBlocking(&c)) {
 	while(out->getCharNonBlocking(&c)) {	
 		len = *cur_len;
 		
-		if ((c == '\n') || (c == '\r')) {
-			// *(dst + (len++)) = '\0';
+		if ((c == '\n') || (c == '\r')) {			
 			//Remove all extra text from previous commands
 			memset(dst + len, '\0', COMMAND_MAX_LEN - len);
 			out->xputchar(c);
@@ -311,10 +309,7 @@ void Console::historyDump(void) {
 
 void Console::historyAdd(char *entry) {
 	if (*line != '\n' && *line != '\r' && *line != '\0') {
-		//xstrcpy(history[hist_cur], entry, COMMAND_MAX_LEN);
-		for(uint8_t i = 0; i < COMMAND_MAX_LEN; i++){
-			history[hist_cur][i] = entry[i];
-		}
+		xstrcpy(history[hist_cur], entry, COMMAND_MAX_LEN);
 
 		if (++hist_cur == HISTORY_SIZE)
 			hist_cur = 0;		
