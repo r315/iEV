@@ -323,7 +323,7 @@ board_include_paths := \
 	$(touchgfx_framework_path)/framework/include \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Inc \
 	$(Drivers_path)/CMSIS/Include \
-	$(Drivers_path)/CMSIS/Device/ST/STM32f7xx/Include \
+	$(Drivers_path)/CMSIS/Device/ST/STM32F7xx/Include \
 	$(bsp_path)/Src \
 	$(bsp_path)/Components/otm8009a \
 	$(bsp_path)/Components/qspi \
@@ -370,7 +370,7 @@ library_include_paths := $(touchgfx_framework_path)/lib/core/$(platform)/gcc
 
 _all_: generate_assets
 
-ifeq ($(shell find "$(application_path)" -wholename "$(application_path)/$(binary_output_path)/extflash.bin" -size +0c | wc -l | xargs echo),1)
+ifeq ($(shell find "$(application_path)" -wholename "$(application_path)$(binary_output_path)/extflash.bin" -size +0c | wc -l | xargs echo),1)
 _flash_: _extflash_
 else
 _flash_: _intflash_

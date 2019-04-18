@@ -205,12 +205,12 @@
       },
       "AvailableResolutions": [],
       "PhysicalButtons": [],
-      "GenerateAssetsCommand": "make -f simulator/gcc/Makefile assets -j10",
-      "PostGenerateCommand": "touchgfx update_project --project-file=..\\EWARM\\iEV.ewp --gui-group-name=Application/User/TouchGFX/gui --generated-group-name=Application/User/TouchGFX/generated && touchgfx update_project --project-file=simulator/msvs/Application.vcxproj",
-      "CompileSimulatorCommand": "make -f simulator/gcc/Makefile -j10",
-      "RunSimulatorCommand": "build\\bin\\simulator.exe",
-      "CompileTargetCommand": "make -f ../gcc/Makefile -j8",
-      "FlashTargetCommand": "make -f ../gcc/Makefile -j8 flash"
+      "GenerateAssetsCommand": "echo Assets",
+      "PostGenerateCommand": "echo PostGenerate",
+      "CompileSimulatorCommand": "echo compile simulator",
+      "RunSimulatorCommand": "echo run simulator",
+      "CompileTargetCommand": "make -C .. -j4",
+      "FlashTargetCommand": "make -C .. -j4 intflash"
     }
   },
   "Version": "4.10.0",
