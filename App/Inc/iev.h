@@ -10,6 +10,7 @@ extern "C" {
 /* board related includes */
 #include "stm32f769i_discovery.h"
 /* RTOS includes */
+#include "cmsis_os.h"
 #include "FreeRTOS.h"
 #include "queue.h"
 #include "semphr.h"
@@ -27,6 +28,7 @@ typedef struct {
     uint32_t rpm;
     uint32_t distance;
     uint32_t speed;
+    uint16_t battery;
 }QuadrantData;
 
 typedef struct {
@@ -34,6 +36,7 @@ typedef struct {
     double distance;    
     double wheelCircumference;
     double rpm;
+    uint16_t batteryLevel;
     uint8_t updated;
     SemaphoreHandle_t mutex;
 }QuadrantConfiguration;

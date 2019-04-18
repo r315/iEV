@@ -10,8 +10,9 @@ extern "C" {
 /*  
   b15-b8     b7 b3   b2-b1    b0
 |   size  | -      | OP    | start | */
-#define OPT_READ  1
-#define OPT_WRITE  2
+#define OPT_READ  	1
+#define OPT_WRITE  	2
+#define OPT_OPER3	3
 #define OPT_DONE (1 << 0)
 #define OPT_SET_FLAG(_o, _f) _o |= _f
 #define OPT_SET_OPER(o, n) o = ((o & ~(3 << OPT_DONE)) | (n << OPT_DONE))

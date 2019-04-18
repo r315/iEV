@@ -81,7 +81,7 @@ flash intflash: all
 	@cd "$(application_path)" && "$(MAKE)" -r -f $(makefile_name) -s $(MFLAGS) _$@_
 
 flash-openocd: all
-	openocd -f iEV.cfg -c "program $(binary_output_path)/intflash.hex verify reset exit"
+	openocd -f $(bsp_path)/STM32F769-DISCO.cfg -c "program $(binary_output_path)/intflash.hex verify reset exit"
 
 test:
 #@echo ""; $(foreach d, $(c_source_files), echo $(d);)
@@ -485,3 +485,5 @@ _clean_:
 	@mkdir -p $(asset_root_path)
 	# Remove assets folder if it is empty (i.e. no gui_generated folder)
 	@rmdir --ignore-fail-on-non-empty $(asset_root_path)
+	# Remove unused CubeMX generated files
+	@rm -rf STM32F769NIHx_FLASH.ld startup_stm32f769xx.s

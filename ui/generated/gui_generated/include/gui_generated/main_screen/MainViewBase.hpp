@@ -11,8 +11,9 @@
 #include <touchgfx/widgets/BoxWithBorder.hpp>
 #include <touchgfx/widgets/TextArea.hpp>
 #include <touchgfx/widgets/TextAreaWithWildcard.hpp>
-#include <touchgfx/canvas_widget_renderer/CanvasWidgetRenderer.hpp>
+#include <touchgfx/containers/Container.hpp>
 
+#include <touchgfx/canvas_widget_renderer/CanvasWidgetRenderer.hpp>
 class MainViewBase : public touchgfx::View<MainPresenter>
 {
 public:
@@ -35,6 +36,9 @@ protected:
     touchgfx::TextArea TextArea_km_unit;
     touchgfx::TextAreaWithOneWildcard TextAreaRpm;
     touchgfx::TextAreaWithOneWildcard TextAreaDistance;
+    touchgfx::Container batteryGaugeContainer;
+    touchgfx::Image batteryGauge;
+
 
     /*
      * Wildcard Buffers

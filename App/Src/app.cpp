@@ -1,5 +1,4 @@
 #include "main.h"
-#include "cmsis_os.h"
 #include "iev.h"
 #include "gui/main_screen/MainPresenter.hpp"
 #include <stdio.h>
@@ -68,6 +67,7 @@ void updateTask(void *argument)
                 qdata.rpm = qconfig.rpm;
                 qdata.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);
                 qdata.distance = (uint32_t)(qconfig.distance/1000); // display in km
+                qdata.battery = qconfig.batteryLevel;
                 // send to display
                 xQueueSend(qdataQueue, &qdata, pdMS_TO_TICKS(UPDATE_RATE));
             }

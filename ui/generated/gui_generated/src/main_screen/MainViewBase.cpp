@@ -42,12 +42,19 @@ MainViewBase::MainViewBase()
     TextAreaDistance.setWildcard(TextAreaDistanceBuffer);
     TextAreaDistance.setTypedText(TypedText(T_TOTALDISTANCE));
 
+    batteryGaugeContainer.setPosition(61, 68, 120, 300);
+
+    batteryGauge.setXY(0, -199);
+    batteryGauge.setBitmap(Bitmap(BITMAP_BATTERY_GAUGE_ID));
+    batteryGaugeContainer.add(batteryGauge);
+
     add(fon_411111);
     add(boxWithBorder_rpm);
     add(textArea_rpm_unit);
     add(TextArea_km_unit);
     add(TextAreaRpm);
     add(TextAreaDistance);
+    add(batteryGaugeContainer);
 }
 
 void MainViewBase::setupScreen()

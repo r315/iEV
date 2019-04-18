@@ -31,6 +31,7 @@ public:
     virtual void notifyRpmChange(int value);
     virtual void notifyDistanceChange(int value);
     virtual void notifySpeedChange(int value);
+    virtual void notifyBatteryChange(int percentage);
 protected:
     Model* model;
 };

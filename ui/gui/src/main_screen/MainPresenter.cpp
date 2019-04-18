@@ -28,3 +28,6 @@ void MainPresenter::notifyDistanceChange(int value){
     view.setDistance(value);
 }
     
+void MainPresenter::notifyBatteryChange(int percentage){
+    view.setBatteryLevel(percentage);
+}

@@ -16,6 +16,8 @@ void MainView::setupScreen()
     gauge.setAnimationDuration(20);
     gauge.setVisible(true);
     add(gauge);
+
+    batteryGaugeMaxHeight = batteryGaugeContainer.getHeight();
 }
 
 void MainView::tearDownScreen()
@@ -36,4 +38,21 @@ void MainView::setRpm(int value){
 
 void MainView::setSpeed(int value){
     gauge.setValue(value);
+}
+
+void MainView::setBatteryLevel(int value){
+    if(value > 100 || value < 0) 
+        return;
+    
+    int16_t currentHeight = batteryGauge.getHeight();    
+    // Divide gauge in 10 sections
+    uint16_t section = batteryGaugeMaxHeight / 10;
+    
+    value = value / 10;
+    
+    value = (value == 0) ? section : section * value;   // always has at least one bar
+
+    batteryGauge.setY(-value);
+
+    batteryGauge.invalidate();    
 }

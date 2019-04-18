@@ -15,8 +15,9 @@ public:
     void setDistance(int value);
     void setRpm(int value);
     void setSpeed(int value);
+    void setBatteryLevel(int value);
 protected:
-
+    uint16_t batteryGaugeMaxHeight;
     Gauge gauge;
 };
 

@@ -144,6 +144,36 @@
             "Clickable": false,
             "Fadeable": false,
             "Moveable": false
+          },
+          {
+            "Components": [
+              {
+                "RelativeFilename": "battery_gauge.png",
+                "Alpha": 255,
+                "Name": "batteryGauge",
+                "X": 0,
+                "Y": -199,
+                "Width": 120,
+                "Height": 600,
+                "Type": "Image",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              }
+            ],
+            "Name": "batteryGaugeContainer",
+            "X": 61,
+            "Y": 68,
+            "Width": 120,
+            "Height": 300,
+            "Type": "Container",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
           }
         ],
         "Interactions": [],
