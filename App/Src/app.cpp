@@ -13,6 +13,7 @@
 #define SECONDS_MINUTE 60
 #define ITERATIONS_SECOND (1000/UPDATE_RATE)
 #define SECONDS_HOUR 3600
+#define CAN_RPM_MSG 1223
 
 #define RPM_QUEUE_ITEM_SIZE sizeof(QuadrantData)
 
@@ -25,10 +26,27 @@ static const char prompt[] = "iEV>";
 QueueHandle_t qdataQueue;
 QuadrantConfiguration qconfig;
 
+/**
+ * 
+ * */
+void CAN_MessageCallback(uint8_t *data){
+BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    //if(header.FilterMatchIndex == CAN_RPM_MSG){
+        // Should discart message after 100ms???
+        if (xSemaphoreTakeFromISR(qconfig.mutex, &xHigherPriorityTaskWoken) == pdPASS){
+            qconfig.data.battery = 100;
+            xSemaphoreGiveFromISR(qconfig.mutex, &xHigherPriorityTaskWoken);
+        }
+    //}
+}
+
+/**
+ *  @brief High priority task for handling constant periodicity calculation
+ * \param   *argument - not used
+ * */
 void updateTask(void *argument)
 {
     TickType_t lastTime = xTaskGetTickCount();
-    QuadrantData qdata;
 
     qdataQueue = xQueueCreate(RPM_QUEUE_LENGTH, RPM_QUEUE_ITEM_SIZE);
 
@@ -53,23 +71,21 @@ void updateTask(void *argument)
         /* Read rpm */
         if (xSemaphoreTake(qconfig.mutex, pdMS_TO_TICKS(UPDATE_RATE)) == pdPASS)
         {
-            double wheelRpm = qconfig.rpm / qconfig.gearRacio;
+            double wheelRpm = qconfig.data.rpm / qconfig.gearRacio;
             //get distance in respect to wheel revolutions in 100ms
             double distanceIteration = (wheelRpm / (SECONDS_MINUTE * ITERATIONS_SECOND)) * qconfig.wheelCircumference;
             // add to total distance
-            uint32_t curDistance = (uint32_t)qconfig.distance;
-            qconfig.distance += distanceIteration;
+            uint32_t curDistance = (uint32_t)qconfig.totalDistance;
+            qconfig.totalDistance += distanceIteration;
 
             // If integer part of distance or configuration has changed update screen 
-            if ((uint32_t)qconfig.distance != curDistance || qconfig.updated == true)
+            if ((uint32_t)qconfig.totalDistance != curDistance || qconfig.updated == true)
             {
-                qconfig.updated = false;
-                qdata.rpm = qconfig.rpm;
-                qdata.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);
-                qdata.distance = (uint32_t)(qconfig.distance/1000); // display in km
-                qdata.battery = qconfig.batteryLevel;
+                qconfig.updated = false;                
+                qconfig.data.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);
+                qconfig.data.distance = (uint32_t)(qconfig.totalDistance/1000); // display in km                
                 // send to display
-                xQueueSend(qdataQueue, &qdata, pdMS_TO_TICKS(UPDATE_RATE));
+                xQueueSend(qdataQueue, &qconfig.data, pdMS_TO_TICKS(UPDATE_RATE));
             }
             xSemaphoreGive(qconfig.mutex);
         }
@@ -77,6 +93,11 @@ void updateTask(void *argument)
     }
 }
 
+
+/**
+ *  @brief Low priority task for toggling Alive LED
+ * \param   *argument - not used
+ * */
 void ledAliveTask(void *argument)
 {
     TickType_t lastTime = xTaskGetTickCount();
@@ -89,6 +110,11 @@ void ledAliveTask(void *argument)
     }
 }
 
+
+/**
+ *  @brief normal priority task for display management
+ * \param   *argument - not used
+ * */
 void graphicsTask(void *argument)
 {
     /* Initialise the graphical hardware */
@@ -99,6 +125,11 @@ void graphicsTask(void *argument)
     GRAPHICS_MainTask();
 }
 
+
+/**
+ *  @brief normal priority task for system management
+ * \param   *argument - not used
+ * */
 void consoleTask(void *argument)
 {
     Console console;
@@ -131,13 +162,15 @@ extern "C" void appMain(void)
 
     qconfig.gearRacio = 1;
     qconfig.wheelCircumference = 1.928f; //16" wheel
-    qconfig.rpm = 518.67f;
+    qconfig.data.rpm = 518;
 
     /* Create tasks */
     xTaskCreate(graphicsTask, "Graphics Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
     xTaskCreate(ledAliveTask, "Alive Led Task", STACK_MINIMUM, NULL, IDLE_PRIORITY_TASK, NULL);
     xTaskCreate(consoleTask, "Console Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
     xTaskCreate(updateTask, "Update Task", STACK_MEDIUM, NULL, HIGH_PRIORITY_TASK, NULL);
+
+    CAN_Init(CAN_MessageCallback);    
 
     /* Start scheduler */
     osKernelStart();
