@@ -46,7 +46,7 @@ extern "C" {
 		char *historyForward(void);
 		char *historyGet(void);
 		void historyClear(void);
-		uint8_t changeLine(char *new_line);
+		uint8_t changeLine(char *old_line, char *new_line, uint8_t old_line_len);
 		uint8_t hist_idx;
 		uint8_t hist_cur;
 		uint8_t hist_size;
@@ -75,6 +75,7 @@ extern "C" {
 		uint8_t getCmdListSize(void) { return cmdListSize; }
 		ConsoleCommand *getCmdIndexed(uint8_t idx) { return cmdList[idx]; } // security issues??
 	};
+
 
 }
 #endif

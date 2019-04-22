@@ -70,17 +70,17 @@ char Console::parseCommand(char *line) {
 }
 
 void Console::process(void) {
-	/*if (getLineNonBlocking(line, &line_len, COMMAND_MAX_LEN)) {
+#if defined(CONSOLE_BLOCKING)
+	line_len = 0;
+	line_len = getline(line, COMMAND_MAX_LEN);	
+#else
+	if (getLineNonBlocking(line, &line_len, COMMAND_MAX_LEN)) 
+#endif
+	{
 		historyAdd(line);
 		parseCommand(line);
 		print(prompt);
-	}*/
-
-	line_len = 0;
-	line_len = getline(line, COMMAND_MAX_LEN);
-	historyAdd(line);
-	parseCommand(line);
-	print(prompt);
+	}
 }
 
 /**
@@ -124,13 +124,13 @@ int Console::xgetchar(void)
 
 /**
  * Read a line ended by \n or \r from serial port.
- * Ending char are not added to line read * 
+ * Ending char is not added to line read *
  * */
 char Console::getLineNonBlocking(char *dst, uint8_t *cur_len, uint8_t maxLen) {
 	char c;
 	uint8_t len;
 
-	while(out->getCharNonBlocking(&c)) {	
+	while (out->getCharNonBlocking(&c)) {
 		len = *cur_len;
 		
 		if ((c == '\n') || (c == '\r')) {			
@@ -153,10 +153,10 @@ char Console::getLineNonBlocking(char *dst, uint8_t *cur_len, uint8_t maxLen) {
 
 			switch (c) {
 				case 0x41:  // UP arrow
-					changeLine(historyBack());
+					*cur_len = changeLine(dst, historyBack(), *cur_len);
 					break;
 				case 0x42:  // Down arrow
-					changeLine(historyForward());
+					*cur_len = changeLine(dst, historyForward(), *cur_len);
 					break;
 			}
 		}
@@ -179,48 +179,48 @@ char Console::getline(char *dst, uint8_t max)
 	while (!hasLine) {
 		c = out->xgetchar();
 		switch (c) {
-			case '\b':			
+		case '\b':
 			if (len != 0) {
 				out->xputchar(c);
 				out->xputchar(' ');
-				out->xputchar(c);				
+				out->xputchar(c);
 				len--;
 			}
-				break;
+			break;
 
-			case '\n':
-			case '\r':
-				hasLine = 1;
-				out->xputchar(c);
-				break;
+		case '\n':
+		case '\r':
+			hasLine = 1;
+			out->xputchar(c);
+			break;
 
-			case 0x1b:
-				c = out->xgetchar();
-				c = out->xgetchar();
-				//print("%X ", c);
-				switch (c) {
-					case 0x41:  // [1B, 5B, 41] UP arrow
-						len = changeLine(historyBack());
-						break;
-					case 0x42:  // [1B, 5B, 42] Down arrow
-						len = changeLine(historyForward());
-					default:
-					break;
-				}
+		case 0x1b:
+			c = out->xgetchar();
+			c = out->xgetchar();
+			//print("%X ", c);
+			switch (c) {
+			case 0x41:  // [1B, 5B, 41] UP arrow
+				len = changeLine(dst, historyBack(), len);
 				break;
-
-			case '<':
-				historyDump();
-				hasLine = 1;
-				break;
-
+			case 0x42:  // [1B, 5B, 42] Down arrow
+				len = changeLine(dst, historyForward(), len);
 			default:
+				break;
+			}
+			break;
+
+		case '<':
+			historyDump();
+			hasLine = 1;
+			break;
+
+		default:
 			if (len < max) {
 				out->xputchar(c);
 				dst[len] = c;
 				len++;
 			}
-				break;
+			break;
 		}
 	}
 
@@ -309,7 +309,8 @@ void Console::historyDump(void) {
 
 void Console::historyAdd(char *entry) {
 	if (*line != '\n' && *line != '\r' && *line != '\0') {
-		xstrcpy(history[hist_cur], entry, COMMAND_MAX_LEN);
+		
+		memcpy(history[hist_cur], entry, COMMAND_MAX_LEN);
 
 		if (++hist_cur == HISTORY_SIZE)
 			hist_cur = 0;		
@@ -359,18 +360,16 @@ void Console::historyClear(void) {
 	hist_idx = hist_cur = hist_size = 0;
 }
 
-uint8_t Console::changeLine(char *new_line) {
-	uint8_t i;
-	while (line_len--) {
+uint8_t Console::changeLine(char *old_line, char *new_line, uint8_t old_line_len) {
+	uint8_t new_line_len;
+	while (old_line_len--) {
 		out->xputs("\b \b");
 	}
 
 	out->xputs(new_line);
-	line_len = strlen(new_line);
+	new_line_len = strlen(new_line);
 
-	for (i = 0; i < line_len; i++) {
-		*(line + i) = *new_line++;
-	}
+	memcpy(old_line, new_line, new_line_len);
 
-	return line_len;
+	return new_line_len;
 }

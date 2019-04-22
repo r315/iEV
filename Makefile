@@ -169,7 +169,8 @@ cpp_compiler         := arm-none-eabi-g++
 cpp_compiler_options += -g -mthumb \
                     $(no_libs) \
                     -mno-thumb-interwork -fno-rtti -fno-exceptions  \
-                    -Og -fno-strict-aliasing -fdata-sections -ffunction-sections
+                    -Og -fno-strict-aliasing -fdata-sections -ffunction-sections \
+										-DCONSOLE_BLOCKING					
 
 #TODO removed -Wall
 
@@ -277,6 +278,7 @@ board_c_files += \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_uart.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_sd.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_sdmmc.c \
+	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_can.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd_ex.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_usb.c \
