@@ -44,7 +44,6 @@ typedef struct {
 extern QueueHandle_t qdataQueue;
 extern QuadrantConfiguration qconfig;
 extern StdOut uart;
-extern CAN_HandleTypeDef hcan1;
 
 #ifdef __cplusplus
 }

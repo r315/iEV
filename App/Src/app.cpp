@@ -13,7 +13,6 @@
 #define SECONDS_MINUTE 60
 #define ITERATIONS_SECOND (1000/UPDATE_RATE)
 #define SECONDS_HOUR 3600
-#define CAN_RPM_MSG 1223
 
 #define RPM_QUEUE_ITEM_SIZE sizeof(QuadrantData)
 
@@ -34,7 +33,7 @@ BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     //if(header.FilterMatchIndex == CAN_RPM_MSG){
         // Should discart message after 100ms???
         if (xSemaphoreTakeFromISR(qconfig.mutex, &xHigherPriorityTaskWoken) == pdPASS){
-            qconfig.data.battery = 100;
+            qconfig.data.rpm = *((uint32_t*)data);
             xSemaphoreGiveFromISR(qconfig.mutex, &xHigherPriorityTaskWoken);
         }
     //}
@@ -81,7 +80,7 @@ void updateTask(void *argument)
             // If integer part of distance or configuration has changed update screen 
             if ((uint32_t)qconfig.totalDistance != curDistance || qconfig.updated == true)
             {
-                qconfig.updated = false;                
+                qconfig.updated = false;
                 qconfig.data.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);
                 qconfig.data.distance = (uint32_t)(qconfig.totalDistance/1000); // display in km                
                 // send to display
@@ -131,13 +130,14 @@ void graphicsTask(void *argument)
  * \param   *argument - not used
  * */
 void consoleTask(void *argument)
-{
+{    
     Console console;
     Help help;
     Rpm rpm;
     Config cfg;
     CmdMem mem;
     SDCard sd;
+    CmdCan can;
 
     uart.init();
     console.init(&uart, prompt);
@@ -147,7 +147,8 @@ void consoleTask(void *argument)
     console.addCommand(&cfg);
     console.addCommand(&mem);
     console.addCommand(&sd);
-
+    console.addCommand(&can);
+ 
     for (;;)
     {
         console.process();

@@ -24,6 +24,7 @@ CAN_FilterTypeDef filter;
     hcan.Init.ReceiveFifoLocked = DISABLE;
     hcan.Init.TransmitFifoPriority = DISABLE;
 
+    // HW Pins and interupts are configured on Init call 
     status = HAL_CAN_Init(&hcan);
 
     if ( status != HAL_OK)
@@ -66,10 +67,10 @@ uint32_t mailbox;
 uint8_t TxData[8];
 CAN_TxHeaderTypeDef header;
 
-    header.StdId = 0x11;
+    header.StdId = 0xF1;
     header.RTR = CAN_RTR_DATA;
     header.IDE = CAN_ID_STD;
-    header.DLC = 2;
+    header.DLC = sizeof(TxData);
     header.TransmitGlobalTime = DISABLE;
     TxData[0] = 0xCA;
     TxData[1] = 0xFE;
@@ -93,16 +94,16 @@ uint8_t rxdata[8];
         return;
     }
 
-    if((header.StdId != 0x11)                     ||
+/*    if((header.StdId != 0x11)                     ||
      (header.RTR != CAN_RTR_DATA)               ||
      (header.IDE != CAN_ID_STD)                 ||
      (header.DLC != 2)                          ||
      ((rxdata[0]<<8 | rxdata[1]) != 0xCAFE))
   {
-    /* Rx message Error */
+    Rx message Error 
     return;
   }
-
+*/
     can_cb(rxdata);
 }
 

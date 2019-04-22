@@ -12,6 +12,8 @@ extern "C" {
 |   size  | -      | OP    | start | */
 #define OPT_READ  	1
 #define OPT_WRITE  	2
+#define OPT_OPER1  	1
+#define OPT_OPER2  	2
 #define OPT_OPER3	3
 #define OPT_DONE (1 << 0)
 #define OPT_SET_FLAG(_o, _f) _o |= _f
@@ -86,6 +88,15 @@ public:
 	void fatFs_Init(void);	
 };
 
+
+class CmdCan : public ConsoleCommand{
+    Console *console;
+public:
+    CmdCan () : ConsoleCommand("can") {}
+    void init(void *params) { console = static_cast<Console*>(params); }
+    char execute(void *ptr);
+    void help(void);
+};
 
 }
 #endif
