@@ -61,7 +61,7 @@ double value;
 					qconfig.wheelCircumference = value * PI;
 					break;
 				case OPT_OPER3:
-					qconfig.batteryLevel = bval;
+					qconfig.data.battery = bval;
 					break;
 			}
 			qconfig.updated= TRUE;

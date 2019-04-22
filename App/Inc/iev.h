@@ -33,18 +33,17 @@ typedef struct {
 
 typedef struct {
     double gearRacio;
-    double distance;    
+    double totalDistance;
     double wheelCircumference;
-    double rpm;
-    uint16_t batteryLevel;
     uint8_t updated;
+    QuadrantData data;
     SemaphoreHandle_t mutex;
 }QuadrantConfiguration;
 
 extern QueueHandle_t qdataQueue;
 extern QuadrantConfiguration qconfig;
 extern StdOut uart;
-
+extern CAN_HandleTypeDef hcan1;
 
 #ifdef __cplusplus
 }

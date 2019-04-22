@@ -16,7 +16,7 @@ char Rpm::execute(void *ptr)
 
 		if (xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS)
 		{
-			qconfig.rpm = rpm;
+			qconfig.data.rpm = rpm;
 			qconfig.updated = TRUE;
 			xSemaphoreGive(qconfig.mutex);
 		}
