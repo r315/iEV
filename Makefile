@@ -21,9 +21,6 @@ application_path = $(makefile_path)
 # Change makefile_name to a relative path
 makefile_name := $(subst $(call sq,$(application_path))/,,$(call sq,$(abspath $(call sq,$(makefile_name)))))
 
-# Get relative path to makefile from application_path
-makefile_path_relative := $(subst $(call sq,$(application_path))/,,$(call sq,$(abspath $(call sq,$(makefile_path)))))
-
 # Get path to Middlewares
 Middlewares_path := Middlewares
 
@@ -37,7 +34,7 @@ bsp_path := $(Drivers_path)/BSP
 os_path := $(Middlewares_path)/Third_Party/FreeRTOS
 
 #Get user application path
-user_app_path := App
+user_app_path := Core/App
 
 #FatFS
 fatfs_path := $(Middlewares_path)/Third_Party/FatFs
@@ -48,7 +45,7 @@ linker_script_path := $(bsp_path)
 # corrects TouchGFX Path
 #touchgfx_path := ${subst ../,,$(touchgfx_path)}
 #touchgfx_path := $(subst $(call sq,$(makefile_path))/,,$(call sq,$(abspath $(call sq,$(touchgfx_path)))))
-touchgfx_framework_path := $(Middlewares_path)/ST/touchgfx
+touchgfx_framework_path := $(Middlewares_path)/ST/TouchGFX/touchgfx
 ui_path := ui
 ui_mk := $(ui_path)/config/gcc/app.mk
 
@@ -206,7 +203,7 @@ all_components := $(components) \
 	$(asset_texts_output)
 
 #keep framework include and source out of this mess! :)
-include_paths := $(library_includes) #$(foreach comp, $(all_components), $(comp)/include) $(framework_includes) #$(source_Middlewares_paths)
+include_paths := $(library_includes) $(foreach comp, $(all_components), $(comp)/include) $(framework_includes) #$(source_Middlewares_paths)
 source_paths = $(foreach comp, $(all_components), $(comp)/Src) #$(Drivers_path)/STM32F7xx_HAL_Driver/Src
 
 # Finds files that matches the specified pattern. The directory list
@@ -235,22 +232,20 @@ fontconvert_font_files := \
 	$(fontconvert_bdf_lower_files) \
 	$(fontconvert_bdf_upper_files)
 
-asm_source_files := $(bsp_path)/startup/startup_stm32f769xx.s
+# SOC startup file
+asm_source_files := $(bsp_path)/startup_stm32f769xx.s
 
+# Board specific drivers
 board_c_files := \
-	$(bsp_path)/Src/stm32f769i_discovery.c \
-	$(bsp_path)/Src/stm32f769i_discovery_sdram.c \
-	$(bsp_path)/Src/stm32f769i_discovery_ts.c \
-	$(bsp_path)/Src/stm32f769i_discovery_qspi.c \
+	$(bsp_path)/STM32F769I-Discovery/stm32f769i_discovery.c \
+	$(bsp_path)/STM32F769I-Discovery/stm32f769i_discovery_sdram.c \
+	$(bsp_path)/STM32F769I-Discovery/stm32f769i_discovery_ts.c \
+	$(bsp_path)/STM32F769I-Discovery/stm32f769i_discovery_qspi.c \
 	$(bsp_path)/Components/otm8009a/otm8009a.c \
 	$(bsp_path)/Components/ft6x06/ft6x06.c \
-	$(bsp_path)/Src/stm32f769i_discovery_sd.c \
-	
+	$(bsp_path)/STM32F769I-Discovery/stm32f769i_discovery_sd.c \
 
-board_c_files += \
-	$(wildcard $(user_app_path)/Src/*.c) \
-	$(os_path)/Source/CMSIS_RTOS/cmsis_os.c
-
+# SOC level drivers
 board_c_files += \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_cortex.c \
@@ -265,6 +260,7 @@ board_c_files += \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_rcc.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_rcc_ex.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_sdram.c \
+	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_sd.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_tim.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_tim_ex.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_qspi.c \
@@ -273,24 +269,24 @@ board_c_files += \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_crc_ex.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_rtc.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_rtc_ex.c \
-	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_fmc.c \
-	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_dsi.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_uart.c \
-	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_sd.c \
+	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_fmc.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_sdmmc.c \
+	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_dsi.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_can.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd_ex.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_usb.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_spi.c \
-	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_nor.c \
 
+# Libraries c sources
 board_c_files += \
-	$(console_path)/strfunc.c \
 	$(fatfs_path)/src/ff.c \
 	$(fatfs_path)/src/ff_gen_drv.c \
 	$(fatfs_path)/src/diskio.c \
 	$(fatfs_path)/src/option/syscall.c \
+	$(os_path)/Source/CMSIS_RTOS/cmsis_os.c \
+	$(console_path)/strfunc.c \
 	#$(usb_lib_path)/Core/Src/usbd_ioreq.c \
 	$(usb_lib_path)/Core/Src/usbd_ctlreq.c \
 	$(usb_lib_path)/Core/Src/usbd_core.c \
@@ -298,12 +294,14 @@ board_c_files += \
 	$(usb_device_path)/App/usb_device.c \
 	$(usb_device_path)/App/usbd_desc.c \
 	$(usb_device_path)/App/usbd_cdc_if.c \
-	$(usb_device_path)/Target/usbd_conf.c \
-	
+	$(usb_device_path)/Target/usbd_conf.c \	
 
-
+# Libraries cpp sources
 board_cpp_files := \
-	$(wildcard $(user_app_path)/Src/*.cpp) \
+	$(console_path)/console.cpp \
+
+# Board specific cpp files
+board_cpp_files += \
 	$(ui_path)/target/STM32F7Instrumentation.cpp \
 	$(ui_path)/target/OTM8009TouchController.cpp \
 	$(ui_path)/target/STM32F7DMA.cpp \
@@ -311,8 +309,15 @@ board_cpp_files := \
 	$(ui_path)/target/GPIO.cpp \
 	$(ui_path)/target/HW_Init.cpp \
 	$(ui_path)/target/BoardConfiguration.cpp \
-	$(console_path)/console.cpp \
 
+
+# Application c sources
+board_c_files += \
+	$(wildcard $(user_app_path)/*.c) \
+
+# Application cpp surces
+board_cpp_files += \
+	$(wildcard $(user_app_path)/*.cpp) \
 
 board_include_paths := \
 	$(ui_path)/gui/include \
@@ -326,10 +331,9 @@ board_include_paths := \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Inc \
 	$(Drivers_path)/CMSIS/Include \
 	$(Drivers_path)/CMSIS/Device/ST/STM32F7xx/Include \
-	$(bsp_path)/Src \
+	$(bsp_path)/STM32F769I-Discovery \
 	$(bsp_path)/Components/otm8009a \
 	$(bsp_path)/Components/qspi \
-	$(user_app_path)/Inc \
 	Core/Inc \
 	$(usb_lib_path)/Core/Inc \
 	$(usb_lib_path)/Class/CDC/Inc \
@@ -489,3 +493,5 @@ _clean_:
 	@rmdir --ignore-fail-on-non-empty $(asset_root_path)
 	# Remove unused CubeMX generated files
 	@rm -rf STM32F769NIHx_FLASH.ld startup_stm32f769xx.s
+
+	@$(MAKE) -C $(ui_path) -f simulator/gcc/Makefile clean

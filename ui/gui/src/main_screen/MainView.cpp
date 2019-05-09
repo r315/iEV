@@ -43,8 +43,7 @@ void MainView::setSpeed(int value){
 void MainView::setBatteryLevel(int value){
     if(value > 100 || value < 0) 
         return;
-    
-    int16_t currentHeight = batteryGauge.getHeight();    
+        
     // Divide gauge in 10 sections
     uint16_t section = batteryGaugeMaxHeight / 10;
     

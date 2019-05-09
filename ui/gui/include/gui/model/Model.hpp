@@ -20,7 +20,7 @@ class ModelListener;
 class Model
 {
 private:
-    uint32_t tickCount;
+
     
 public:
     Model();

@@ -29,9 +29,9 @@ MainViewBase::MainViewBase()
     TextArea_km_unit.setTypedText(TypedText(T_SINGLEUSEID4));
 
     TextAreaRpm.setPosition(324, 40, 311, 117);
-    TextAreaRpm.setColor(touchgfx::Color::getColorFrom24BitRGB(17, 194, 32));
+    TextAreaRpm.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 173, 217));
     TextAreaRpm.setLinespacing(0);
-    Unicode::snprintf(TextAreaRpmBuffer, TEXTAREARPM_SIZE, "%s", TypedText(T_SINGLEUSEID6).getText());
+    Unicode::snprintf(TextAreaRpmBuffer, TEXTAREARPM_SIZE, "%s", TypedText(T_SINGLEUSEID8).getText());
     TextAreaRpm.setWildcard(TextAreaRpmBuffer);
     TextAreaRpm.setTypedText(TypedText(T_CURRENTRPM));
 

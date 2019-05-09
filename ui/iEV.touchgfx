@@ -80,7 +80,7 @@
             "Name": "TextArea_km_unit",
             "X": 181,
             "Y": 436,
-            "Width": 31,
+            "Width": 44,
             "Height": 25,
             "Type": "TextArea",
             "Visible": true,
@@ -93,15 +93,15 @@
             "TextId": "currentRpm",
             "TextRotation": "0",
             "Color": {
-              "Red": 17,
-              "Green": 194,
-              "Blue": 32
+              "Red": 0,
+              "Green": 173,
+              "Blue": 217
             },
             "Alpha": 255,
             "AutoSize": false,
             "LineSpacing": 0,
             "Wildcard1": {
-              "TextId": "SingleUseId6",
+              "TextId": "SingleUseId8",
               "UseBuffer": true,
               "BufferSize": 7
             },
@@ -201,11 +201,11 @@
         "IsResource": true
       },
       {
-        "TextEntryId": "SingleUseId6",
+        "TextEntryId": "SingleUseId7",
         "IsResource": false
       },
       {
-        "TextEntryId": "SingleUseId7",
+        "TextEntryId": "SingleUseId8",
         "IsResource": false
       }
     ],
@@ -235,10 +235,10 @@
       },
       "AvailableResolutions": [],
       "PhysicalButtons": [],
-      "GenerateAssetsCommand": "echo Assets",
-      "PostGenerateCommand": "echo PostGenerate",
-      "CompileSimulatorCommand": "echo compile simulator",
-      "RunSimulatorCommand": "echo run simulator",
+      "GenerateAssetsCommand": "make -f simulator/gcc/Makefile assets -j4",
+      "PostGenerateCommand": "touchgfx update_project --project-file=simulator/msvs/Application.vcxproj",
+      "CompileSimulatorCommand": "make -f simulator/gcc/Makefile -j4",
+      "RunSimulatorCommand": "build\\bin\\simulator.exe",
       "CompileTargetCommand": "make -C .. -j4",
       "FlashTargetCommand": "make -C .. -j4 intflash"
     }

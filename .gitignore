@@ -11,4 +11,4 @@ startup/
 STM32F769NIHx_FLASH.ld
 startup_stm32f769xx.s
 FATFS/
-Middlewares/ST/touchgfx/touchgfx/
+Middlewares/ST/TouchGFX/

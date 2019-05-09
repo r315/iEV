@@ -27,10 +27,10 @@ public:
 
     virtual ~MainPresenter() {};
 
-    virtual void notifyRpmChange(int value);
-    virtual void notifySpeedChange(int value);
-    virtual void notifyDistanceChange(int value);
-    virtual void notifyBatteryChange(int percentage);
+    void notifyRpmChange(int value);
+    void notifySpeedChange(int value);
+    void notifyDistanceChange(int value);
+    void notifyBatteryChange(int percentage);
 private:
     MainPresenter();
 
