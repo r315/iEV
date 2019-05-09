@@ -12,7 +12,7 @@ HAL_StatusTypeDef status;
 CAN_FilterTypeDef filter;
 
     hcan.Instance = CAN_INSTANCE;
-    hcan.Init.Prescaler = 60;          // 100kHz
+    hcan.Init.Prescaler = 12;          // 500kHz tq = (BRP[9:0]+1) x tPCLK
     hcan.Init.Mode = CAN_MODE_LOOPBACK; //CAN_MODE_NORMAL;
     hcan.Init.SyncJumpWidth = CAN_SJW_1TQ;
     hcan.Init.TimeSeg1 = CAN_BS1_6TQ;

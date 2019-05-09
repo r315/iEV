@@ -19,6 +19,7 @@ extern "C" {
 #include "console.h"
 #include "commands.h"
 #include "can.h"
+#include "logger.h"
 
 #define RPM_QUEUE_LENGTH        2
 #define UPDATE_RATE             100

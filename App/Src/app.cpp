@@ -149,6 +149,8 @@ void consoleTask(void *argument)
     console.addCommand(&sd);
     console.addCommand(&can);
  
+    console.print("\rCPU %uMHz\n%s", SystemCoreClock/1000000, prompt);
+
     for (;;)
     {
         console.process();
