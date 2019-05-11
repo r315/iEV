@@ -13,14 +13,16 @@ Model::Model() : modelListener(0)
 
 // Called every frame (15.66ms)
 void Model::tick()
-{    
+{   
+    #if !defined(SIMULATOR) 
     QuadrantData qdata = {};
 
-    //if(xQueueReceive(qdataQueue, &qdata, 0) == pdPASS){
+    if(xQueueReceive(qdataQueue, &qdata, 0) == pdPASS){
         // update ui
         modelListener->notifyRpmChange(qdata.rpm);
-        //modelListener->notifyDistanceChange(qdata.distance);
-        //modelListener->notifySpeedChange(qdata.speed);
-        //modelListener->notifyBatteryChange(qdata.battery);
-    //}  
+        modelListener->notifyDistanceChange(qdata.distance);
+        modelListener->notifySpeedChange(qdata.speed);
+        modelListener->notifyBatteryChange(qdata.battery);
+    }
+    #endif  
 }

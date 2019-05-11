@@ -78,9 +78,9 @@
             "AutoSize": true,
             "LineSpacing": 0,
             "Name": "TextArea_km_unit",
-            "X": 181,
-            "Y": 436,
-            "Width": 44,
+            "X": 559,
+            "Y": 417,
+            "Width": 31,
             "Height": 25,
             "Type": "TextArea",
             "Visible": true,
@@ -134,8 +134,8 @@
               "BufferSize": 7
             },
             "Name": "TextAreaDistance",
-            "X": 22,
-            "Y": 417,
+            "X": 400,
+            "Y": 412,
             "Width": 153,
             "Height": 49,
             "Type": "TextArea",
@@ -174,12 +174,115 @@
             "Clickable": false,
             "Fadeable": false,
             "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\dark_icons_next_arrow_48.png",
+            "Released": "__designer\\dark_icons_next_arrow_48.png",
+            "Alpha": 255,
+            "Name": "button1",
+            "X": 758,
+            "Y": 31,
+            "Width": 28,
+            "Height": 48,
+            "Type": "Button",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
           }
         ],
-        "Interactions": [],
+        "Interactions": [
+          {
+            "InteractionName": "Interaction1",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button1",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "ScreenTransitionType": "ScreenTransitionSlide",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "Config",
+              "Type": "ActionGotoScreen"
+            }
+          }
+        ],
         "Name": "Main",
         "OverrideDefaultBufferSize": true,
         "CanvasBufferSize": 12000
+      },
+      {
+        "Components": [
+          {
+            "RelativeFilename": "fon-41111.png",
+            "Alpha": 255,
+            "Name": "bg_cfg",
+            "X": 0,
+            "Y": 0,
+            "Width": 800,
+            "Height": 480,
+            "Type": "Image",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "InitialStatePressed": false,
+            "Pressed": "__designer\\blue_togglebars_toggle_round_large_button_on.png",
+            "Released": "__designer\\blue_togglebars_toggle_round_large_button_off.png",
+            "Alpha": 255,
+            "Style": "Style4",
+            "Name": "toggleButton1",
+            "X": 575,
+            "Y": 82,
+            "Width": 128,
+            "Height": 38,
+            "Type": "ToggleButton",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Pressed": "__designer\\dark_icons_back_arrow_48.png",
+            "Released": "__designer\\dark_icons_back_arrow_48.png",
+            "Alpha": 255,
+            "Name": "button1",
+            "X": 22,
+            "Y": 29,
+            "Width": 28,
+            "Height": 48,
+            "Type": "Button",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "Interaction1",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "button1",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "ScreenTransitionType": "ScreenTransitionSlide",
+              "ScreenTransitionDirection": "West",
+              "ActionComponent": "Main",
+              "Type": "ActionGotoScreen"
+            }
+          }
+        ],
+        "Name": "Config",
+        "OverrideDefaultBufferSize": false,
+        "CanvasBufferSize": 0
       }
     ],
     "CustomContainerDefinitions": [],

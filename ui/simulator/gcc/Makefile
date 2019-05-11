@@ -108,6 +108,7 @@ cpp_compiler         := g++
 cpp_compiler_options += -g -DSIMULATOR='' -DENABLE_LOG
 linker               := g++
 
+
 WARN = error all extra write-strings init-self cast-qual \
        pointer-arith strict-aliasing format=2 uninitialized \
        missing-declarations no-long-long no-unused-parameter \

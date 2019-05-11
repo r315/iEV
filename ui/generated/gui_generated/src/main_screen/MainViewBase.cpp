@@ -6,7 +6,8 @@
 #include <touchgfx/Color.hpp>
 #include <texts/TextKeysAndLanguages.hpp>
 
-MainViewBase::MainViewBase()
+MainViewBase::MainViewBase() :
+    buttonCallback(this, &MainViewBase::buttonCallbackHandler)
 {
     CanvasWidgetRenderer::setupBuffer(canvasBuffer, CANVAS_BUFFER_SIZE);
 
@@ -23,7 +24,7 @@ MainViewBase::MainViewBase()
     textArea_rpm_unit.setLinespacing(0);
     textArea_rpm_unit.setTypedText(TypedText(T_SINGLEUSEID1));
 
-    TextArea_km_unit.setXY(181, 436);
+    TextArea_km_unit.setXY(559, 417);
     TextArea_km_unit.setColor(touchgfx::Color::getColorFrom24BitRGB(207, 219, 209));
     TextArea_km_unit.setLinespacing(0);
     TextArea_km_unit.setTypedText(TypedText(T_SINGLEUSEID4));
@@ -35,7 +36,7 @@ MainViewBase::MainViewBase()
     TextAreaRpm.setWildcard(TextAreaRpmBuffer);
     TextAreaRpm.setTypedText(TypedText(T_CURRENTRPM));
 
-    TextAreaDistance.setPosition(22, 417, 153, 49);
+    TextAreaDistance.setPosition(400, 412, 153, 49);
     TextAreaDistance.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 173, 217));
     TextAreaDistance.setLinespacing(0);
     Unicode::snprintf(TextAreaDistanceBuffer, TEXTAREADISTANCE_SIZE, "%s", TypedText(T_SINGLEUSEID7).getText());
@@ -48,6 +49,10 @@ MainViewBase::MainViewBase()
     batteryGauge.setBitmap(Bitmap(BITMAP_BATTERY_GAUGE_ID));
     batteryGaugeContainer.add(batteryGauge);
 
+    button1.setXY(758, 31);
+    button1.setBitmaps(Bitmap(BITMAP_DARK_ICONS_NEXT_ARROW_48_ID), Bitmap(BITMAP_DARK_ICONS_NEXT_ARROW_48_ID));
+    button1.setAction(buttonCallback);
+
     add(fon_411111);
     add(boxWithBorder_rpm);
     add(textArea_rpm_unit);
@@ -55,9 +60,21 @@ MainViewBase::MainViewBase()
     add(TextAreaRpm);
     add(TextAreaDistance);
     add(batteryGaugeContainer);
+    add(button1);
 }
 
 void MainViewBase::setupScreen()
 {
 
+}
+
+void MainViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
+{
+    if (&src == &button1)
+    {
+        //Interaction1
+        //When button1 clicked change screen to Config
+        //Go to Config with screen transition towards East
+        application().gotoConfigScreenSlideTransitionEast();
+    }
 }

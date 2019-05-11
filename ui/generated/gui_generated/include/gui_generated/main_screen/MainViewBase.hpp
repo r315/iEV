@@ -13,6 +13,7 @@
 #include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 #include <touchgfx/containers/Container.hpp>
 
+#include <touchgfx/widgets/Button.hpp>
 #include <touchgfx/canvas_widget_renderer/CanvasWidgetRenderer.hpp>
 class MainViewBase : public touchgfx::View<MainPresenter>
 {
@@ -39,6 +40,7 @@ protected:
     touchgfx::Container batteryGaugeContainer;
     touchgfx::Image batteryGauge;
 
+    touchgfx::Button button1;
 
     /*
      * Wildcard Buffers
@@ -49,6 +51,16 @@ protected:
     touchgfx::Unicode::UnicodeChar TextAreaDistanceBuffer[TEXTAREADISTANCE_SIZE];
 
 private:
+
+    /*
+     * Callback Handler Declarations
+     */
+    void buttonCallbackHandler(const touchgfx::AbstractButton& src);
+
+    /*
+     * Callback Declarations
+     */
+    touchgfx::Callback<MainViewBase, const touchgfx::AbstractButton&> buttonCallback;
 
     /*
      * Canvas Buffer Size
