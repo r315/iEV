@@ -15,7 +15,7 @@ namespace iEV_Host
 
         private SerialPort serialPort;
         private readonly object monitor = new object();
-        private bool active;
+        private bool active = false;
 
         private LinkedList<T> ml;
 
@@ -53,8 +53,12 @@ namespace iEV_Host
 
         public void Send(T msg)
         {
+            
             lock (monitor)
             {
+                if (!active)
+                    return;
+
                 ml.AddLast(msg);
                 Monitor.Pulse(monitor);
             }
@@ -64,6 +68,8 @@ namespace iEV_Host
         {
             lock (monitor)
             {
+                if (!active)
+                    return;
                 active = false;
                 Monitor.Pulse(monitor);
             }

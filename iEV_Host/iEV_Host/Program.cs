@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace iEV_Host
 {
-    public enum Status {Empty, Ready, Sent };
+   
 
     class Program
     {
-        private static int RPM_INCREMENT = 50;
-        private static int MESSAGE_ID = 0x602;
+        private static int RPM_INCREMENT = 50;        
 
         static void Main(string[] args)
         {            
-            CanMessage msg = new CanMessage(MESSAGE_ID);
+            CanMessage01 msg = new CanMessage01();
+            CanMessage02 msg2 = new CanMessage02();
+
             MessageSender<CanMessage> sender = new MessageSender<CanMessage>();
             
-
             Console.WriteLine("\n User Up/Down Arrows to change RPM, 'r' to reset 'esc' to exit\n");
             ConsoleKeyInfo cki;
 
@@ -61,7 +61,7 @@ namespace iEV_Host
 
             } while (cki.Key != ConsoleKey.Escape);
 
-            sender.Terminate();
+            sender.Terminate(); 
         }
 
       

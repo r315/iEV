@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CanMessage.cs" />
+    <Compile Include="CanMessage01.cs" />
+    <Compile Include="CanMessage02.cs" />
     <Compile Include="IMessageSerial.cs" />
     <Compile Include="MessageSender.cs" />
     <Compile Include="Program.cs" />
