@@ -1,5 +1,5 @@
 ﻿using System;
-namespace iEV_Host
+namespace iEV_Host 
 {
     internal class CanMessage02 : CanMessage
     {

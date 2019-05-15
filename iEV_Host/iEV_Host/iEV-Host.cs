@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 namespace iEV_Host
 {
    
-
     class Program
     {
         private static int RPM_INCREMENT = 50;        

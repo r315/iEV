@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using System.IO.Ports;
 using System.Threading;
-
+ 
 namespace iEV_Host
 {
     class MessageSender<T>  where T : IMessageSerial

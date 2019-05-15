@@ -3,5 +3,5 @@
     internal interface IMessageSerial
     {
         byte[] GetBytes();
-    }
+    } 
 }

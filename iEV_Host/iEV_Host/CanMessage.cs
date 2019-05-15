@@ -21,5 +21,5 @@ namespace iEV_Host
         }
 
         public CanMessage() { }
-    }
+    } 
 }

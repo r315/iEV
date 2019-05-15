@@ -16,6 +16,10 @@
 
 #define RPM_QUEUE_ITEM_SIZE sizeof(QuadrantData)
 
+#define CAN_MSG_SIZE 10
+#define CAN_MSG_01   0x601
+#define CAN_MSG_02   0x602
+
 void GRAPHICS_MainTask(void);
 void GRAPHICS_Init(void);
 void GRAPHICS_HW_Init(void);
@@ -126,10 +130,37 @@ void graphicsTask(void *argument)
 
 
 /**
- *  @brief normal priority task for system management
+ *  @brief normal priority task for processing CAN messages from serial port
  * \param   *argument - not used
  * */
-void consoleTask(void *argument)
+#if 1
+void messagesTask(void *argument)
+{   
+    uint8_t msg[20], i; 
+    uart.init();
+
+    i = 0;
+    while(1){
+        msg[i++] = uart.xgetchar();
+        if(i == CAN_MSG_SIZE){
+            i = 0;
+            if(msg[0] != CAN_MSG_01 >> 8)
+                continue;
+            if (xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS)
+            {
+                qconfig.data.rpm = (msg[2]<<8) | msg[3];
+                qconfig.updated = TRUE;
+                xSemaphoreGive(qconfig.mutex);
+            }
+        }
+    }
+}
+#else
+/**
+ *  @brief normal priority task for system management commands
+ * \param   *argument - not used
+ * */
+void messagesTask(void *argument)
 {    
     Console console;
     Help help;
@@ -157,6 +188,7 @@ void consoleTask(void *argument)
         osDelay(100);
     }
 }
+#endif
 
 extern "C" void appMain(void)
 {
@@ -170,7 +202,7 @@ extern "C" void appMain(void)
     /* Create tasks */
     xTaskCreate(graphicsTask, "Graphics Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
     xTaskCreate(ledAliveTask, "Alive Led Task", STACK_MINIMUM, NULL, IDLE_PRIORITY_TASK, NULL);
-    xTaskCreate(consoleTask, "Console Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
+    xTaskCreate(messagesTask, "Messages Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
     xTaskCreate(updateTask, "Update Task", STACK_MEDIUM, NULL, HIGH_PRIORITY_TASK, NULL);
 
     CAN_Init(CAN_MessageCallback);    
