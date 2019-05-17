@@ -167,7 +167,7 @@ cpp_compiler_options += -g -mthumb \
                     $(no_libs) \
                     -mno-thumb-interwork -fno-rtti -fno-exceptions  \
                     -Og -fno-strict-aliasing -fdata-sections -ffunction-sections \
-										-DCONSOLE_BLOCKING					
+										
 
 #TODO removed -Wall
 
@@ -343,7 +343,7 @@ board_include_paths := \
 	$(fatfs_path)/src \
 
 c_compiler_options += -DST -DSTM32F769xx
-cpp_compiler_options += -DST -DSTM32F769xx
+cpp_compiler_options += -DST -DSTM32F769xx -DCONSOLE_BLOCKING
 
 include_paths += $(board_include_paths) $(os_include_paths)
 

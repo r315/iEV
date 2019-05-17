@@ -47,7 +47,7 @@
     <Compile Include="CanMessage02.cs" />
     <Compile Include="IMessageSerial.cs" />
     <Compile Include="MessageSender.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="iEV-Host.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

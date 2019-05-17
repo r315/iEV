@@ -92,7 +92,7 @@ namespace iEV_Host
                 Console.WriteLine("   {0}", s);
             }
 
-            Console.Write("\nEnter COM port value (Default: {0}): ", sp.PortName);
+            Console.Write("\nEnter COM port (Default: {0}): ", sp.PortName);
             string portName = Console.ReadLine();
 
             if (portName != "" && (portName.ToLower()).StartsWith("com"))
@@ -108,7 +108,7 @@ namespace iEV_Host
             lock (monitor)
             {
                 try
-                {
+                {                    
                     while (active)
                     {
                         while (ml.Count > 0)
@@ -123,12 +123,13 @@ namespace iEV_Host
                         //Console.WriteLine("Thread {0} sleeping", Thread.CurrentThread.ManagedThreadId);
                         Monitor.Wait(monitor);
                     }
+                    serialPort.Close();
                 }
                 catch (ThreadInterruptedException e)
                 {
                     throw e;
                 }
-
+                
             }
         }
 
