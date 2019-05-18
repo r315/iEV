@@ -46,6 +46,8 @@ linker_script_path := $(bsp_path)
 #touchgfx_path := ${subst ../,,$(touchgfx_path)}
 #touchgfx_path := $(subst $(call sq,$(makefile_path))/,,$(call sq,$(abspath $(call sq,$(touchgfx_path)))))
 touchgfx_framework_path := $(Middlewares_path)/ST/TouchGFX/touchgfx
+
+# Get user interface path
 ui_path := ui
 ui_mk := $(ui_path)/config/gcc/app.mk
 
@@ -53,9 +55,9 @@ ui_mk := $(ui_path)/config/gcc/app.mk
 #include $(application_path)/TouchGFX/config/gcc/app.mk
 include $(ui_mk)
 
-#Usb device
-usb_lib_path := Middlewares/ST/STM32_USB_Device_Library
-usb_device_path := USB_DEVICE
+# Get Usb device
+#usb_lib_path := Middlewares/ST/STM32_USB_Device_Library
+#usb_device_path := USB_DEVICE
 
 #costum libs
 console_path := $(Middlewares_path)/Third_Party/console
