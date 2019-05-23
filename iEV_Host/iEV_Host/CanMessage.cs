@@ -20,6 +20,11 @@ namespace iEV_Host
             bytes = new byte[size];
         }
 
-        public CanMessage() { }
+        public CanMessage()
+        {
+            bytes = new byte[8];
+            bytes[0] = 255; // Set lowest priority
+            bytes[1] = 255; 
+        }
     } 
 }

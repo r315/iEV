@@ -9,15 +9,17 @@ using System.Threading;
  
 namespace iEV_Host
 {
-    class MessageSender<T>  where T : IMessageSerial
+    class MessageSender<T>  where T : class, IMessageSerial, new()
     {
         public const int BAUD_RATE = 115200;
 
         private SerialPort serialPort;
         private readonly object monitor = new object();
+        private readonly int MSG_INTERVAL = 10;
         private bool active = false;
 
         private LinkedList<T> ml;
+        private T lastMessage;
 
         public MessageSender()
         {
@@ -46,6 +48,8 @@ namespace iEV_Host
 
             ml = new LinkedList<T>();
 
+            lastMessage = new T();
+
             Thread serialPortThread = new Thread(SerialPortSender);
             active = true;
             serialPortThread.Start();
@@ -59,8 +63,7 @@ namespace iEV_Host
                 if (!active)
                     return;
 
-                ml.AddLast(msg);
-                Monitor.Pulse(monitor);
+                ml.AddLast(msg);                
             }
         }
 
@@ -108,22 +111,22 @@ namespace iEV_Host
             lock (monitor)
             {
                 try
-                {                    
-                    while (active)
+                {
+                    using (serialPort)
                     {
-                        while (ml.Count > 0)
+                        while (active)
                         {
-                            LinkedListNode<T> node = ml.First;
-                            ml.Remove(node);
-                            byte[] bytes = node.Value.GetBytes();
-
-                            //Console.WriteLine("Thread {0} sending {1}", Thread.CurrentThread.ManagedThreadId, ToByteString(bytes));
-                            serialPort.Write(bytes, 0, bytes.Length);                            
+                            if (ml.Count > 0)
+                            {                                
+                                LinkedListNode<T> node = ml.First;
+                                ml.Remove(node);
+                                lastMessage = node.Value;                               
+                            }                           
+                            serialPort.Write(lastMessage.GetBytes(), 0, lastMessage.GetBytes().Length);
+                            //Console.WriteLine("Thread {0} sleeping", Thread.CurrentThread.ManagedThreadId);                            
+                            Monitor.Wait(monitor, MSG_INTERVAL);
                         }
-                        //Console.WriteLine("Thread {0} sleeping", Thread.CurrentThread.ManagedThreadId);
-                        Monitor.Wait(monitor);
                     }
-                    serialPort.Close();
                 }
                 catch (ThreadInterruptedException e)
                 {
