@@ -187,11 +187,13 @@ void serialTask(void *argument)
     {
         switch(qconfig.mode){
             case Serial:
-        console.process();
-        osDelay(100);
+                BSP_LED_On(LED3);
+                console.process();
+                osDelay(100);
                 break;
 
             case Can:
+                BSP_LED_Off(LED3);
                 msg[i++] = uart.xgetchar();
                 if(i == CAN_MSG_SIZE){
                     i = 0;
@@ -202,8 +204,8 @@ void serialTask(void *argument)
                         qconfig.data.rpm = (msg[2]<<8) | msg[3];
                         qconfig.updated = TRUE;
                         xSemaphoreGive(qconfig.mutex);
-    }
-}
+                    }
+                }
             default:
                 break;
         }
