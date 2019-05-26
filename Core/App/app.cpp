@@ -27,7 +27,7 @@ void GRAPHICS_HW_Init(void);
 static const char prompt[] = "iEV>";
 
 QueueHandle_t qdataQueue;
-QuadrantConfiguration qconfig;
+SystemConfiguration_t qconfig;
 
 /**
  * 

@@ -40,10 +40,10 @@ typedef struct {
     uint8_t updated;
     QuadrantData data;
     SemaphoreHandle_t mutex;
-}QuadrantConfiguration;
+}SystemConfiguration_t;
 
 extern QueueHandle_t qdataQueue;
-extern QuadrantConfiguration qconfig;
+extern SystemConfiguration_t qconfig;
 extern StdOut uart;
 
 #ifdef __cplusplus
