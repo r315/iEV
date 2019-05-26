@@ -26,7 +26,7 @@ public:
     virtual void deactivate();
 
     virtual ~ConfigPresenter() {};
-
+    void setSerialMode(uint8_t mode);
 private:
     ConfigPresenter();
 

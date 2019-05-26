@@ -222,7 +222,7 @@ extern "C" void appMain(void)
     qconfig.wheelCircumference = 1.928f; //16" wheel
     qconfig.data.rpm = 518;
     qconfig.data.battery = 50;
-    qconfig.mode = Serial;
+    qconfig.mode = Can; //Serial;
 
     BSP_LED_Init(LED1);
     BSP_LED_Init(LED2);

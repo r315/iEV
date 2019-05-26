@@ -345,7 +345,7 @@ board_include_paths := \
 	$(fatfs_path)/src \
 
 c_compiler_options += -DST -DSTM32F769xx
-cpp_compiler_options += -DST -DSTM32F769xx -DCONSOLE_BLOCKING
+cpp_compiler_options += -DST -DSTM32F769xx#-DCONSOLE_BLOCKING
 
 include_paths += $(board_include_paths) $(os_include_paths)
 

@@ -40,6 +40,8 @@ public:
      * the ModelListener interface.
      */
     void tick();
+
+    void userSetSerialMode(uint8_t mode);
 protected:
     /**
      * Pointer to the currently active presenter.

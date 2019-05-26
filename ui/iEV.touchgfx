@@ -234,7 +234,7 @@
             "Pressed": "__designer\\blue_togglebars_toggle_large_button_off.png",
             "Released": "__designer\\blue_togglebars_toggle_large_button_on.png",
             "Alpha": 255,
-            "Name": "toggleButton1",
+            "Name": "toggleSerialMode",
             "X": 576,
             "Y": 77,
             "Width": 128,
@@ -288,7 +288,7 @@
         ],
         "Interactions": [
           {
-            "InteractionName": "Interaction1",
+            "InteractionName": "ScreenChange",
             "HasCompletedTrigger": false,
             "Trigger": {
               "TriggerComponent": "button1",
@@ -299,6 +299,18 @@
               "ScreenTransitionDirection": "West",
               "ActionComponent": "Main",
               "Type": "ActionGotoScreen"
+            }
+          },
+          {
+            "InteractionName": "SerialMode",
+            "HasCompletedTrigger": false,
+            "Trigger": {
+              "TriggerComponent": "toggleSerialMode",
+              "Type": "TriggerClicked"
+            },
+            "Action": {
+              "FunctionName": "updateSerialMode",
+              "Type": "ActionCustom"
             }
           }
         ],

@@ -26,3 +26,9 @@ void Model::tick()
     }
     #endif  
 }
+
+void Model::userSetSerialMode(uint8_t mode){
+
+    qconfig.mode = (mode == 1) ? Serial : Can;
+}
+

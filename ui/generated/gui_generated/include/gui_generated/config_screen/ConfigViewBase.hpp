@@ -20,6 +20,14 @@ public:
 
     virtual void setupScreen();
 
+    /*
+     * Custom Action Handlers
+     */
+    virtual void updateSerialMode()
+    {
+        // Override and implement this function in ConfigView
+    }
+
 protected:
     FrontendApplication& application() {
         return *static_cast<FrontendApplication*>(Application::getInstance());
@@ -29,7 +37,7 @@ protected:
      * Member Declarations
      */
     touchgfx::Image bg_cfg;
-    touchgfx::ToggleButton toggleButton1;
+    touchgfx::ToggleButton toggleSerialMode;
     touchgfx::Button button1;
     touchgfx::TextArea textArea1;
 

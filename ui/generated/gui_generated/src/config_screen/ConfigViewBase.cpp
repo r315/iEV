@@ -12,8 +12,9 @@ ConfigViewBase::ConfigViewBase() :
     bg_cfg.setXY(0, 0);
     bg_cfg.setBitmap(Bitmap(BITMAP_FON_41111_ID));
 
-    toggleButton1.setXY(576, 77);
-    toggleButton1.setBitmaps(Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_ON_ID), Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_OFF_ID));
+    toggleSerialMode.setXY(576, 77);
+    toggleSerialMode.setBitmaps(Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_ON_ID), Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_OFF_ID));
+    toggleSerialMode.setAction(buttonCallback);
 
     button1.setXY(22, 29);
     button1.setBitmaps(Bitmap(BITMAP_DARK_ICONS_BACK_ARROW_48_ID), Bitmap(BITMAP_DARK_ICONS_BACK_ARROW_48_ID));
@@ -25,7 +26,7 @@ ConfigViewBase::ConfigViewBase() :
     textArea1.setTypedText(TypedText(T_SINGLEUSEID9));
 
     add(bg_cfg);
-    add(toggleButton1);
+    add(toggleSerialMode);
     add(button1);
     add(textArea1);
 }
@@ -37,13 +38,16 @@ void ConfigViewBase::setupScreen()
 
 void ConfigViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
 {
-    if (&src == &toggleButton1)
+    if (&src == &toggleSerialMode)
     {
-
+        //SerialMode
+        //When toggleSerialMode clicked call virtual function
+        //Call updateSerialMode
+        updateSerialMode();
     }
     else if (&src == &button1)
     {
-        //Interaction1
+        //ScreenChange
         //When button1 clicked change screen to Main
         //Go to Main with screen transition towards West
         application().gotoMainScreenSlideTransitionWest();

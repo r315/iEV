@@ -15,3 +15,7 @@ void ConfigPresenter::deactivate()
 {
 
 }
+
+void ConfigPresenter::setSerialMode(uint8_t mode){
+    model->userSetSerialMode(mode);
+}

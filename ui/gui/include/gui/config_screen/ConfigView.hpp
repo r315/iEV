@@ -11,6 +11,7 @@ public:
     virtual ~ConfigView() {}
     virtual void setupScreen();
     virtual void tearDownScreen();
+    virtual void updateSerialMode();
 protected:
 };
 

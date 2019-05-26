@@ -31,6 +31,7 @@ public:
     void notifySpeedChange(int value);
     void notifyDistanceChange(int value);
     void notifyBatteryChange(int percentage);
+
 private:
     MainPresenter();
 
