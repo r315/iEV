@@ -7,8 +7,8 @@
 #include <touchgfx/Bitmap.hpp>
 
 const uint16_t BITMAP_BATTERY_GAUGE_ID = 0; // Size: 120x600 pixels
-const uint16_t BITMAP_BLUE_TOGGLEBARS_TOGGLE_ROUND_LARGE_BUTTON_OFF_ID = 1; // Size: 128x38 pixels
-const uint16_t BITMAP_BLUE_TOGGLEBARS_TOGGLE_ROUND_LARGE_BUTTON_ON_ID = 2; // Size: 128x38 pixels
+const uint16_t BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_OFF_ID = 1; // Size: 128x38 pixels
+const uint16_t BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_ON_ID = 2; // Size: 128x38 pixels
 const uint16_t BITMAP_DARK_ICONS_BACK_ARROW_48_ID = 3; // Size: 28x48 pixels
 const uint16_t BITMAP_DARK_ICONS_NEXT_ARROW_48_ID = 4; // Size: 28x48 pixels
 const uint16_t BITMAP_DIAL_ID = 5; // Size: 527x293 pixels

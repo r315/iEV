@@ -10,6 +10,7 @@
 #include <touchgfx/widgets/Image.hpp>
 #include <touchgfx/widgets/ToggleButton.hpp>
 #include <touchgfx/widgets/Button.hpp>
+#include <touchgfx/widgets/TextArea.hpp>
 
 class ConfigViewBase : public touchgfx::View<ConfigPresenter>
 {
@@ -30,6 +31,7 @@ protected:
     touchgfx::Image bg_cfg;
     touchgfx::ToggleButton toggleButton1;
     touchgfx::Button button1;
+    touchgfx::TextArea textArea1;
 
 private:
 

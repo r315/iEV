@@ -24,7 +24,7 @@ MainViewBase::MainViewBase() :
     textArea_rpm_unit.setLinespacing(0);
     textArea_rpm_unit.setTypedText(TypedText(T_SINGLEUSEID1));
 
-    TextArea_km_unit.setXY(559, 417);
+    TextArea_km_unit.setXY(187, 405);
     TextArea_km_unit.setColor(touchgfx::Color::getColorFrom24BitRGB(207, 219, 209));
     TextArea_km_unit.setLinespacing(0);
     TextArea_km_unit.setTypedText(TypedText(T_SINGLEUSEID4));
@@ -36,7 +36,7 @@ MainViewBase::MainViewBase() :
     TextAreaRpm.setWildcard(TextAreaRpmBuffer);
     TextAreaRpm.setTypedText(TypedText(T_CURRENTRPM));
 
-    TextAreaDistance.setPosition(400, 412, 153, 49);
+    TextAreaDistance.setPosition(28, 406, 153, 49);
     TextAreaDistance.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 173, 217));
     TextAreaDistance.setLinespacing(0);
     Unicode::snprintf(TextAreaDistanceBuffer, TEXTAREADISTANCE_SIZE, "%s", TypedText(T_SINGLEUSEID7).getText());

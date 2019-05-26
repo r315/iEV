@@ -3,6 +3,8 @@
 /*********************************************************************************/
 #include <gui_generated/config_screen/ConfigViewBase.hpp>
 #include "BitmapDatabase.hpp"
+#include <texts/TextKeysAndLanguages.hpp>
+#include <touchgfx/Color.hpp>
 
 ConfigViewBase::ConfigViewBase() :
     buttonCallback(this, &ConfigViewBase::buttonCallbackHandler)
@@ -10,16 +12,22 @@ ConfigViewBase::ConfigViewBase() :
     bg_cfg.setXY(0, 0);
     bg_cfg.setBitmap(Bitmap(BITMAP_FON_41111_ID));
 
-    toggleButton1.setXY(575, 82);
-    toggleButton1.setBitmaps(Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_ROUND_LARGE_BUTTON_OFF_ID), Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_ROUND_LARGE_BUTTON_ON_ID));
+    toggleButton1.setXY(576, 77);
+    toggleButton1.setBitmaps(Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_ON_ID), Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_OFF_ID));
 
     button1.setXY(22, 29);
     button1.setBitmaps(Bitmap(BITMAP_DARK_ICONS_BACK_ARROW_48_ID), Bitmap(BITMAP_DARK_ICONS_BACK_ARROW_48_ID));
     button1.setAction(buttonCallback);
 
+    textArea1.setXY(437, 84);
+    textArea1.setColor(touchgfx::Color::getColorFrom24BitRGB(116, 195, 250));
+    textArea1.setLinespacing(0);
+    textArea1.setTypedText(TypedText(T_SINGLEUSEID9));
+
     add(bg_cfg);
     add(toggleButton1);
     add(button1);
+    add(textArea1);
 }
 
 void ConfigViewBase::setupScreen()

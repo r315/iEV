@@ -78,8 +78,8 @@
             "AutoSize": true,
             "LineSpacing": 0,
             "Name": "TextArea_km_unit",
-            "X": 559,
-            "Y": 417,
+            "X": 187,
+            "Y": 405,
             "Width": 31,
             "Height": 25,
             "Type": "TextArea",
@@ -134,8 +134,8 @@
               "BufferSize": 7
             },
             "Name": "TextAreaDistance",
-            "X": 400,
-            "Y": 412,
+            "X": 28,
+            "Y": 406,
             "Width": 153,
             "Height": 49,
             "Type": "TextArea",
@@ -231,13 +231,12 @@
           },
           {
             "InitialStatePressed": false,
-            "Pressed": "__designer\\blue_togglebars_toggle_round_large_button_on.png",
-            "Released": "__designer\\blue_togglebars_toggle_round_large_button_off.png",
+            "Pressed": "__designer\\blue_togglebars_toggle_large_button_off.png",
+            "Released": "__designer\\blue_togglebars_toggle_large_button_on.png",
             "Alpha": 255,
-            "Style": "Style4",
             "Name": "toggleButton1",
-            "X": 575,
-            "Y": 82,
+            "X": 576,
+            "Y": 77,
             "Width": 128,
             "Height": 38,
             "Type": "ToggleButton",
@@ -257,6 +256,29 @@
             "Width": 28,
             "Height": 48,
             "Type": "Button",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "TextId": "SingleUseId9",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 116,
+              "Green": 195,
+              "Blue": 250
+            },
+            "Alpha": 255,
+            "AutoSize": true,
+            "LineSpacing": 0,
+            "Name": "textArea1",
+            "X": 437,
+            "Y": 84,
+            "Width": 118,
+            "Height": 25,
+            "Type": "TextArea",
             "Visible": true,
             "Draggable": false,
             "Clickable": false,
@@ -309,6 +331,10 @@
       },
       {
         "TextEntryId": "SingleUseId8",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId9",
         "IsResource": false
       }
     ],
