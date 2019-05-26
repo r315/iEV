@@ -133,8 +133,8 @@ void graphicsTask(void *argument)
  *  @brief normal priority task for processing CAN messages from serial port
  * \param   *argument - not used
  * */
-#if 1
-void messagesTask(void *argument)
+#if 0
+void serialTask(void *argument)
 {   
     uint8_t msg[20], i; 
     uart.init();
@@ -160,7 +160,7 @@ void messagesTask(void *argument)
  *  @brief normal priority task for system management commands
  * \param   *argument - not used
  * */
-void messagesTask(void *argument)
+void serialTask(void *argument)
 {    
     Console console;
     Help help;
@@ -169,6 +169,7 @@ void messagesTask(void *argument)
     CmdMem mem;
     SDCard sd;
     CmdCan can;
+    uint8_t msg[20], i = 0; 
 
     uart.init();
     console.init(&uart, prompt);
@@ -184,8 +185,28 @@ void messagesTask(void *argument)
 
     for (;;)
     {
+        switch(qconfig.mode){
+            case Serial:
         console.process();
         osDelay(100);
+                break;
+
+            case Can:
+                msg[i++] = uart.xgetchar();
+                if(i == CAN_MSG_SIZE){
+                    i = 0;
+                    if(msg[0] != CAN_MSG_01 >> 8)
+                        break;
+                    if (xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS)
+                    {
+                        qconfig.data.rpm = (msg[2]<<8) | msg[3];
+                        qconfig.updated = TRUE;
+                        xSemaphoreGive(qconfig.mutex);
+    }
+}
+            default:
+                break;
+        }
     }
 }
 #endif
@@ -198,11 +219,17 @@ extern "C" void appMain(void)
     qconfig.gearRacio = 1;
     qconfig.wheelCircumference = 1.928f; //16" wheel
     qconfig.data.rpm = 518;
+    qconfig.data.battery = 50;
+    qconfig.mode = Serial;
+
+    BSP_LED_Init(LED1);
+    BSP_LED_Init(LED2);
+    BSP_LED_Init(LED3);
 
     /* Create tasks */
     xTaskCreate(graphicsTask, "Graphics Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
     xTaskCreate(ledAliveTask, "Alive Led Task", STACK_MINIMUM, NULL, IDLE_PRIORITY_TASK, NULL);
-    xTaskCreate(messagesTask, "Messages Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
+    xTaskCreate(serialTask, "Messages Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
     xTaskCreate(updateTask, "Update Task", STACK_MEDIUM, NULL, HIGH_PRIORITY_TASK, NULL);
 
     CAN_Init(CAN_MessageCallback);    

@@ -26,6 +26,8 @@ extern "C" {
 
 #define LED3_TOGGLE             HAL_GPIO_TogglePin(LD_USER3_GPIO_Port, LD_USER3_Pin);
 
+typedef enum {Serial, Can} Mode_t;
+
 typedef struct {
     uint32_t rpm;
     uint32_t distance;
@@ -40,6 +42,7 @@ typedef struct {
     uint8_t updated;
     QuadrantData data;
     SemaphoreHandle_t mutex;
+    Mode_t mode;
 }SystemConfiguration_t;
 
 extern QueueHandle_t qdataQueue;
