@@ -22,7 +22,7 @@ extern "C" {
 #include "logger.h"
 
 #define RPM_QUEUE_LENGTH        2
-#define UPDATE_RATE             100
+#define UPDATE_RATE             10
 
 #define LED3_TOGGLE             HAL_GPIO_TogglePin(LD_USER3_GPIO_Port, LD_USER3_Pin);
 
