@@ -55,16 +55,16 @@ namespace iEV_Host
             serialPortThread.Start();
         }
 
-        public void Send(T msg)
-        {
-            
+        public bool Send(T msg)
+        {            
             lock (monitor)
             {
                 if (!active)
-                    return;
+                    return false;
 
                 ml.AddLast(msg);                
             }
+            return true;
         }
 
         public void Terminate()
@@ -73,8 +73,7 @@ namespace iEV_Host
             {
                 if (!active)
                     return;
-                active = false;
-                Monitor.Pulse(monitor);
+                active = false;                
             }
         }
 
@@ -110,11 +109,11 @@ namespace iEV_Host
         {
             lock (monitor)
             {
-                try
+                using (serialPort)
                 {
-                    using (serialPort)
+                    while (active)
                     {
-                        while (active)
+                        try
                         {
                             if (ml.Count > 0)
                             {                                
@@ -126,13 +125,18 @@ namespace iEV_Host
                             //Console.WriteLine("Thread {0} sleeping", Thread.CurrentThread.ManagedThreadId);                            
                             Monitor.Wait(monitor, MSG_INTERVAL);
                         }
+                        catch (ThreadInterruptedException e)
+                        {
+                            Console.WriteLine("Thread {0} Interrupted, {1}", Thread.CurrentThread.ManagedThreadId, e);
+                        }
+                        catch (System.IO.IOException e)
+                        {
+                            Console.WriteLine("Thread {0}: {1}", Thread.CurrentThread.ManagedThreadId, e.Message);
+                            active = false;
+                            //throw e;
+                        }
                     }
-                }
-                catch (ThreadInterruptedException e)
-                {
-                    throw e;
-                }
-                
+                }                
             }
         }
 

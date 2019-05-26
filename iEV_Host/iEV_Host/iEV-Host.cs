@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace iEV_Host
 {
    
-    class Program
+    class iEvHost    
     {
         private static int RPM_INCREMENT = 50;        
 
@@ -56,9 +56,9 @@ namespace iEV_Host
                 //Console.WriteLine(cki.Key.ToString());
 
                 msg.Rpm = rpm;
-                sender.Send(msg);
+                
 
-            } while (cki.Key != ConsoleKey.Escape);
+            } while (cki.Key != ConsoleKey.Escape && sender.Send(msg));
 
             sender.Terminate(); 
         }

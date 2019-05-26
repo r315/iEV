@@ -23,7 +23,7 @@ namespace iEV_Host
         public CanMessage()
         {
             bytes = new byte[8];
-            bytes[0] = 255; // Set lowest priority
+            bytes[0] = 255; // dummy message, set lowest priority
             bytes[1] = 255; 
         }
     } 
