@@ -36,10 +36,10 @@ protected:
     /*
      * Member Declarations
      */
-    touchgfx::Image bg_cfg;
-    touchgfx::ToggleButton toggleSerialMode;
-    touchgfx::Button button1;
-    touchgfx::TextArea textArea1;
+    touchgfx::Image Config_BG;
+    touchgfx::ToggleButton ModeSelector;
+    touchgfx::Button GoToMain;
+    touchgfx::TextArea ModeTitle;
 
 private:
 

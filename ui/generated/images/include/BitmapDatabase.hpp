@@ -16,6 +16,8 @@ const uint16_t BITMAP_DIAL_CENTER_ID = 6; // Size: 50x50 pixels
 const uint16_t BITMAP_DIAL_KPH_ID = 7; // Size: 360x360 pixels
 const uint16_t BITMAP_DIAL_RPM_ID = 8; // Size: 360x360 pixels
 const uint16_t BITMAP_FON_41111_ID = 9; // Size: 800x480 pixels
+const uint16_t BITMAP_TEMP_ID = 10; // Size: 53x38 pixels
+const uint16_t BITMAP_TEMP_C_ID = 11; // Size: 48x35 pixels
 
 namespace BitmapDatabase
 {

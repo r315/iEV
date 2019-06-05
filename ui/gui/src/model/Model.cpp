@@ -23,6 +23,9 @@ void Model::tick()
         modelListener->notifyDistanceChange(qdata.distance);
         modelListener->notifySpeedChange(qdata.speed);
         modelListener->notifyBatteryChange(qdata.battery);
+        modelListener->notifyMotorTempChange(qdata.motorTemp);
+        modelListener->notifyControllerTempChange(qdata.controllerTemp);
+        modelListener->notifyMotorCurrentChange(qdata.motorCurrent);
     }
 #endif  
 }

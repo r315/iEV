@@ -203,6 +203,9 @@ void serialTask(void *argument)
                             if (xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS)
                             {
                                 qconfig.data.rpm = (msg[2]<<8) | msg[3];
+                                qconfig.data.motorTemp = msg[4];
+                                qconfig.data.controllerTemp = msg[5];
+                                qconfig.data.motorCurrent = (msg[6]<<8) | msg[7];
                                 qconfig.updated = TRUE;
                                 xSemaphoreGive(qconfig.mutex);
                             }

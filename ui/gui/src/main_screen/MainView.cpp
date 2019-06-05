@@ -29,12 +29,12 @@ void MainView::setupScreen()
     dialRpm.setAnimationDuration(20);
     dialRpm.setVisible(true);
 
-    remove(TextAreaDistance);
+    remove(Hodometer);
     add(dialKph);
     add(dialRpm);
 
-    TextAreaDistance.setXY(dialKph.getX() + 100, dialKph.getY() + 240);
-    add(TextAreaDistance);
+    Hodometer.setXY(dialKph.getX() + 100, dialKph.getY() + 240);
+    add(Hodometer);
 
     batteryGaugeMaxHeight = batteryGaugeContainer.getHeight();
 }
@@ -45,8 +45,8 @@ void MainView::tearDownScreen()
 }
 
 void MainView::setDistance(int value){
-     Unicode::snprintf(TextAreaDistanceBuffer, 7, "%06d", value);
-    TextAreaDistance.invalidate();
+    Unicode::snprintf(HodometerBuffer, HODOMETER_SIZE, "%06d", value);
+    Hodometer.invalidate();
 }
 
 void MainView::setRpm(int value){
@@ -75,4 +75,19 @@ void MainView::setBatteryLevel(int value){
     batteryGauge.setY(-value);
 
     batteryGauge.invalidate();    
+}
+
+void MainView::setMotorTemp(int temp){
+    Unicode::snprintf(MotorTempBuffer, MOTORTEMP_SIZE, "%d", temp);
+    MotorTemp.invalidate();
+}
+
+void MainView::setControllerTemp(int temp){
+   Unicode::snprintf(ControllerTempBuffer, CONTROLLERTEMP_SIZE, "%d", temp);
+    ControllerTemp.invalidate(); 
+}
+
+void MainView::setMotorCurrent(int current){
+    Unicode::snprintf(MotorCurrentBuffer, MOTORCURRENT_SIZE, "%d", current);
+    MotorCurrent.invalidate();
 }

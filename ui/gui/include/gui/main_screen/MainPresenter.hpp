@@ -10,6 +10,10 @@ class MainView;
 
 class MainPresenter : public Presenter, public ModelListener
 {
+private:
+    MainPresenter();
+    MainView& view;
+
 public:
     MainPresenter(MainView& v);
 
@@ -31,11 +35,9 @@ public:
     void notifySpeedChange(int value);
     void notifyDistanceChange(int value);
     void notifyBatteryChange(int percentage);
-
-private:
-    MainPresenter();
-
-    MainView& view;
+    void notifyMotorTempChange(int temp);
+    void notifyControllerTempChange(int temp);
+    void notifyMotorCurrentChange(int temp);
 };
 
 

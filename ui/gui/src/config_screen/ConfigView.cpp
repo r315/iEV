@@ -17,5 +17,5 @@ void ConfigView::tearDownScreen()
 
 void ConfigView::updateSerialMode(){
     //setMode(3);
-    presenter->setSerialMode(toggleSerialMode.getState() == false ? 1 : 0 );
+    presenter->setSerialMode(ModeSelector.getState() == false ? 1 : 0 );
 }

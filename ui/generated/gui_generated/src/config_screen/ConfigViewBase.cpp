@@ -9,26 +9,26 @@
 ConfigViewBase::ConfigViewBase() :
     buttonCallback(this, &ConfigViewBase::buttonCallbackHandler)
 {
-    bg_cfg.setXY(0, 0);
-    bg_cfg.setBitmap(Bitmap(BITMAP_FON_41111_ID));
+    Config_BG.setXY(0, 0);
+    Config_BG.setBitmap(Bitmap(BITMAP_FON_41111_ID));
 
-    toggleSerialMode.setXY(576, 77);
-    toggleSerialMode.setBitmaps(Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_ON_ID), Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_OFF_ID));
-    toggleSerialMode.setAction(buttonCallback);
+    ModeSelector.setXY(576, 77);
+    ModeSelector.setBitmaps(Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_ON_ID), Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_OFF_ID));
+    ModeSelector.setAction(buttonCallback);
 
-    button1.setXY(22, 29);
-    button1.setBitmaps(Bitmap(BITMAP_DARK_ICONS_BACK_ARROW_48_ID), Bitmap(BITMAP_DARK_ICONS_BACK_ARROW_48_ID));
-    button1.setAction(buttonCallback);
+    GoToMain.setXY(22, 29);
+    GoToMain.setBitmaps(Bitmap(BITMAP_DARK_ICONS_BACK_ARROW_48_ID), Bitmap(BITMAP_DARK_ICONS_BACK_ARROW_48_ID));
+    GoToMain.setAction(buttonCallback);
 
-    textArea1.setXY(437, 84);
-    textArea1.setColor(touchgfx::Color::getColorFrom24BitRGB(116, 195, 250));
-    textArea1.setLinespacing(0);
-    textArea1.setTypedText(TypedText(T_SINGLEUSEID9));
+    ModeTitle.setXY(423, 84);
+    ModeTitle.setColor(touchgfx::Color::getColorFrom24BitRGB(116, 195, 250));
+    ModeTitle.setLinespacing(0);
+    ModeTitle.setTypedText(TypedText(T_SINGLEUSEID9));
 
-    add(bg_cfg);
-    add(toggleSerialMode);
-    add(button1);
-    add(textArea1);
+    add(Config_BG);
+    add(ModeSelector);
+    add(GoToMain);
+    add(ModeTitle);
 }
 
 void ConfigViewBase::setupScreen()
@@ -38,17 +38,17 @@ void ConfigViewBase::setupScreen()
 
 void ConfigViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
 {
-    if (&src == &toggleSerialMode)
+    if (&src == &ModeSelector)
     {
         //SerialMode
-        //When toggleSerialMode clicked call virtual function
+        //When ModeSelector clicked call virtual function
         //Call updateSerialMode
         updateSerialMode();
     }
-    else if (&src == &button1)
+    else if (&src == &GoToMain)
     {
         //ScreenChange
-        //When button1 clicked change screen to Main
+        //When GoToMain clicked change screen to Main
         //Go to Main with screen transition towards West
         application().gotoMainScreenSlideTransitionWest();
     }

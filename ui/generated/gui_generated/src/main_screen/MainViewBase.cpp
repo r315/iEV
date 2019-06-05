@@ -11,30 +11,83 @@ MainViewBase::MainViewBase() :
 {
     CanvasWidgetRenderer::setupBuffer(canvasBuffer, CANVAS_BUFFER_SIZE);
 
-    fon_411111.setXY(0, 0);
-    fon_411111.setBitmap(Bitmap(BITMAP_FON_41111_ID));
+    Main_BG.setXY(0, 0);
+    Main_BG.setBitmap(Bitmap(BITMAP_FON_41111_ID));
 
-    batteryGaugeContainer.setPosition(340, 156, 120, 300);
+    Hodometer.setPosition(542, 400, 153, 50);
+    Hodometer.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 173, 217));
+    Hodometer.setLinespacing(0);
+    Unicode::snprintf(HodometerBuffer, HODOMETER_SIZE, "%s", TypedText(T_SINGLEUSEID7).getText());
+    Hodometer.setWildcard(HodometerBuffer);
+    Hodometer.setTypedText(TypedText(T_TOTALDISTANCE));
 
-    batteryGauge.setXY(0, -150);
+    GoToConfig.setXY(758, 31);
+    GoToConfig.setBitmaps(Bitmap(BITMAP_DARK_ICONS_NEXT_ARROW_48_ID), Bitmap(BITMAP_DARK_ICONS_NEXT_ARROW_48_ID));
+    GoToConfig.setAction(buttonCallback);
+
+    batteryGaugeContainer.setPosition(360, 150, 80, 300);
+
+    batteryGauge.setXY(-20, -150);
     batteryGauge.setBitmap(Bitmap(BITMAP_BATTERY_GAUGE_ID));
     batteryGaugeContainer.add(batteryGauge);
 
-    button1.setXY(758, 31);
-    button1.setBitmaps(Bitmap(BITMAP_DARK_ICONS_NEXT_ARROW_48_ID), Bitmap(BITMAP_DARK_ICONS_NEXT_ARROW_48_ID));
-    button1.setAction(buttonCallback);
+    TempContainer.setPosition(60, 60, 230, 50);
 
-    TextAreaDistance.setPosition(544, 400, 153, 50);
-    TextAreaDistance.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 173, 217));
-    TextAreaDistance.setLinespacing(0);
-    Unicode::snprintf(TextAreaDistanceBuffer, TEXTAREADISTANCE_SIZE, "%s", TypedText(T_SINGLEUSEID7).getText());
-    TextAreaDistance.setWildcard(TextAreaDistanceBuffer);
-    TextAreaDistance.setTypedText(TypedText(T_TOTALDISTANCE));
+    EngineTemp_BG.setPosition(0, 0, 230, 50);
+    EngineTemp_BG.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    EngineTemp_BG.setBorderColor(touchgfx::Color::getColorFrom24BitRGB(77, 75, 75));
+    EngineTemp_BG.setBorderSize(5);
+    TempContainer.add(EngineTemp_BG);
 
-    add(fon_411111);
+    MotorTempIcon.setXY(51, 6);
+    MotorTempIcon.setBitmap(Bitmap(BITMAP_TEMP_ID));
+    TempContainer.add(MotorTempIcon);
+
+    MotorTemp.setXY(11, 10);
+    MotorTemp.setColor(touchgfx::Color::getColorFrom24BitRGB(148, 40, 40));
+    MotorTemp.setLinespacing(0);
+    Unicode::snprintf(MotorTempBuffer, MOTORTEMP_SIZE, "%s", TypedText(T_SINGLEUSEID10).getText());
+    MotorTemp.setWildcard(MotorTempBuffer);
+    MotorTemp.resizeToCurrentText();
+    MotorTemp.setTypedText(TypedText(T_ENGINETEMP));
+    TempContainer.add(MotorTemp);
+
+    ControllerTemp.setXY(115, 10);
+    ControllerTemp.setColor(touchgfx::Color::getColorFrom24BitRGB(148, 40, 40));
+    ControllerTemp.setLinespacing(0);
+    Unicode::snprintf(ControllerTempBuffer, CONTROLLERTEMP_SIZE, "%s", TypedText(T_SINGLEUSEID11).getText());
+    ControllerTemp.setWildcard(ControllerTempBuffer);
+    ControllerTemp.resizeToCurrentText();
+    ControllerTemp.setTypedText(TypedText(T_CONTROLLERTEMP));
+    TempContainer.add(ControllerTemp);
+
+    ControllerTempIcon.setXY(169, 6);
+    ControllerTempIcon.setBitmap(Bitmap(BITMAP_TEMP_C_ID));
+    TempContainer.add(ControllerTempIcon);
+
+    CurrentContainer.setPosition(510, 60, 230, 50);
+
+    CurrentConsume_BG.setPosition(0, 0, 230, 50);
+    CurrentConsume_BG.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
+    CurrentConsume_BG.setBorderColor(touchgfx::Color::getColorFrom24BitRGB(77, 75, 75));
+    CurrentConsume_BG.setBorderSize(5);
+    CurrentContainer.add(CurrentConsume_BG);
+
+    MotorCurrent.setXY(92, 10);
+    MotorCurrent.setColor(touchgfx::Color::getColorFrom24BitRGB(148, 40, 40));
+    MotorCurrent.setLinespacing(0);
+    Unicode::snprintf(MotorCurrentBuffer, MOTORCURRENT_SIZE, "%s", TypedText(T_SINGLEUSEID12).getText());
+    MotorCurrent.setWildcard(MotorCurrentBuffer);
+    MotorCurrent.resizeToCurrentText();
+    MotorCurrent.setTypedText(TypedText(T_MOTORCURRENT));
+    CurrentContainer.add(MotorCurrent);
+
+    add(Main_BG);
+    add(Hodometer);
+    add(GoToConfig);
     add(batteryGaugeContainer);
-    add(button1);
-    add(TextAreaDistance);
+    add(TempContainer);
+    add(CurrentContainer);
 }
 
 void MainViewBase::setupScreen()
@@ -44,10 +97,10 @@ void MainViewBase::setupScreen()
 
 void MainViewBase::buttonCallbackHandler(const touchgfx::AbstractButton& src)
 {
-    if (&src == &button1)
+    if (&src == &GoToConfig)
     {
         //Interaction1
-        //When button1 clicked change screen to Config
+        //When GoToConfig clicked change screen to Config
         //Go to Config with screen transition towards East
         application().gotoConfigScreenSlideTransitionEast();
     }

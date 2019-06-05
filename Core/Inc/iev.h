@@ -33,6 +33,9 @@ typedef struct {
     uint32_t distance;
     uint32_t speed;
     uint16_t battery;
+    uint8_t motorTemp;
+    uint8_t controllerTemp;
+    uint16_t motorCurrent;
 }QuadrantData;
 
 typedef struct {

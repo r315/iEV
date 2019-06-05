@@ -18,16 +18,16 @@ touchgfx::InternalFlashFont& getFont_verdana_10_4bpp()
     return verdana_10_4bpp;
 }
 
-// verdana_20_4bpp
-extern const touchgfx::GlyphNode glyphs_verdana_20_4bpp[];
-extern const uint8_t unicodes_verdana_20_4bpp[];
-extern const touchgfx::KerningNode kerning_verdana_20_4bpp[];
-touchgfx::InternalFlashFont& getFont_verdana_20_4bpp();
+// verdana_24_4bpp
+extern const touchgfx::GlyphNode glyphs_verdana_24_4bpp[];
+extern const uint8_t unicodes_verdana_24_4bpp[];
+extern const touchgfx::KerningNode kerning_verdana_24_4bpp[];
+touchgfx::InternalFlashFont& getFont_verdana_24_4bpp();
 
-touchgfx::InternalFlashFont& getFont_verdana_20_4bpp()
+touchgfx::InternalFlashFont& getFont_verdana_24_4bpp()
 {
-    static touchgfx::InternalFlashFont verdana_20_4bpp(glyphs_verdana_20_4bpp, 21, 20, 0, 4, 0, 0, unicodes_verdana_20_4bpp, kerning_verdana_20_4bpp, 45, 0);
-    return verdana_20_4bpp;
+    static touchgfx::InternalFlashFont verdana_24_4bpp(glyphs_verdana_24_4bpp, 23, 24, 0, 4, 0, 1, unicodes_verdana_24_4bpp, kerning_verdana_24_4bpp, 63, 0);
+    return verdana_24_4bpp;
 }
 
 // verdana_40_4bpp

@@ -8,10 +8,11 @@
 #include <mvp/View.hpp>
 #include <gui/main_screen/MainPresenter.hpp>
 #include <touchgfx/widgets/Image.hpp>
+#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
+#include <touchgfx/widgets/Button.hpp>
 #include <touchgfx/containers/Container.hpp>
 
-#include <touchgfx/widgets/Button.hpp>
-#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
+#include <touchgfx/widgets/BoxWithBorder.hpp>
 #include <touchgfx/canvas_widget_renderer/CanvasWidgetRenderer.hpp>
 class MainViewBase : public touchgfx::View<MainPresenter>
 {
@@ -29,18 +30,35 @@ protected:
     /*
      * Member Declarations
      */
-    touchgfx::Image fon_411111;
+    touchgfx::Image Main_BG;
+    touchgfx::TextAreaWithOneWildcard Hodometer;
+    touchgfx::Button GoToConfig;
     touchgfx::Container batteryGaugeContainer;
     touchgfx::Image batteryGauge;
 
-    touchgfx::Button button1;
-    touchgfx::TextAreaWithOneWildcard TextAreaDistance;
+    touchgfx::Container TempContainer;
+    touchgfx::BoxWithBorder EngineTemp_BG;
+    touchgfx::Image MotorTempIcon;
+    touchgfx::TextAreaWithOneWildcard MotorTemp;
+    touchgfx::TextAreaWithOneWildcard ControllerTemp;
+    touchgfx::Image ControllerTempIcon;
+
+    touchgfx::Container CurrentContainer;
+    touchgfx::BoxWithBorder CurrentConsume_BG;
+    touchgfx::TextAreaWithOneWildcard MotorCurrent;
+
 
     /*
      * Wildcard Buffers
      */
-    static const uint16_t TEXTAREADISTANCE_SIZE = 7;
-    touchgfx::Unicode::UnicodeChar TextAreaDistanceBuffer[TEXTAREADISTANCE_SIZE];
+    static const uint16_t HODOMETER_SIZE = 7;
+    touchgfx::Unicode::UnicodeChar HodometerBuffer[HODOMETER_SIZE];
+    static const uint16_t MOTORTEMP_SIZE = 4;
+    touchgfx::Unicode::UnicodeChar MotorTempBuffer[MOTORTEMP_SIZE];
+    static const uint16_t CONTROLLERTEMP_SIZE = 4;
+    touchgfx::Unicode::UnicodeChar ControllerTempBuffer[CONTROLLERTEMP_SIZE];
+    static const uint16_t MOTORCURRENT_SIZE = 6;
+    touchgfx::Unicode::UnicodeChar MotorCurrentBuffer[MOTORCURRENT_SIZE];
 
 private:
 
