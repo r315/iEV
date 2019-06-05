@@ -2,20 +2,7 @@
 namespace iEV_Host 
 {
     internal class CanMessage02 : CanMessage
-    {
-        
-        private const int MESSAGE_ID01 = 0x602;
-        private const int CAN_MSG_SIZE = 10;
-
-        private int Address
-        {
-            get { return Address; }
-            set
-            {
-                bytes[0] = (byte)(value >> 8);
-                bytes[1] = (byte)(value);
-            }
-        }
+    {   
         public int Frequency
         {
             get { return Frequency; }
@@ -76,10 +63,10 @@ namespace iEV_Host
 
         public CanMessage02() : base(CAN_MSG_SIZE)
         {
-            Address = MESSAGE_ID01;
+            Address = MESSAGE_ID02;
         }
 
-        public override string ToString() => String.Format(@"
+        /*public override string ToString() => String.Format(@"
             Address: 0x{0:X}\n
             Frequency: {1}\n
             FaultPrimary: {2}\n
@@ -87,6 +74,6 @@ namespace iEV_Host
             Throttle: {4}\n
             Brake: {5}\n
             System: {6}\n",
-            Address, Frequency, FaultPrimary, FaultSecondary, Throttle, Brake, System);
+            Address, Frequency, FaultPrimary, FaultSecondary, Throttle, Brake, System);*/
     }    
 }

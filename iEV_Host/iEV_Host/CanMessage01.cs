@@ -3,18 +3,7 @@
 namespace iEV_Host
 {
     internal class CanMessage01 : CanMessage
-    {
-        private const int MESSAGE_ID01 = 0x601;
-        private const int CAN_MSG_SIZE = 10;
-
-        private int Address {
-            get { return Address; }
-            set
-            {             
-                base.bytes[0] = (byte)(value >> 8);
-                base.bytes[1] = (byte)(value);
-            }
-        }
+    {       
         public int Rpm {
             get { return Rpm; }
             set
@@ -60,6 +49,6 @@ namespace iEV_Host
             Address = MESSAGE_ID01;            
         }
 
-        public override string ToString() => String.Format("Address: 0x{0:X}, Rpm: {1}, Motor Temp: {2}", Address, Rpm, MotorTemp);
+        //public override string ToString() => String.Format("Address: 0x{0:X}, Rpm: {1}, Motor Temp: {2}", Address, Rpm, MotorTemp);
     }
 }

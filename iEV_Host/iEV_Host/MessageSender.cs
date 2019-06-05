@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 using System.IO.Ports;
 using System.Threading;
- 
+
+
 namespace iEV_Host
 {
     class MessageSender<T>  where T : class, IMessageSerial, new()
@@ -14,8 +15,7 @@ namespace iEV_Host
         public const int BAUD_RATE = 115200;
 
         private SerialPort serialPort;
-        private readonly object monitor = new object();
-        private readonly int MSG_INTERVAL = 10;
+        private readonly object monitor = new object();        
         private bool active = false;
 
         private LinkedList<T> ml;
@@ -54,7 +54,7 @@ namespace iEV_Host
             active = true;
             serialPortThread.Start();
         }
-
+        
         public bool Send(T msg)
         {            
             lock (monitor)
@@ -62,7 +62,25 @@ namespace iEV_Host
                 if (!active)
                     return false;
 
-                ml.AddLast(msg);                
+                ml.AddLast(msg);
+                Monitor.Pulse(monitor);
+            }
+            return true;
+        }
+
+        public bool SendMsgList(List<T> msg)
+        {
+            lock (monitor)
+            {
+                if (!active)
+                    return false;
+
+                foreach (T item in msg)
+                {
+                    ml.AddLast(item);
+                }
+                
+                Monitor.Pulse(monitor);
             }
             return true;
         }
@@ -73,7 +91,8 @@ namespace iEV_Host
             {
                 if (!active)
                     return;
-                active = false;                
+                active = false;
+                Monitor.Pulse(monitor);
             }
         }
 
@@ -118,12 +137,27 @@ namespace iEV_Host
                             if (ml.Count > 0)
                             {                                
                                 LinkedListNode<T> node = ml.First;
-                                ml.Remove(node);
-                                lastMessage = node.Value;                               
-                            }                           
-                            serialPort.Write(lastMessage.GetBytes(), 0, lastMessage.GetBytes().Length);
-                            //Console.WriteLine("Thread {0} sleeping", Thread.CurrentThread.ManagedThreadId);                            
-                            Monitor.Wait(monitor, MSG_INTERVAL);
+                                int sleep;
+                                T msg = node.Value;
+                                byte[] data = msg.GetBytes();                                
+                                serialPort.Write(data, 0, data.Length);
+                                //Console.WriteLine("Thread {0} sleeping", Thread.CurrentThread.ManagedThreadId);
+                                if (!msg.repeat)
+                                {
+                                    ml.Remove(node);                                
+                                    lastMessage = node.Value;
+                                }
+                                sleep = node.Value.timeStamp;
+
+                                if (sleep < 0)
+                                    Console.WriteLine();
+                                    
+                                Monitor.Wait(monitor, sleep);
+                            }
+                            else
+                            {
+                                Monitor.Wait(monitor);
+                            }
                         }
                         catch (ThreadInterruptedException e)
                         {
