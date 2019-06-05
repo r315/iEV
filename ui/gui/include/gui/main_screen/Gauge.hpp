@@ -176,7 +176,7 @@ public:
         Needle()
         {
             //ShapePoint<float> points[3] = { { -5.0f, 0}, {0.0f, -250}, {5.0f, 0} };
-            ShapePoint<float> points[4] = { { -5.0f, 0}, {-1.0f, -220}, {1.0f, -220}, {5.0f, 0} };
+            ShapePoint<float> points[4] = { { -5.0f, 0}, {-1.0f, -160}, {1.0f, -160}, {5.0f, 0} }; //p1{x,y}, p2{x,y}...
             setShape(points);
         }
     };

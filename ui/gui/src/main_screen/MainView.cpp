@@ -1,5 +1,9 @@
 #include <gui/main_screen/MainView.hpp>
 
+
+#define BITMAP_DIAL_KPH_LOC 440, 160
+#define BITMAP_DIAL_RPM_LOC 0, 160
+
 MainView::MainView()
 {
 
@@ -9,13 +13,28 @@ void MainView::setupScreen()
 {
     MainViewBase::setupScreen();
     
-    gauge.setBitmaps(Bitmap(BITMAP_DIAL_ID), Bitmap(BITMAP_DIAL_CENTER_ID));
-    gauge.setXY(250,187);
-    gauge.setLimits(0, 160, 270, 270 + 180);
-    gauge.setValue(0);
-    gauge.setAnimationDuration(20);
-    gauge.setVisible(true);
-    add(gauge);
+    //gauge.setBitmaps(Bitmap(BITMAP_DIAL_ID), Bitmap(BITMAP_DIAL_CENTER_ID));
+    dialKph.setBitmaps(Bitmap(BITMAP_DIAL_KPH_ID), Bitmap(BITMAP_DIAL_CENTER_ID));
+    dialKph.setXY(BITMAP_DIAL_KPH_LOC);
+    dialKph.setLimits(0, 180, 247, 247 + 205);
+    dialKph.setValue(180);
+    dialKph.setAnimationDuration(20);
+    dialKph.setVisible(true);   
+
+     //gauge.setBitmaps(Bitmap(BITMAP_DIAL_ID), Bitmap(BITMAP_DIAL_CENTER_ID));
+    dialRpm.setBitmaps(Bitmap(BITMAP_DIAL_RPM_ID), Bitmap(BITMAP_DIAL_CENTER_ID));
+    dialRpm.setXY(BITMAP_DIAL_RPM_LOC);
+    dialRpm.setLimits(0, 10000, 247, 247 + 225);
+    dialRpm.setValue(0);
+    dialRpm.setAnimationDuration(20);
+    dialRpm.setVisible(true);
+
+    remove(TextAreaDistance);
+    add(dialKph);
+    add(dialRpm);
+
+    TextAreaDistance.setXY(dialKph.getX() + 100, dialKph.getY() + 240);
+    add(TextAreaDistance);
 
     batteryGaugeMaxHeight = batteryGaugeContainer.getHeight();
 }
@@ -31,13 +50,14 @@ void MainView::setDistance(int value){
 }
 
 void MainView::setRpm(int value){
-    Unicode::snprintf(TextAreaRpmBuffer, 6, "%d", value);
-    TextAreaRpm.invalidate();
+    //Unicode::snprintf(TextAreaRpmBuffer, 6, "%d", value);
+    //TextAreaRpm.invalidate();
+    dialRpm.setValue(value);
 }
 
 
 void MainView::setSpeed(int value){
-    gauge.setValue(value);
+    dialKph.setValue(value);
 }
 
 void MainView::setBatteryLevel(int value){

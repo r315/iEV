@@ -8,12 +8,10 @@
 #include <mvp/View.hpp>
 #include <gui/main_screen/MainPresenter.hpp>
 #include <touchgfx/widgets/Image.hpp>
-#include <touchgfx/widgets/BoxWithBorder.hpp>
-#include <touchgfx/widgets/TextArea.hpp>
-#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 #include <touchgfx/containers/Container.hpp>
 
 #include <touchgfx/widgets/Button.hpp>
+#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 #include <touchgfx/canvas_widget_renderer/CanvasWidgetRenderer.hpp>
 class MainViewBase : public touchgfx::View<MainPresenter>
 {
@@ -32,21 +30,15 @@ protected:
      * Member Declarations
      */
     touchgfx::Image fon_411111;
-    touchgfx::BoxWithBorder boxWithBorder_rpm;
-    touchgfx::TextArea textArea_rpm_unit;
-    touchgfx::TextArea TextArea_km_unit;
-    touchgfx::TextAreaWithOneWildcard TextAreaRpm;
-    touchgfx::TextAreaWithOneWildcard TextAreaDistance;
     touchgfx::Container batteryGaugeContainer;
     touchgfx::Image batteryGauge;
 
     touchgfx::Button button1;
+    touchgfx::TextAreaWithOneWildcard TextAreaDistance;
 
     /*
      * Wildcard Buffers
      */
-    static const uint16_t TEXTAREARPM_SIZE = 7;
-    touchgfx::Unicode::UnicodeChar TextAreaRpmBuffer[TEXTAREARPM_SIZE];
     static const uint16_t TEXTAREADISTANCE_SIZE = 7;
     touchgfx::Unicode::UnicodeChar TextAreaDistanceBuffer[TEXTAREADISTANCE_SIZE];
 

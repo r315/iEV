@@ -3,8 +3,8 @@
 /*********************************************************************************/
 #include <gui_generated/main_screen/MainViewBase.hpp>
 #include "BitmapDatabase.hpp"
-#include <touchgfx/Color.hpp>
 #include <texts/TextKeysAndLanguages.hpp>
+#include <touchgfx/Color.hpp>
 
 MainViewBase::MainViewBase() :
     buttonCallback(this, &MainViewBase::buttonCallbackHandler)
@@ -14,38 +14,9 @@ MainViewBase::MainViewBase() :
     fon_411111.setXY(0, 0);
     fon_411111.setBitmap(Bitmap(BITMAP_FON_41111_ID));
 
-    boxWithBorder_rpm.setPosition(316, 51, 358, 106);
-    boxWithBorder_rpm.setColor(touchgfx::Color::getColorFrom24BitRGB(56, 56, 56));
-    boxWithBorder_rpm.setBorderColor(touchgfx::Color::getColorFrom24BitRGB(0, 0, 0));
-    boxWithBorder_rpm.setBorderSize(5);
+    batteryGaugeContainer.setPosition(340, 156, 120, 300);
 
-    textArea_rpm_unit.setXY(627, 51);
-    textArea_rpm_unit.setColor(touchgfx::Color::getColorFrom24BitRGB(207, 219, 209));
-    textArea_rpm_unit.setLinespacing(0);
-    textArea_rpm_unit.setTypedText(TypedText(T_SINGLEUSEID1));
-
-    TextArea_km_unit.setXY(187, 405);
-    TextArea_km_unit.setColor(touchgfx::Color::getColorFrom24BitRGB(207, 219, 209));
-    TextArea_km_unit.setLinespacing(0);
-    TextArea_km_unit.setTypedText(TypedText(T_SINGLEUSEID4));
-
-    TextAreaRpm.setPosition(324, 40, 311, 117);
-    TextAreaRpm.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 173, 217));
-    TextAreaRpm.setLinespacing(0);
-    Unicode::snprintf(TextAreaRpmBuffer, TEXTAREARPM_SIZE, "%s", TypedText(T_SINGLEUSEID8).getText());
-    TextAreaRpm.setWildcard(TextAreaRpmBuffer);
-    TextAreaRpm.setTypedText(TypedText(T_CURRENTRPM));
-
-    TextAreaDistance.setPosition(28, 406, 153, 49);
-    TextAreaDistance.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 173, 217));
-    TextAreaDistance.setLinespacing(0);
-    Unicode::snprintf(TextAreaDistanceBuffer, TEXTAREADISTANCE_SIZE, "%s", TypedText(T_SINGLEUSEID7).getText());
-    TextAreaDistance.setWildcard(TextAreaDistanceBuffer);
-    TextAreaDistance.setTypedText(TypedText(T_TOTALDISTANCE));
-
-    batteryGaugeContainer.setPosition(61, 68, 120, 300);
-
-    batteryGauge.setXY(0, -199);
+    batteryGauge.setXY(0, -150);
     batteryGauge.setBitmap(Bitmap(BITMAP_BATTERY_GAUGE_ID));
     batteryGaugeContainer.add(batteryGauge);
 
@@ -53,14 +24,17 @@ MainViewBase::MainViewBase() :
     button1.setBitmaps(Bitmap(BITMAP_DARK_ICONS_NEXT_ARROW_48_ID), Bitmap(BITMAP_DARK_ICONS_NEXT_ARROW_48_ID));
     button1.setAction(buttonCallback);
 
+    TextAreaDistance.setPosition(544, 400, 153, 50);
+    TextAreaDistance.setColor(touchgfx::Color::getColorFrom24BitRGB(0, 173, 217));
+    TextAreaDistance.setLinespacing(0);
+    Unicode::snprintf(TextAreaDistanceBuffer, TEXTAREADISTANCE_SIZE, "%s", TypedText(T_SINGLEUSEID7).getText());
+    TextAreaDistance.setWildcard(TextAreaDistanceBuffer);
+    TextAreaDistance.setTypedText(TypedText(T_TOTALDISTANCE));
+
     add(fon_411111);
-    add(boxWithBorder_rpm);
-    add(textArea_rpm_unit);
-    add(TextArea_km_unit);
-    add(TextAreaRpm);
-    add(TextAreaDistance);
     add(batteryGaugeContainer);
     add(button1);
+    add(TextAreaDistance);
 }
 
 void MainViewBase::setupScreen()

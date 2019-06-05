@@ -18,7 +18,7 @@ public:
     void setBatteryLevel(int value);
 protected:
     uint16_t batteryGaugeMaxHeight;
-    Gauge gauge;
+    Gauge dialKph, dialRpm;
 };
 
 #endif // MAIN_VIEW_HPP

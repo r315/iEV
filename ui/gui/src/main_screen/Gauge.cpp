@@ -22,11 +22,11 @@ void Gauge::setBitmaps(Bitmap backgroundBmp, Bitmap centerBmp)
     background.setXY(0, 0);
 
     center.setBitmap(centerBmp);
-    center.setXY((background.getWidth() - center.getWidth()) / 2, background.getHeight() - center.getHeight());
+    center.setXY((background.getWidth() - center.getWidth())/ 2, (background.getHeight() - center.getWidth())/ 2);
 
     colorPainter.setColor(Color::getColorFrom24BitRGB(0xAE, 0x18, 0x24));
     needle.setPosition(0, 0, background.getWidth(), background.getHeight());
-    needle.setOrigin(background.getWidth() / 2, background.getHeight() - (center.getHeight()/2)); //background.getHeight() / 2);
+    needle.setOrigin(background.getWidth() / 2, background.getHeight() / 2); // base center of shape
     needle.setPainter(colorPainter);
 
     //shadowPainter.setColor(Color::getColorFrom24BitRGB(0x0, 0x0, 0xFF), 60);

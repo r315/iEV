@@ -14,7 +14,7 @@ Model::Model() : modelListener(0)
 // Called every frame (15.66ms)
 void Model::tick()
 {   
-    #if !defined(SIMULATOR) 
+#if !defined(SIMULATOR) 
     QuadrantData qdata = {};
 
     if(xQueueReceive(qdataQueue, &qdata, 0) == pdPASS){
@@ -24,11 +24,12 @@ void Model::tick()
         modelListener->notifySpeedChange(qdata.speed);
         modelListener->notifyBatteryChange(qdata.battery);
     }
-    #endif  
+#endif  
 }
 
 void Model::userSetSerialMode(uint8_t mode){
-
+ #if !defined(SIMULATOR) 
     qconfig.mode = (mode == 1) ? Serial : Can;
+#endif
 }
 
