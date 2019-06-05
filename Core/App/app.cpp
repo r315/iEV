@@ -197,15 +197,24 @@ void serialTask(void *argument)
                 msg[i++] = uart.xgetchar();
                 if(i == CAN_MSG_SIZE){
                     i = 0;
-                    if(msg[0] != CAN_MSG_01 >> 8)
-                        break;
-                    if (xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS)
-                    {
-                        qconfig.data.rpm = (msg[2]<<8) | msg[3];
-                        qconfig.updated = TRUE;
-                        xSemaphoreGive(qconfig.mutex);
-                    }
+                    uint16_t id = (uint16_t)msg[0] << 8 | msg[1];
+                    switch(id){
+                        case CAN_MSG_01:
+                            if (xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS)
+                            {
+                                qconfig.data.rpm = (msg[2]<<8) | msg[3];
+                                qconfig.updated = TRUE;
+                                xSemaphoreGive(qconfig.mutex);
+                            }
+                            break;
+
+                        case CAN_MSG_02:
+                            break;
+
+                    }                    
                 }
+                break;
+
             default:
                 break;
         }
@@ -218,9 +227,9 @@ extern "C" void appMain(void)
 
     // TODO: load data from intflash or ext flash
 
-    qconfig.gearRacio = 1;
+    qconfig.gearRacio = 5;
     qconfig.wheelCircumference = 1.928f; //16" wheel
-    qconfig.data.rpm = 518;
+    qconfig.data.rpm = 3000; //518;
     qconfig.data.battery = 50;
     qconfig.mode = Can; //Serial;
 
