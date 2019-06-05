@@ -79,7 +79,7 @@ namespace iEV_Host
         {
             MessageSender<CanMessage> sender = new MessageSender<CanMessage>();
 
-            sender.SendMsgList(LoadFromFile(@"..\..\candataeco.csv"));
+            //sender.SendMsgList(LoadFromFile(@"..\..\candataeco.csv"));
 
             CanMessage01 msg = new CanMessage01();
             CanMessage02 msg2 = new CanMessage02();
@@ -88,6 +88,7 @@ namespace iEV_Host
             ConsoleKeyInfo cki;
 
             int rpm = 0;
+            msg.MotorTemp = 50;
 
             do
             {
@@ -113,6 +114,16 @@ namespace iEV_Host
 
                     case "R":
                         rpm = 0;
+                        break;
+
+                    case "OemComma":
+                        if (msg.MotorTemp > 0)
+                            msg.MotorTemp -= 25;
+                        break;
+
+                    case "OemPeriod":
+                        if (msg.MotorTemp < 200)
+                            msg.MotorTemp += 25;
                         break;
 
                     default: break;

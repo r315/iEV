@@ -5,7 +5,7 @@ namespace iEV_Host
     internal class CanMessage01 : CanMessage
     {       
         public int Rpm {
-            get { return Rpm; }
+            get { return bytes[2]<<8 | bytes[3]; }
             set
             {               
                 bytes[2] = (byte)(value >> 8);
@@ -13,14 +13,14 @@ namespace iEV_Host
             }
         }
         public byte MotorTemp {
-            get { return MotorTemp; }
+            get { return bytes[4]; }
             set
             {        
                 bytes[4] = value;
             }
         }
         public byte ControllerTemp {
-            get { return ControllerTemp; }
+            get { return bytes[5]; }
             set
             {               
                 bytes[5] = value;
@@ -28,7 +28,7 @@ namespace iEV_Host
         }
         public int RmsCurrent
         {
-            get { return RmsCurrent; }
+            get { return bytes[6] << 8 | bytes[7]; }
             set
             {                
                 bytes[6] = (byte)(value >> 8);
@@ -36,7 +36,7 @@ namespace iEV_Host
             }
         }
         public int CapacitorVoltage {
-            get { return CapacitorVoltage; }
+            get { return bytes[8] << 8 | bytes[9]; }
             set
             {                
                 bytes[8] = (byte)(value >> 8);

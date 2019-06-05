@@ -58,12 +58,10 @@
     <Compile Include="IMessageSerial.cs" />
     <Compile Include="MessageSender.cs" />
     <Compile Include="iEV-Host.cs" />
-    <Compile Include="MessageTransfer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
