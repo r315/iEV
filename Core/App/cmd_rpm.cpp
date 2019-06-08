@@ -14,11 +14,11 @@ char Rpm::execute(void *ptr)
 	else
 	{
 
-		if (xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS)
+		if (xSemaphoreTake(cfgData.mutex, portMAX_DELAY) == pdPASS)
 		{
-			qconfig.data.rpm = rpm;
-			qconfig.updated = TRUE;
-			xSemaphoreGive(qconfig.mutex);
+			cfgData.invData.rpm = rpm;
+			cfgData.updated = TRUE;
+			xSemaphoreGive(cfgData.mutex);
 		}
 	}
 

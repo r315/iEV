@@ -14,7 +14,7 @@
 #define ITERATIONS_SECOND (1000/UPDATE_RATE)
 #define SECONDS_HOUR 3600
 
-#define RPM_QUEUE_ITEM_SIZE sizeof(QuadrantData)
+#define RPM_QUEUE_ITEM_SIZE sizeof(invData_t)
 
 #define CAN_MSG_SIZE 10
 #define CAN_MSG_01   0x601
@@ -26,8 +26,8 @@ void GRAPHICS_HW_Init(void);
 
 static const char prompt[] = "iEV>";
 
-QueueHandle_t qdataQueue;
-SystemConfiguration_t qconfig;
+QueueHandle_t invDataQueue;
+SystemConfiguration_t cfgData;
 
 /**
  * 
@@ -36,9 +36,9 @@ void CAN_MessageCallback(uint8_t *data){
 BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     //if(header.FilterMatchIndex == CAN_RPM_MSG){
         // Should discart message after 100ms???
-        if (xSemaphoreTakeFromISR(qconfig.mutex, &xHigherPriorityTaskWoken) == pdPASS){
-            qconfig.data.rpm = *((uint32_t*)data);
-            xSemaphoreGiveFromISR(qconfig.mutex, &xHigherPriorityTaskWoken);
+        if (xSemaphoreTakeFromISR(cfgData.mutex, &xHigherPriorityTaskWoken) == pdPASS){
+            cfgData.invData.rpm = *((uint32_t*)data);
+            xSemaphoreGiveFromISR(cfgData.mutex, &xHigherPriorityTaskWoken);
         }
     //}
 }
@@ -51,46 +51,46 @@ void updateTask(void *argument)
 {
     TickType_t lastTime = xTaskGetTickCount();
 
-    qdataQueue = xQueueCreate(RPM_QUEUE_LENGTH, RPM_QUEUE_ITEM_SIZE);
+    invDataQueue = xQueueCreate(RPM_QUEUE_LENGTH, RPM_QUEUE_ITEM_SIZE);
 
-    if (qdataQueue == NULL)
+    if (invDataQueue == NULL)
     {
         //console.log("Fail to create qdataQueue\n");
         return;
     }
     //console.log("qdataQueue created\n");
 
-    qconfig.mutex = xSemaphoreCreateBinary();
+    cfgData.mutex = xSemaphoreCreateBinary();
 
-    if (qconfig.mutex == NULL)
+    if (cfgData.mutex == NULL)
     {
         return;
     }
     
-    xSemaphoreGive(qconfig.mutex);    
+    xSemaphoreGive(cfgData.mutex);    
 
     while (true)
     {
         /* Read rpm */
-        if (xSemaphoreTake(qconfig.mutex, pdMS_TO_TICKS(UPDATE_RATE)) == pdPASS)
+        if (xSemaphoreTake(cfgData.mutex, pdMS_TO_TICKS(UPDATE_RATE)) == pdPASS)
         {
-            double wheelRpm = qconfig.data.rpm / qconfig.gearRacio;
+            double wheelRpm = cfgData.invData.rpm / cfgData.gearRacio;
             //get distance in respect to wheel revolutions in 100ms
-            double distanceIteration = (wheelRpm / (SECONDS_MINUTE * ITERATIONS_SECOND)) * qconfig.wheelCircumference;
+            double distanceIteration = (wheelRpm / (SECONDS_MINUTE * ITERATIONS_SECOND)) * cfgData.wheelCircumference;
             // add to total distance
-            uint32_t curDistance = (uint32_t)qconfig.totalDistance;
-            qconfig.totalDistance += distanceIteration;
+            uint32_t curDistance = (uint32_t)cfgData.totalDistance;
+            cfgData.totalDistance += distanceIteration;
 
             // If integer part of distance or configuration has changed update screen 
-            if ((uint32_t)qconfig.totalDistance != curDistance || qconfig.updated == true)
+            if ((uint32_t)cfgData.totalDistance != curDistance || cfgData.updated == true)
             {
-                qconfig.updated = false;
-                qconfig.data.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);
-                qconfig.data.distance = (uint32_t)(qconfig.totalDistance/1000); // display in km                
+                cfgData.updated = false;
+                cfgData.invData.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);
+                cfgData.invData.distance = (uint32_t)(cfgData.totalDistance/1000); // display in km                
                 // send to display
-                xQueueSend(qdataQueue, &qconfig.data, pdMS_TO_TICKS(UPDATE_RATE));
+                xQueueSend(invDataQueue, &cfgData.invData, pdMS_TO_TICKS(UPDATE_RATE));
             }
-            xSemaphoreGive(qconfig.mutex);
+            xSemaphoreGive(cfgData.mutex);
         }
         vTaskDelayUntil(&lastTime, pdMS_TO_TICKS(UPDATE_RATE));
     }
@@ -146,11 +146,11 @@ void serialTask(void *argument)
             i = 0;
             if(msg[0] != CAN_MSG_01 >> 8)
                 continue;
-            if (xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS)
+            if (xSemaphoreTake(cfgData.mutex, portMAX_DELAY) == pdPASS)
             {
-                qconfig.data.rpm = (msg[2]<<8) | msg[3];
-                qconfig.updated = TRUE;
-                xSemaphoreGive(qconfig.mutex);
+                cfgData.invData.rpm = (msg[2]<<8) | msg[3];
+                cfgData.updated = TRUE;
+                xSemaphoreGive(cfgData.mutex);
             }
         }
     }
@@ -185,7 +185,7 @@ void serialTask(void *argument)
 
     for (;;)
     {
-        switch(qconfig.mode){
+        switch(cfgData.mode){
             case Serial:
                 BSP_LED_On(LED3);
                 console.process();
@@ -200,14 +200,14 @@ void serialTask(void *argument)
                     uint16_t id = (uint16_t)msg[0] << 8 | msg[1];
                     switch(id){
                         case CAN_MSG_01:
-                            if (xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS)
+                            if (xSemaphoreTake(cfgData.mutex, portMAX_DELAY) == pdPASS)
                             {
-                                qconfig.data.rpm = (msg[2]<<8) | msg[3];
-                                qconfig.data.motorTemp = msg[4];
-                                qconfig.data.controllerTemp = msg[5];
-                                qconfig.data.motorCurrent = (msg[6]<<8) | msg[7];
-                                qconfig.updated = TRUE;
-                                xSemaphoreGive(qconfig.mutex);
+                                cfgData.invData.rpm = (msg[2]<<8) | msg[3];
+                                cfgData.invData.motorTemp = msg[4];
+                                cfgData.invData.controllerTemp = msg[5];
+                                cfgData.invData.motorCurrent = (msg[6]<<8) | msg[7];
+                                cfgData.updated = TRUE;
+                                xSemaphoreGive(cfgData.mutex);
                             }
                             break;
 
@@ -230,11 +230,11 @@ extern "C" void appMain(void)
 
     // TODO: load data from intflash or ext flash
 
-    qconfig.gearRacio = 5;
-    qconfig.wheelCircumference = 1.928f; //16" wheel
-    qconfig.data.rpm = 3000; //518;
-    qconfig.data.battery = 50;
-    qconfig.mode = Can; //Serial;
+    cfgData.gearRacio = 5;
+    cfgData.wheelCircumference = 1.928f; //16" wheel
+    cfgData.invData.rpm = 3000; //518;
+    cfgData.invData.battery = 50;
+    cfgData.mode = Can; //Serial;
 
     BSP_LED_Init(LED1);
     BSP_LED_Init(LED2);

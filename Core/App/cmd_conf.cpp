@@ -20,8 +20,8 @@ double value;
 	// check parameters
 	if( p1 == NULL || *p1 == '\0'){
 		help();
-        console->print("racio: %.2f\n", qconfig.gearRacio);		
-		console->print("wheel: %.8fm\n\n", qconfig.wheelCircumference);		
+        console->print("racio: %.2f\n", cfgData.gearRacio);		
+		console->print("wheel: %.8fm\n\n", cfgData.wheelCircumference);		
 	}else{
 		while( !(operation & OPT_DONE) ){
 			if(isNextWord(&p1, "racio")){
@@ -52,20 +52,20 @@ double value;
 		}
 
 	
-		if(xSemaphoreTake(qconfig.mutex, portMAX_DELAY) == pdPASS){
+		if(xSemaphoreTake(cfgData.mutex, portMAX_DELAY) == pdPASS){
 			switch(OPT_OPER(operation)){
 				case OPT_READ:
-					qconfig.gearRacio = value;
+					cfgData.gearRacio = value;
 					break;
 				case OPT_WRITE:			
-					qconfig.wheelCircumference = value * PI;
+					cfgData.wheelCircumference = value * PI;
 					break;
 				case OPT_OPER3:
-					qconfig.data.battery = bval;
+					cfgData.invData.battery = bval;
 					break;
 			}
-			qconfig.updated= TRUE;
-			xSemaphoreGive(qconfig.mutex);
+			cfgData.updated= TRUE;
+			xSemaphoreGive(cfgData.mutex);
 		}		
     }
 	return CMD_OK;

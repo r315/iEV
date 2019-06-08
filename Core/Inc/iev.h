@@ -36,20 +36,20 @@ typedef struct {
     uint8_t motorTemp;
     uint8_t controllerTemp;
     uint16_t motorCurrent;
-}QuadrantData;
+}invData_t;
 
 typedef struct {
     double gearRacio;
     double totalDistance;
     double wheelCircumference;
     uint8_t updated;
-    QuadrantData data;
+    invData_t invData;
     SemaphoreHandle_t mutex;
     Mode_t mode;
 }SystemConfiguration_t;
 
-extern QueueHandle_t qdataQueue;
-extern SystemConfiguration_t qconfig;
+extern QueueHandle_t invDataQueue;
+extern SystemConfiguration_t cfgData;
 extern StdOut uart;
 
 #ifdef __cplusplus

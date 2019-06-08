@@ -15,24 +15,24 @@ Model::Model() : modelListener(0)
 void Model::tick()
 {   
 #if !defined(SIMULATOR) 
-    QuadrantData qdata = {};
+    invData_t invData = {};
 
-    if(xQueueReceive(qdataQueue, &qdata, 0) == pdPASS){
+    if(xQueueReceive(invDataQueue, &invData, 0) == pdPASS){
         // update ui
-        modelListener->notifyRpmChange(qdata.rpm);
-        modelListener->notifyDistanceChange(qdata.distance);
-        modelListener->notifySpeedChange(qdata.speed);
-        modelListener->notifyBatteryChange(qdata.battery);
-        modelListener->notifyMotorTempChange(qdata.motorTemp);
-        modelListener->notifyControllerTempChange(qdata.controllerTemp);
-        modelListener->notifyMotorCurrentChange(qdata.motorCurrent);
+        modelListener->notifyRpmChange(invData.rpm);
+        modelListener->notifyDistanceChange(invData.distance);
+        modelListener->notifySpeedChange(invData.speed);
+        modelListener->notifyBatteryChange(invData.battery);
+        modelListener->notifyMotorTempChange(invData.motorTemp);
+        modelListener->notifyControllerTempChange(invData.controllerTemp);
+        modelListener->notifyMotorCurrentChange(invData.motorCurrent);
     }
 #endif  
 }
 
 void Model::userSetSerialMode(uint8_t mode){
  #if !defined(SIMULATOR) 
-    qconfig.mode = (mode == 1) ? Serial : Can;
+    cfgData.mode = (mode == 1) ? Serial : Can;
 #endif
 }
 
