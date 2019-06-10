@@ -83,6 +83,8 @@ void updateTask(void *argument)
     cfgData.invData.motorTemp = 20;
     cfgData.invData.controllerTemp = 24;    
 
+    TM_ComputeDistance(cfgData.invData.rpm, RPM_TS, cfgData.tm);
+
     while (true)
     {
         /* Start by acquiring exclusive access */

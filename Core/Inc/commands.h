@@ -10,11 +10,15 @@ extern "C" {
 /*  
   b15-b8     b7 b3   b2-b1    b0
 |   size  | -      | OP    | start | */
-#define OPT_READ  	1
-#define OPT_WRITE  	2
-#define OPT_OPER1  	1
-#define OPT_OPER2  	2
-#define OPT_OPER3	3
+enum {
+	OPT_OPER1 = 1,
+	OPT_OPER2,
+	OPT_OPER3,
+	OPT_OPER4,
+	OPT_READ = OPT_OPER1,
+	OPT_WRITE = OPT_OPER2
+};
+
 #define OPT_DONE (1 << 0)
 #define OPT_SET_FLAG(_o, _f) _o |= _f
 #define OPT_SET_OPER(o, n) o = ((o & ~(3 << OPT_DONE)) | (n << OPT_DONE))

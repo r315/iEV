@@ -20,8 +20,13 @@ double value;
 	// check parameters
 	if( p1 == NULL || *p1 == '\0'){
 		help();
+		console->print("system ticks: %d\n", HAL_GetTick());
         console->print("racio: %.2f\n", cfgData.gearRacio);		
-		console->print("wheel: %.8fm\n\n", cfgData.wheelCircumference);		
+		console->print("wheel: %.8fm\n", cfgData.wheelCircumference);
+		console->print("speed: %dkm/h\n", cfgData.speed);
+		console->print("rpm: %d\n", cfgData.invData.rpm);
+		console->print("hodometer: %.8fm\n", cfgData.distance);
+		console->xputchar('\n');
 	}else{
 		while( !(operation & OPT_DONE) ){
 			if(isNextWord(&p1, "racio")){
@@ -45,6 +50,13 @@ double value;
 				}				
 			}
 
+			if(isNextWord(&p1, "mode")){
+				if(nextInt(&p1, (int32_t*)&bval)){
+					OPT_SET_OPER(operation, OPT_OPER4);					 
+					OPT_SET_FLAG(operation, OPT_DONE);
+				}				
+			}
+
 			if (*p1 == '\0'){
 				OPT_SET_FLAG(operation, OPT_DONE);
 			}else
@@ -62,6 +74,9 @@ double value;
 					break;
 				case OPT_OPER3:
 					cfgData.invData.battery = bval;
+					break;
+				case OPT_OPER4:
+					cfgData.mode = bval == 0 ? Can : Serial;
 					break;
 			}
 			cfgData.updated= TRUE;
