@@ -254,7 +254,7 @@
                   "Blue": 40
                 },
                 "Alpha": 255,
-                "AutoSize": true,
+                "AutoSize": false,
                 "LineSpacing": 0,
                 "Wildcard1": {
                   "TextId": "SingleUseId12",
@@ -262,9 +262,9 @@
                   "BufferSize": 6
                 },
                 "Name": "MotorCurrent",
-                "X": 92,
+                "X": 75,
                 "Y": 10,
-                "Width": 32,
+                "Width": 80,
                 "Height": 30,
                 "Type": "TextArea",
                 "Visible": true,
@@ -326,8 +326,8 @@
           },
           {
             "InitialStatePressed": false,
-            "Pressed": "__designer\\blue_togglebars_toggle_large_button_off.png",
-            "Released": "__designer\\blue_togglebars_toggle_large_button_on.png",
+            "Pressed": "__designer\\blue_togglebars_toggle_large_button_on.png",
+            "Released": "__designer\\blue_togglebars_toggle_large_button_off.png",
             "Alpha": 255,
             "Name": "ModeSelector",
             "X": 576,

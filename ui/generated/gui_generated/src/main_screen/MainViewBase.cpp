@@ -73,12 +73,11 @@ MainViewBase::MainViewBase() :
     CurrentConsume_BG.setBorderSize(5);
     CurrentContainer.add(CurrentConsume_BG);
 
-    MotorCurrent.setXY(92, 10);
+    MotorCurrent.setPosition(75, 10, 80, 30);
     MotorCurrent.setColor(touchgfx::Color::getColorFrom24BitRGB(148, 40, 40));
     MotorCurrent.setLinespacing(0);
     Unicode::snprintf(MotorCurrentBuffer, MOTORCURRENT_SIZE, "%s", TypedText(T_SINGLEUSEID12).getText());
     MotorCurrent.setWildcard(MotorCurrentBuffer);
-    MotorCurrent.resizeToCurrentText();
     MotorCurrent.setTypedText(TypedText(T_MOTORCURRENT));
     CurrentContainer.add(MotorCurrent);
 

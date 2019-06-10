@@ -13,7 +13,7 @@ ConfigViewBase::ConfigViewBase() :
     Config_BG.setBitmap(Bitmap(BITMAP_FON_41111_ID));
 
     ModeSelector.setXY(576, 77);
-    ModeSelector.setBitmaps(Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_ON_ID), Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_OFF_ID));
+    ModeSelector.setBitmaps(Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_OFF_ID), Bitmap(BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_ON_ID));
     ModeSelector.setAction(buttonCallback);
 
     GoToMain.setXY(22, 29);
