@@ -16,10 +16,12 @@ namespace iEV_Host
 
         private SerialPort serialPort;
         private readonly object monitor = new object();        
-        private bool active = false;
+        private bool active = false, wait = true;
 
         private LinkedList<T> ml;
         private T lastMessage;
+
+        Thread serialPortThread;
 
         public MessageSender()
         {
@@ -50,7 +52,7 @@ namespace iEV_Host
 
             lastMessage = new T();
 
-            Thread serialPortThread = new Thread(SerialPortSender);
+            serialPortThread = new Thread(SerialPortSender);
             active = true;
             serialPortThread.Start();
         }
@@ -94,6 +96,7 @@ namespace iEV_Host
                 active = false;
                 Monitor.Pulse(monitor);
             }
+            serialPortThread.Join();
         }
 
         // Display Port values and prompt user to enter a port.
@@ -108,19 +111,30 @@ namespace iEV_Host
             }
 
             Console.WriteLine("Available Ports:");
-            foreach (string s in SerialPort.GetPortNames())
+            
+            foreach (string s in portNames)
             {
                 Console.WriteLine("   {0}", s);
             }
 
-            Console.Write("\nEnter COM port (Default: {0}): ", sp.PortName);
+            Console.Write("\nEnter COM port (Default: {0}): ", portNames[0]); // sp.PortName);
             string portName = Console.ReadLine();
 
-            if (portName != "" && (portName.ToLower()).StartsWith("com"))
+            if(portName == "")
+            {
+                sp.PortName = portNames[0];
+            }
+            else if ((portName.ToLower()).StartsWith("com"))
             {
                 sp.PortName = portName;
             }
+            else
+            {
+                Console.WriteLine("Invalid port '{0}'", portName);
+                return false;
+            }
 
+            Console.WriteLine();
             return true;
         }
 
@@ -156,7 +170,14 @@ namespace iEV_Host
                             }
                             else
                             {
-                                Monitor.Wait(monitor);
+                                if(wait) // wait for messages
+                                {
+                                    Monitor.Wait(monitor);
+                                }
+                                else
+                                {
+                                    active = false;
+                                }                                    
                             }
                         }
                         catch (ThreadInterruptedException e)
@@ -193,5 +214,18 @@ namespace iEV_Host
             return sb.ToString();
         }
 
+        public bool isActive()
+        {
+            return active;
+        }
+
+        public void Wait()
+        {
+            lock (monitor)
+            {
+                wait = false;
+            }
+            serialPortThread.Join();
+        }
     }
 }

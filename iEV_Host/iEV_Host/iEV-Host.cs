@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CsvHelper;
 using Microsoft.VisualBasic.FileIO;
@@ -13,82 +14,113 @@ namespace iEV_Host
    
     class iEvHost    
     {
-        
+        private static readonly Regex trimmer = new Regex(@"\s\s+");
         private static int RPM_INCREMENT = 100;
+        private static DateTime lastTime;
 
-        static List<CanMessage>  LoadFromFile(String file)
-        {             
-            List<CanMessage> messages;
-            using (CsvReader csv = new CsvReader(File.OpenText(file)))
+        //params order
+        // date, time stamp, itf, id, size, data
+        //(2019-06-04 13:09:49.115038) can0 601 [8] 00 00 0F 19 00 1D 02 85
+        private static CanMessage CreateMessage(params string[] cols)
+        {
+            CanMessage msg;            
+
+            int id = Convert.ToInt32(cols[3], 16);
+            int size = Convert.ToInt32(cols[4].Trim(new char[] { '[', ']' }), 16);
+            byte[] payload = new byte[size];
+
+            for(int i = 0; i < size; i++)
             {
-                messages = new List<CanMessage>();
-                csv.Configuration.Delimiter = ";";                
-                csv.Read();
-                csv.ReadHeader();
+                int x = Convert.ToInt32(cols[i + 5], 16);
+                payload[i] = (byte)x;
+            }
 
-                DateTime lastTime = DateTime.MinValue;
-                int time;
-               
+            DateTime ts = DateTime.Parse(cols[1].Trim(')'));
 
-                while (csv.Read())
-                {
-                    CanMessage msg;                    
-                    DateTime ts = DateTime.Parse(csv.GetField("Column3").Trim(')'));
-                    //int ts = Convert.ToInt32(dt.ToString("mmssfff"));                   
+            if (lastTime == DateTime.MinValue)
+            {
+                lastTime = ts;
+            }
 
-                    if (lastTime == DateTime.MinValue)
-                    {
-                        lastTime = ts;                        
-                    }                    
+            int time = ts.Subtract(lastTime).Milliseconds;
 
-                    time = ts.Subtract(lastTime).Milliseconds;
-                    //Console.WriteLine(time);
-                    lastTime = ts;
+            lastTime = ts;
 
-                    if(time < 0)
-                        Console.WriteLine(time);
-
-                    int id = Convert.ToInt32(csv.GetField("Column5"),16);
-                    int size = Convert.ToInt32(csv.GetField("Column6").Trim(new char[] { '[', ']' }), 16);
-                    byte[] payload = new byte[CanMessage.PAYLOAD_SIZE];
-
-                    for (int i = 0; i < payload.Length; i++)
-                    {
-                        int x = Convert.ToInt32(csv.GetField(i + 6), 16);
-                        payload[i] = (byte)x;                        
-                    }
-
-                    if (id == CanMessage.MESSAGE_ID01)
-                    {
-                        msg = new CanMessage01();
-                    }
-                    else
-                    {
-                        msg = new CanMessage02();
-                    }
-
-                    msg.timeStamp = time;
-                    msg.SetPayload(payload);
-                    messages.Add(msg);
-                }
-            }            
-            return messages;
+            switch (id)
+            {
+                case CanMessage.MESSAGE_ID01:
+                    msg = new CanMessage01();
+                    break;
+                case CanMessage.MESSAGE_ID02:
+                    msg = new CanMessage02();
+                    break;
+                default:
+                    msg = new CanMessage();
+                    break;
+            }
+            msg.timeStamp = time;
+            msg.SetPayload(payload);            
+            return msg;
         }
 
-        static void Main(string[] args)
+        static List<CanMessage>  LoadFile(String filename)
         {
-            MessageSender<CanMessage> sender = new MessageSender<CanMessage>();
+            List<CanMessage> messages = new List<CanMessage>(); ;
+            StreamReader file = null;
 
-            //sender.SendMsgList(LoadFromFile(@"..\..\candataeco.csv"));
+            string delimiter;            
 
+            try
+            {
+                file = File.OpenText(filename);
+                lastTime = DateTime.MinValue;       
+
+                string line = Path.GetExtension(filename);
+
+                switch (line)
+                {
+                    case ".csv":
+                        delimiter = ";";
+                        line = file.ReadLine(); // skipt headers
+                        break;
+                    case ".txt":
+                        delimiter = " ";
+                        break;
+                    default:
+                        Console.WriteLine("Extension '{0}' not supported", line);
+                        return null;
+                }
+
+                while ((line = file.ReadLine()) != null)
+                {
+                    CanMessage msg;
+                    line = trimmer.Replace(line, delimiter);
+                    msg = CreateMessage(line.Split(delimiter[0]).Skip(1).ToArray());
+                    messages.Add(msg);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                messages = null;
+            }
+            finally
+            {
+                file.Close();
+            }
+            return messages;
+        }       
+
+        static void ManualMode(MessageSender<CanMessage> sender)
+        {
             CanMessage01 msg = new CanMessage01();
             CanMessage02 msg2 = new CanMessage02();
-            
+
             Console.WriteLine("\n User Up/Down Arrows to change RPM, 'r' to reset 'esc' to exit\n");
             ConsoleKeyInfo cki;
 
             int rpm = 0;
-            msg.MotorTemp = 50;
+            msg.MotorTemp = 0;
 
             do
             {
@@ -101,7 +133,7 @@ namespace iEV_Host
                 {
 
                     case "UpArrow":
-                        if(rpm < 10000)
+                        if (rpm < 10000)
                             rpm += RPM_INCREMENT;
                         break;
 
@@ -127,16 +159,54 @@ namespace iEV_Host
                         break;
 
                     default: break;
-                }               
-                
+                }
+
                 //Console.WriteLine(cki.Key.ToString());
 
                 msg.Rpm = rpm;
                 msg.timeStamp = 10;
                 msg.repeat = true;
-                
 
             } while (cki.Key != ConsoleKey.Escape && sender.Send(msg));
+        }
+
+        static void FileMode(MessageSender<CanMessage> sender, string filename)
+        {            
+            Console.WriteLine("Reading messages from file '{0}'", filename);
+           
+            List<CanMessage> messageList = null;
+            
+            messageList = LoadFile(filename);               
+
+            if(messageList != null)
+            {
+                Console.WriteLine("Sending {0} messages...", messageList.Count);
+                DateTime start = DateTime.Now;
+                sender.SendMsgList(messageList);
+                sender.Wait();
+                TimeSpan time = DateTime.Now.Subtract(start);
+                Console.WriteLine("Completed in {0} seconds", time.TotalSeconds);
+            }
+            else
+            {
+                Console.WriteLine("Fail to open file");
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            MessageSender<CanMessage> sender = new MessageSender<CanMessage>();
+
+            if (!sender.isActive()) return;
+
+            if(args.Length > 0)
+            {
+                FileMode(sender, args[1]);
+            }
+            else
+            {
+                ManualMode(sender);
+            }
 
             sender.Terminate(); 
         }      
