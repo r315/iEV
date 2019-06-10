@@ -1,7 +1,9 @@
+#include <stdio.h>
+
 #include "main.h"
 #include "iev.h"
 #include "gui/main_screen/MainPresenter.hpp"
-#include <stdio.h>
+
 
 #define IDLE_PRIORITY_TASK tskIDLE_PRIORITY
 #define LOW_PRIORITY_TASK (tskIDLE_PRIORITY + 2)
@@ -14,7 +16,7 @@
 #define ITERATIONS_SECOND (1000/UPDATE_RATE)
 #define SECONDS_HOUR 3600
 
-#define RPM_QUEUE_ITEM_SIZE sizeof(invData_t)
+#define DISP_QUEUE_ITEM_SIZE sizeof(SystemData_t)
 
 #define CAN_MSG_SIZE 10
 #define CAN_MSG_01   0x601
@@ -27,10 +29,10 @@ void GRAPHICS_HW_Init(void);
 static const char prompt[] = "iEV>";
 
 QueueHandle_t invDataQueue;
-SystemConfiguration_t cfgData;
+SystemData_t cfgData;
 
 /**
- * 
+ * Call back for processing received can messages
  * */
 void CAN_MessageCallback(uint8_t *data){
 BaseType_t xHigherPriorityTaskWoken = pdFALSE;
@@ -51,7 +53,7 @@ void updateTask(void *argument)
 {
     TickType_t lastTime = xTaskGetTickCount();
 
-    invDataQueue = xQueueCreate(RPM_QUEUE_LENGTH, RPM_QUEUE_ITEM_SIZE);
+    invDataQueue = xQueueCreate(DISP_QUEUE_LENGTH, DISP_QUEUE_ITEM_SIZE);
 
     if (invDataQueue == NULL)
     {
@@ -67,29 +69,62 @@ void updateTask(void *argument)
         return;
     }
     
-    xSemaphoreGive(cfgData.mutex);    
+    xSemaphoreGive(cfgData.mutex);
+
+    // Note that rpm_Ts may not be constant, so the exact 
+    // rmp_Ts should be given on TM_xx functions calls
+    TM_Init(RPM_TS, RPM_REF, SPEED_REF, &cfgData.tm);
+
+    cfgData.mode = Can; //Serial;
+    cfgData.speed = 0;
+    cfgData.invData.rpm = 5000;
+    cfgData.invData.battery = 20;
+    cfgData.invData.motorCurrent = 0;
+    cfgData.invData.motorTemp = 20;
+    cfgData.invData.controllerTemp = 24;
+    cfgData.updated = true;
 
     while (true)
     {
-        /* Read rpm */
+        /* Start by acquiring exclusive access */
         if (xSemaphoreTake(cfgData.mutex, pdMS_TO_TICKS(UPDATE_RATE)) == pdPASS)
         {
+            #if 0
             double wheelRpm = cfgData.invData.rpm / cfgData.gearRacio;
             //get distance in respect to wheel revolutions in 100ms
             double distanceIteration = (wheelRpm / (SECONDS_MINUTE * ITERATIONS_SECOND)) * cfgData.wheelCircumference;
             // add to total distance
-            uint32_t curDistance = (uint32_t)cfgData.totalDistance;
-            cfgData.totalDistance += distanceIteration;
+            uint32_t curDistance = (uint32_t)cfgData.distance;
+            cfgData.distance += distanceIteration;
 
             // If integer part of distance or configuration has changed update screen 
-            if ((uint32_t)cfgData.totalDistance != curDistance || cfgData.updated == true)
+            if ((uint32_t)cfgData.distance != curDistance || cfgData.updated == true)
             {
                 cfgData.updated = false;
-                cfgData.invData.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);
-                cfgData.invData.distance = (uint32_t)(cfgData.totalDistance/1000); // display in km                
+                cfgData.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);
+                cfgData.distance = (uint32_t)(cfgData.totalDistance/1000); // display in km                
                 // send to display
                 xQueueSend(invDataQueue, &cfgData.invData, pdMS_TO_TICKS(UPDATE_RATE));
             }
+            #else
+            // perform distance and speed calculation
+            // TODO: calculate rpm_Ts
+            double elapsedDistance = TM_ComputeDistance(cfgData.invData.rpm, RPM_TS, cfgData.tm);
+            int instantSpeed = TM_EstimateSpeed(elapsedDistance, RPM_TS, cfgData.tm);
+
+            if((int32_t)cfgData.distance != (uint32_t)(cfgData.distance + elapsedDistance) 
+                || cfgData.speed != instantSpeed){
+                cfgData.updated = true;
+            }
+            // add to total distance
+            cfgData.distance += elapsedDistance;
+            cfgData.speed = instantSpeed;
+            // check if an display update must be performed
+            if(cfgData.updated == true){
+                xQueueSend(invDataQueue, &cfgData, pdMS_TO_TICKS(UPDATE_RATE)); 
+                cfgData.updated = false;
+            }
+            #endif
             xSemaphoreGive(cfgData.mutex);
         }
         vTaskDelayUntil(&lastTime, pdMS_TO_TICKS(UPDATE_RATE));
@@ -231,10 +266,8 @@ extern "C" void appMain(void)
     // TODO: load data from intflash or ext flash
 
     cfgData.gearRacio = 5;
-    cfgData.wheelCircumference = 1.928f; //16" wheel
-    cfgData.invData.rpm = 3000; //518;
-    cfgData.invData.battery = 50;
-    cfgData.mode = Can; //Serial;
+    cfgData.wheelCircumference = 1.928f; //16" wheel    
+   
 
     BSP_LED_Init(LED1);
     BSP_LED_Init(LED2);

@@ -337,6 +337,7 @@ board_include_paths := \
 	$(bsp_path)/Components/otm8009a \
 	$(bsp_path)/Components/qspi \
 	Core/Inc \
+	Core/App \
 	$(usb_lib_path)/Core/Inc \
 	$(usb_lib_path)/Class/CDC/Inc \
 	$(usb_device_path)/App \
