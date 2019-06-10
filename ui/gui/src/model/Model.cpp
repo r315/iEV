@@ -19,9 +19,9 @@ void Model::tick()
 
     if(xQueueReceive(invDataQueue, &cfgData, 0) == pdPASS){
         // update ui
-        modelListener->notifyRpmChange(cfgData.invData.rpm);
-        modelListener->notifyDistanceChange(cfgData.distance);
         modelListener->notifySpeedChange(cfgData.speed);
+        modelListener->notifyRpmChange(cfgData.invData.rpm);
+        modelListener->notifyDistanceChange((int)cfgData.distance);
         modelListener->notifyBatteryChange(cfgData.invData.battery);
         modelListener->notifyMotorTempChange(cfgData.invData.motorTemp);
         modelListener->notifyControllerTempChange(cfgData.invData.controllerTemp);
@@ -31,7 +31,7 @@ void Model::tick()
 }
 
 void Model::userSetSerialMode(uint8_t mode){
- #if !defined(SIMULATOR) 
+#if !defined(SIMULATOR) 
     cfgData.mode = (mode == 1) ? Serial : Can;
 #endif
 }

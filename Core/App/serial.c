@@ -6,7 +6,7 @@
 #include "iev.h"
 
 #define UART_BAUDRATE 115200
-#define VCOM_QUEUE_LENGTH 128
+#define VCOM_QUEUE_LENGTH 512
 #define VCOM_QUEUE_ITEM_SIZE 1
 
 static QueueHandle_t uartQueue;
@@ -80,6 +80,8 @@ StdOut uart = {
 void USART1_IRQHandler(void)
 {
   uint8_t data = USART1->RDR;
-  xQueueSendToBackFromISR(uartQueue, &data, pdFALSE);  
+  if(xQueueSendToBackFromISR(uartQueue, &data, pdFALSE) != pdPASS){
+
+  }
   BSP_LED_Toggle(LED_RED);
 }

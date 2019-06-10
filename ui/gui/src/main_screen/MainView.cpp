@@ -17,9 +17,9 @@ void MainView::setupScreen()
     dialKph.setBitmaps(Bitmap(BITMAP_DIAL_KPH_ID), Bitmap(BITMAP_DIAL_CENTER_ID));
     dialKph.setXY(BITMAP_DIAL_KPH_LOC);
     dialKph.setLimits(0, 180, 247, 247 + 205);
-    dialKph.setValue(180);
+    dialKph.setValue(0);
     dialKph.setAnimationDuration(20);
-    dialKph.setVisible(true);   
+    dialKph.setVisible(true);
 
      //gauge.setBitmaps(Bitmap(BITMAP_DIAL_ID), Bitmap(BITMAP_DIAL_CENTER_ID));
     dialRpm.setBitmaps(Bitmap(BITMAP_DIAL_RPM_ID), Bitmap(BITMAP_DIAL_CENTER_ID));

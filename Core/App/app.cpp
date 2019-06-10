@@ -77,12 +77,11 @@ void updateTask(void *argument)
 
     cfgData.mode = Can; //Serial;
     cfgData.speed = 0;
-    cfgData.invData.rpm = 5000;
+    cfgData.invData.rpm = 0;
     cfgData.invData.battery = 20;
     cfgData.invData.motorCurrent = 0;
     cfgData.invData.motorTemp = 20;
-    cfgData.invData.controllerTemp = 24;
-    cfgData.updated = true;
+    cfgData.invData.controllerTemp = 24;    
 
     while (true)
     {
@@ -93,34 +92,38 @@ void updateTask(void *argument)
             double wheelRpm = cfgData.invData.rpm / cfgData.gearRacio;
             //get distance in respect to wheel revolutions in 100ms
             double distanceIteration = (wheelRpm / (SECONDS_MINUTE * ITERATIONS_SECOND)) * cfgData.wheelCircumference;
-            // add to total distance
-            uint32_t curDistance = (uint32_t)cfgData.distance;
+            
+            cfgData.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);            
+
+            distanceIteration /= 1000;
+
+            if ((uint32_t)cfgData.distance != (uint32_t)(cfgData.distance + distanceIteration)){
+                cfgData.updated = true;
+            }
+
             cfgData.distance += distanceIteration;
 
             // If integer part of distance or configuration has changed update screen 
-            if ((uint32_t)cfgData.distance != curDistance || cfgData.updated == true)
-            {
-                cfgData.updated = false;
-                cfgData.speed = distanceIteration * (SECONDS_HOUR / UPDATE_RATE);
-                cfgData.distance = (uint32_t)(cfgData.totalDistance/1000); // display in km                
+            if (cfgData.updated == true)
+            {                
                 // send to display
-                xQueueSend(invDataQueue, &cfgData.invData, pdMS_TO_TICKS(UPDATE_RATE));
+                xQueueSend(invDataQueue, &cfgData, pdMS_TO_TICKS(UPDATE_RATE));
+                cfgData.updated = false;
             }
+            
             #else
             // perform distance and speed calculation
             // TODO: calculate rpm_Ts
-            double elapsedDistance = TM_ComputeDistance(cfgData.invData.rpm, RPM_TS, cfgData.tm);
-            int instantSpeed = TM_EstimateSpeed(elapsedDistance, RPM_TS, cfgData.tm);
+            double elapsedDistance = TM_ComputeDistance(cfgData.invData.rpm, RPM_TS, cfgData.tm);            
 
-            if((int32_t)cfgData.distance != (uint32_t)(cfgData.distance + elapsedDistance) 
-                || cfgData.speed != instantSpeed){
+            if((int32_t)cfgData.distance != (uint32_t)(cfgData.distance + elapsedDistance)){
                 cfgData.updated = true;
             }
             // add to total distance
-            cfgData.distance += elapsedDistance;
-            cfgData.speed = instantSpeed;
+            cfgData.distance += elapsedDistance;            
             // check if an display update must be performed
             if(cfgData.updated == true){
+                cfgData.speed = TM_EstimateSpeed(elapsedDistance, RPM_TS, cfgData.tm);
                 xQueueSend(invDataQueue, &cfgData, pdMS_TO_TICKS(UPDATE_RATE)); 
                 cfgData.updated = false;
             }
@@ -228,20 +231,20 @@ void serialTask(void *argument)
                 break;
 
             case Can:
-                BSP_LED_Off(LED3);
+                //BSP_LED_Off(LED3);
                 msg[i++] = uart.xgetchar();
                 if(i == CAN_MSG_SIZE){
                     i = 0;
-                    uint16_t id = (uint16_t)msg[0] << 8 | msg[1];
+                    uint16_t id = (msg[0] << 8) | msg[1];
                     switch(id){
                         case CAN_MSG_01:
-                            if (xSemaphoreTake(cfgData.mutex, portMAX_DELAY) == pdPASS)
+                            if (xSemaphoreTake(cfgData.mutex, pdMS_TO_TICKS(UPDATE_RATE)) == pdPASS)
                             {
                                 cfgData.invData.rpm = (msg[2]<<8) | msg[3];
                                 cfgData.invData.motorTemp = msg[4];
                                 cfgData.invData.controllerTemp = msg[5];
                                 cfgData.invData.motorCurrent = (msg[6]<<8) | msg[7];
-                                cfgData.updated = TRUE;
+                                cfgData.updated = true;
                                 xSemaphoreGive(cfgData.mutex);
                             }
                             break;
@@ -276,7 +279,7 @@ extern "C" void appMain(void)
     /* Create tasks */
     xTaskCreate(graphicsTask, "Graphics Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
     xTaskCreate(ledAliveTask, "Alive Led Task", STACK_MINIMUM, NULL, IDLE_PRIORITY_TASK, NULL);
-    xTaskCreate(serialTask, "Messages Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
+    xTaskCreate(serialTask, "Serial Task", STACK_MEDIUM, NULL, NORMAL_PRIORITY_TASK, NULL);
     xTaskCreate(updateTask, "Update Task", STACK_MEDIUM, NULL, HIGH_PRIORITY_TASK, NULL);
 
     CAN_Init(CAN_MessageCallback);    

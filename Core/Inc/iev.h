@@ -22,7 +22,7 @@ extern "C" {
 #include "logger.h"
 #include "TripMeter.h"
 
-#define DISP_QUEUE_LENGTH        3
+#define DISP_QUEUE_LENGTH        5
 #define UPDATE_RATE             10 //ms
 
 #define LED3_TOGGLE             HAL_GPIO_TogglePin(LD_USER3_GPIO_Port, LD_USER3_Pin);
