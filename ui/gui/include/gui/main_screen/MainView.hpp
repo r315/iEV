@@ -12,7 +12,7 @@ public:
     virtual ~MainView() {}
     virtual void setupScreen();
     virtual void tearDownScreen();
-    void setDistance(int value);
+    void setDistance(double value);
     void setRpm(int value);
     void setSpeed(int value);
     void setBatteryLevel(int value);

@@ -21,7 +21,7 @@ void Model::tick()
         // update ui
         modelListener->notifySpeedChange(cfgData.speed);
         modelListener->notifyRpmChange(cfgData.invData.rpm);
-        modelListener->notifyDistanceChange((int)cfgData.distance);
+        modelListener->notifyDistanceChange(cfgData.distance);
         modelListener->notifyBatteryChange(cfgData.invData.battery);
         modelListener->notifyMotorTempChange(cfgData.invData.motorTemp);
         modelListener->notifyControllerTempChange(cfgData.invData.controllerTemp);

@@ -19,34 +19,6 @@
             "Moveable": false
           },
           {
-            "TextId": "totalDistance",
-            "TextRotation": "0",
-            "Color": {
-              "Red": 0,
-              "Green": 173,
-              "Blue": 217
-            },
-            "Alpha": 255,
-            "AutoSize": false,
-            "LineSpacing": 0,
-            "Wildcard1": {
-              "TextId": "SingleUseId7",
-              "UseBuffer": true,
-              "BufferSize": 7
-            },
-            "Name": "Hodometer",
-            "X": 542,
-            "Y": 400,
-            "Width": 153,
-            "Height": 50,
-            "Type": "TextArea",
-            "Visible": true,
-            "Draggable": false,
-            "Clickable": false,
-            "Fadeable": false,
-            "Moveable": false
-          },
-          {
             "Pressed": "__designer\\dark_icons_next_arrow_48.png",
             "Released": "__designer\\dark_icons_next_arrow_48.png",
             "Alpha": 255,
@@ -110,8 +82,8 @@
                 "Name": "EngineTemp_BG",
                 "X": 0,
                 "Y": 0,
-                "Width": 230,
-                "Height": 50,
+                "Width": 300,
+                "Height": 80,
                 "Type": "BoxWithBorder",
                 "Visible": true,
                 "Draggable": false,
@@ -123,7 +95,7 @@
                 "RelativeFilename": "temp.png",
                 "Alpha": 255,
                 "Name": "MotorTempIcon",
-                "X": 51,
+                "X": 100,
                 "Y": 6,
                 "Width": 53,
                 "Height": 38,
@@ -151,10 +123,10 @@
                   "BufferSize": 4
                 },
                 "Name": "MotorTemp",
-                "X": 11,
-                "Y": 10,
-                "Width": 44,
-                "Height": 30,
+                "X": 6,
+                "Y": 16,
+                "Width": 98,
+                "Height": 49,
                 "Type": "TextArea",
                 "Visible": true,
                 "Draggable": false,
@@ -179,10 +151,10 @@
                   "BufferSize": 4
                 },
                 "Name": "ControllerTemp",
-                "X": 115,
-                "Y": 10,
-                "Width": 44,
-                "Height": 30,
+                "X": 150,
+                "Y": 16,
+                "Width": 98,
+                "Height": 49,
                 "Type": "TextArea",
                 "Visible": true,
                 "Draggable": false,
@@ -194,7 +166,7 @@
                 "RelativeFilename": "temp_c.png",
                 "Alpha": 255,
                 "Name": "ControllerTempIcon",
-                "X": 169,
+                "X": 248,
                 "Y": 6,
                 "Width": 48,
                 "Height": 35,
@@ -207,10 +179,10 @@
               }
             ],
             "Name": "TempContainer",
-            "X": 60,
-            "Y": 60,
-            "Width": 230,
-            "Height": 50,
+            "X": 40,
+            "Y": 50,
+            "Width": 300,
+            "Height": 80,
             "Type": "Container",
             "Visible": true,
             "Draggable": false,
@@ -236,8 +208,8 @@
                 "Name": "CurrentConsume_BG",
                 "X": 0,
                 "Y": 0,
-                "Width": 230,
-                "Height": 50,
+                "Width": 260,
+                "Height": 80,
                 "Type": "BoxWithBorder",
                 "Visible": true,
                 "Draggable": false,
@@ -262,10 +234,10 @@
                   "BufferSize": 6
                 },
                 "Name": "MotorCurrent",
-                "X": 75,
-                "Y": 10,
-                "Width": 80,
-                "Height": 30,
+                "X": 0,
+                "Y": 15,
+                "Width": 260,
+                "Height": 50,
                 "Type": "TextArea",
                 "Visible": true,
                 "Draggable": false,
@@ -275,9 +247,135 @@
               }
             ],
             "Name": "CurrentContainer",
-            "X": 510,
-            "Y": 60,
-            "Width": 230,
+            "X": 480,
+            "Y": 50,
+            "Width": 260,
+            "Height": 80,
+            "Type": "Container",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Components": [
+              {
+                "Color": {
+                  "Red": 0,
+                  "Green": 0,
+                  "Blue": 0
+                },
+                "BorderColor": {
+                  "Red": 25,
+                  "Green": 69,
+                  "Blue": 67
+                },
+                "BorderSize": 1,
+                "Alpha": 255,
+                "Name": "BatIcon_BG",
+                "X": 0,
+                "Y": 0,
+                "Width": 80,
+                "Height": 32,
+                "Type": "BoxWithBorder",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "RelativeFilename": "battery_icon.png",
+                "Alpha": 255,
+                "Name": "BatIcon",
+                "X": 13,
+                "Y": 2,
+                "Width": 56,
+                "Height": 28,
+                "Type": "Image",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              }
+            ],
+            "Name": "BatIconContainer",
+            "X": 360,
+            "Y": 150,
+            "Width": 80,
+            "Height": 32,
+            "Type": "Container",
+            "Visible": true,
+            "Draggable": false,
+            "Clickable": false,
+            "Fadeable": false,
+            "Moveable": false
+          },
+          {
+            "Components": [
+              {
+                "TextId": "totalDistance",
+                "TextRotation": "0",
+                "Color": {
+                  "Red": 0,
+                  "Green": 173,
+                  "Blue": 217
+                },
+                "Alpha": 255,
+                "AutoSize": false,
+                "LineSpacing": 0,
+                "Wildcard1": {
+                  "TextId": "SingleUseId7",
+                  "UseBuffer": true,
+                  "BufferSize": 7
+                },
+                "Name": "Kilometers",
+                "X": 0,
+                "Y": 0,
+                "Width": 153,
+                "Height": 50,
+                "Type": "TextArea",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              },
+              {
+                "TextId": "partialDistance",
+                "TextRotation": "0",
+                "Color": {
+                  "Red": 212,
+                  "Green": 121,
+                  "Blue": 6
+                },
+                "Alpha": 255,
+                "AutoSize": true,
+                "LineSpacing": 0,
+                "Wildcard1": {
+                  "TextId": "SingleUseId13",
+                  "UseBuffer": true,
+                  "BufferSize": 7
+                },
+                "Name": "TenthsKilometer",
+                "X": 152,
+                "Y": 0,
+                "Width": 25,
+                "Height": 49,
+                "Type": "TextArea",
+                "Visible": true,
+                "Draggable": false,
+                "Clickable": false,
+                "Fadeable": false,
+                "Moveable": false
+              }
+            ],
+            "Name": "Hodometer",
+            "X": 534,
+            "Y": 400,
+            "Width": 185,
             "Height": 50,
             "Type": "Container",
             "Visible": true,
@@ -451,6 +549,14 @@
       {
         "TextEntryId": "SingleUseId12",
         "IsResource": false
+      },
+      {
+        "TextEntryId": "SingleUseId13",
+        "IsResource": false
+      },
+      {
+        "TextEntryId": "partialDistance",
+        "IsResource": true
       }
     ],
     "Name": "iEV",

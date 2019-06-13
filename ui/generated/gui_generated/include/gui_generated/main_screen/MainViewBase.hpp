@@ -8,11 +8,11 @@
 #include <mvp/View.hpp>
 #include <gui/main_screen/MainPresenter.hpp>
 #include <touchgfx/widgets/Image.hpp>
-#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 #include <touchgfx/widgets/Button.hpp>
 #include <touchgfx/containers/Container.hpp>
 
 #include <touchgfx/widgets/BoxWithBorder.hpp>
+#include <touchgfx/widgets/TextAreaWithWildcard.hpp>
 #include <touchgfx/canvas_widget_renderer/CanvasWidgetRenderer.hpp>
 class MainViewBase : public touchgfx::View<MainPresenter>
 {
@@ -31,7 +31,6 @@ protected:
      * Member Declarations
      */
     touchgfx::Image Main_BG;
-    touchgfx::TextAreaWithOneWildcard Hodometer;
     touchgfx::Button GoToConfig;
     touchgfx::Container batteryGaugeContainer;
     touchgfx::Image batteryGauge;
@@ -47,18 +46,28 @@ protected:
     touchgfx::BoxWithBorder CurrentConsume_BG;
     touchgfx::TextAreaWithOneWildcard MotorCurrent;
 
+    touchgfx::Container BatIconContainer;
+    touchgfx::BoxWithBorder BatIcon_BG;
+    touchgfx::Image BatIcon;
+
+    touchgfx::Container Hodometer;
+    touchgfx::TextAreaWithOneWildcard Kilometers;
+    touchgfx::TextAreaWithOneWildcard TenthsKilometer;
+
 
     /*
      * Wildcard Buffers
      */
-    static const uint16_t HODOMETER_SIZE = 7;
-    touchgfx::Unicode::UnicodeChar HodometerBuffer[HODOMETER_SIZE];
     static const uint16_t MOTORTEMP_SIZE = 4;
     touchgfx::Unicode::UnicodeChar MotorTempBuffer[MOTORTEMP_SIZE];
     static const uint16_t CONTROLLERTEMP_SIZE = 4;
     touchgfx::Unicode::UnicodeChar ControllerTempBuffer[CONTROLLERTEMP_SIZE];
     static const uint16_t MOTORCURRENT_SIZE = 6;
     touchgfx::Unicode::UnicodeChar MotorCurrentBuffer[MOTORCURRENT_SIZE];
+    static const uint16_t KILOMETERS_SIZE = 7;
+    touchgfx::Unicode::UnicodeChar KilometersBuffer[KILOMETERS_SIZE];
+    static const uint16_t TENTHSKILOMETER_SIZE = 7;
+    touchgfx::Unicode::UnicodeChar TenthsKilometerBuffer[TENTHSKILOMETER_SIZE];
 
 private:
 

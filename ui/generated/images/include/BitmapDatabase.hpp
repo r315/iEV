@@ -7,17 +7,18 @@
 #include <touchgfx/Bitmap.hpp>
 
 const uint16_t BITMAP_BATTERY_GAUGE_ID = 0; // Size: 120x600 pixels
-const uint16_t BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_OFF_ID = 1; // Size: 128x38 pixels
-const uint16_t BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_ON_ID = 2; // Size: 128x38 pixels
-const uint16_t BITMAP_DARK_ICONS_BACK_ARROW_48_ID = 3; // Size: 28x48 pixels
-const uint16_t BITMAP_DARK_ICONS_NEXT_ARROW_48_ID = 4; // Size: 28x48 pixels
-const uint16_t BITMAP_DIAL_ID = 5; // Size: 527x293 pixels
-const uint16_t BITMAP_DIAL_CENTER_ID = 6; // Size: 50x50 pixels
-const uint16_t BITMAP_DIAL_KPH_ID = 7; // Size: 360x360 pixels
-const uint16_t BITMAP_DIAL_RPM_ID = 8; // Size: 360x360 pixels
-const uint16_t BITMAP_FON_41111_ID = 9; // Size: 800x480 pixels
-const uint16_t BITMAP_TEMP_ID = 10; // Size: 53x38 pixels
-const uint16_t BITMAP_TEMP_C_ID = 11; // Size: 48x35 pixels
+const uint16_t BITMAP_BATTERY_ICON_ID = 1; // Size: 56x28 pixels
+const uint16_t BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_OFF_ID = 2; // Size: 128x38 pixels
+const uint16_t BITMAP_BLUE_TOGGLEBARS_TOGGLE_LARGE_BUTTON_ON_ID = 3; // Size: 128x38 pixels
+const uint16_t BITMAP_DARK_ICONS_BACK_ARROW_48_ID = 4; // Size: 28x48 pixels
+const uint16_t BITMAP_DARK_ICONS_NEXT_ARROW_48_ID = 5; // Size: 28x48 pixels
+const uint16_t BITMAP_DIAL_ID = 6; // Size: 527x293 pixels
+const uint16_t BITMAP_DIAL_CENTER_ID = 7; // Size: 50x50 pixels
+const uint16_t BITMAP_DIAL_KPH_ID = 8; // Size: 360x360 pixels
+const uint16_t BITMAP_DIAL_RPM_ID = 9; // Size: 360x360 pixels
+const uint16_t BITMAP_FON_41111_ID = 10; // Size: 800x480 pixels
+const uint16_t BITMAP_TEMP_ID = 11; // Size: 53x38 pixels
+const uint16_t BITMAP_TEMP_C_ID = 12; // Size: 48x35 pixels
 
 namespace BitmapDatabase
 {

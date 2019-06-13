@@ -27,7 +27,7 @@ public:
 
     virtual void notifyRpmChange(int value){}
     virtual void notifySpeedChange(int value){}
-    virtual void notifyDistanceChange(int value){}
+    virtual void notifyDistanceChange(double value){}
     virtual void notifyBatteryChange(int percentage){}
     virtual void notifyMotorTempChange(int temp){}
     virtual void notifyControllerTempChange(int temp){}

@@ -115,10 +115,10 @@ void updateTask(void *argument)
             
             #else
             // perform distance and speed calculation
-            // TODO: calculate rpm_Ts
             double elapsedDistance = TM_ComputeDistance(cfgData.invData.rpm, RPM_TS, cfgData.tm);            
+            int partialDistance =  (int)((cfgData.distance + elapsedDistance) * 10);
 
-            if((int32_t)cfgData.distance != (uint32_t)(cfgData.distance + elapsedDistance)){
+            if(partialDistance != (int)(cfgData.distance*10)){
                 cfgData.updated = true;
             }
             // add to total distance
@@ -147,7 +147,7 @@ void ledAliveTask(void *argument)
 
     for (;;)
     {
-        BSP_LED_Toggle(LED_GREEN);
+        BSP_LED_Toggle(LED2);
         vTaskDelayUntil(&lastTime, pdMS_TO_TICKS(400));
         //vTaskDelay(pdMS_TO_TICKS(400));
     }
@@ -233,7 +233,7 @@ void serialTask(void *argument)
                 break;
 
             case Can:
-                //BSP_LED_Off(LED3);
+                BSP_LED_Off(LED3);
                 msg[i++] = uart.xgetchar();
                 if(i == CAN_MSG_SIZE){
                     i = 0;

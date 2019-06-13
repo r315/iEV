@@ -19,10 +19,10 @@ KEEP const touchgfx::Unicode::UnicodeChar T_engineTemp_Gb[3] TEXT_LOCATION_FLASH
 TEXT_LOCATION_FLASH_PRAGMA
 KEEP const touchgfx::Unicode::UnicodeChar T_motorCurrent_Gb[3] TEXT_LOCATION_FLASH_ATTRIBUTE = { 0x2, 0x41, 0x0 };
 TEXT_LOCATION_FLASH_PRAGMA
-KEEP const touchgfx::Unicode::UnicodeChar T_SingleUseId11_Gb[3] TEXT_LOCATION_FLASH_ATTRIBUTE = { 0x35, 0x30, 0x0 };
+KEEP const touchgfx::Unicode::UnicodeChar T_SingleUseId11_Gb[4] TEXT_LOCATION_FLASH_ATTRIBUTE = { 0x31, 0x30, 0x30, 0x0 };
 
 TEXT_LOCATION_FLASH_PRAGMA
-KEEP extern const touchgfx::Unicode::UnicodeChar* const textsGb[9] TEXT_LOCATION_FLASH_ATTRIBUTE =
+KEEP extern const touchgfx::Unicode::UnicodeChar* const textsGb[11] TEXT_LOCATION_FLASH_ATTRIBUTE =
 {
     T_totalDistance_Gb,
     T_SingleUseId7_Gb,
@@ -32,6 +32,8 @@ KEEP extern const touchgfx::Unicode::UnicodeChar* const textsGb[9] TEXT_LOCATION
     T_motorCurrent_Gb,
     T_SingleUseId11_Gb,
     T_SingleUseId11_Gb,
-    T_SingleUseId7_Gb+5
+    T_SingleUseId7_Gb+5,
+    T_SingleUseId7_Gb+5,
+    T_totalDistance_Gb
 };
 

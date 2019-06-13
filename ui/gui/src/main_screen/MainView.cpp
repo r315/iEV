@@ -32,8 +32,7 @@ void MainView::setupScreen()
     remove(Hodometer);
     add(dialKph);
     add(dialRpm);
-
-    Hodometer.setXY(dialKph.getX() + 100, dialKph.getY() + 240);
+    // Add hodometer on top of the dial
     add(Hodometer);
 
     batteryGaugeMaxHeight = batteryGaugeContainer.getHeight();
@@ -44,9 +43,11 @@ void MainView::tearDownScreen()
     MainViewBase::tearDownScreen();
 }
 
-void MainView::setDistance(int value){
-    Unicode::snprintf(HodometerBuffer, HODOMETER_SIZE, "%06d", value);
-    Hodometer.invalidate();
+void MainView::setDistance(double value){
+    Unicode::snprintf(KilometersBuffer, KILOMETERS_SIZE, "%06d", (int)value);
+    Unicode::snprintf(TenthsKilometerBuffer, TENTHSKILOMETER_SIZE, "%d", (int)((value*10))%10);
+    Kilometers.invalidate();
+    TenthsKilometer.invalidate();
 }
 
 void MainView::setRpm(int value){
