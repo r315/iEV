@@ -47,10 +47,10 @@ typedef struct {
 }invData_t;
 
 typedef struct {
-    uint32_t speed;
     double distance;
     double gearRacio;
     double wheelCircumference;
+    uint32_t speed;
     uint8_t updated;
     invData_t invData;
     SemaphoreHandle_t mutex;

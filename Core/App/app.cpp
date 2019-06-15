@@ -3,6 +3,7 @@
 #include "main.h"
 #include "iev.h"
 #include "gui/main_screen/MainPresenter.hpp"
+#include "nvdata.h"
 
 
 #define IDLE_PRIORITY_TASK tskIDLE_PRIORITY
@@ -85,6 +86,8 @@ void updateTask(void *argument)
 
     TM_ComputeDistance(cfgData.invData.rpm, RPM_TS, cfgData.tm);
 
+    cfgData.updated = true;
+
     while (true)
     {
         /* Start by acquiring exclusive access */
@@ -120,9 +123,12 @@ void updateTask(void *argument)
 
             if(partialDistance != (int)(cfgData.distance*10)){
                 cfgData.updated = true;
+                cfgData.distance += elapsedDistance;      
+                NVData_Save(&cfgData.distance, sizeof(cfgData.distance));
+            }else{
+                // add to total distance
+                cfgData.distance += elapsedDistance;            
             }
-            // add to total distance
-            cfgData.distance += elapsedDistance;            
             // check if an display update must be performed
             if(cfgData.updated == true){
                 cfgData.speed = TM_EstimateSpeed(elapsedDistance, RPM_TS, cfgData.tm);
@@ -168,34 +174,6 @@ void graphicsTask(void *argument)
     GRAPHICS_MainTask();
 }
 
-
-/**
- *  @brief normal priority task for processing CAN messages from serial port
- * \param   *argument - not used
- * */
-#if 0
-void serialTask(void *argument)
-{   
-    uint8_t msg[20], i; 
-    uart.init();
-
-    i = 0;
-    while(1){
-        msg[i++] = uart.xgetchar();
-        if(i == CAN_MSG_SIZE){
-            i = 0;
-            if(msg[0] != CAN_MSG_01 >> 8)
-                continue;
-            if (xSemaphoreTake(cfgData.mutex, portMAX_DELAY) == pdPASS)
-            {
-                cfgData.invData.rpm = (msg[2]<<8) | msg[3];
-                cfgData.updated = TRUE;
-                xSemaphoreGive(cfgData.mutex);
-            }
-        }
-    }
-}
-#else
 /**
  *  @brief normal priority task for system management commands
  * \param   *argument - not used
@@ -263,16 +241,17 @@ void serialTask(void *argument)
         }
     }
 }
-#endif
 
-extern "C" void appMain(void)
+extern "C" void APP_Start(void)
 {
-
-    // TODO: load data from intflash or ext flash
-
+    if(NVData_Init()){
+        NVData_Restore(&cfgData.distance, sizeof(cfgData.distance));
+    }
+    else{
     cfgData.gearRacio = 5;
     cfgData.wheelCircumference = 1.928f; //16" wheel    
-   
+        cfgData.distance = 0;
+    }   
 
     BSP_LED_Init(LED1);
     BSP_LED_Init(LED2);

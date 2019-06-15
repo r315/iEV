@@ -276,6 +276,8 @@ board_c_files += \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_sdmmc.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_dsi.c \
 	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_can.c \
+	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_flash.c \
+	$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_flash_ex.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_pcd_ex.c \
 	#$(Drivers_path)/STM32F7xx_HAL_Driver/Src/stm32f7xx_ll_usb.c \

@@ -74,7 +74,7 @@ static void MX_RTC_Init(void);
 static void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
-void appMain(void);
+void APP_Start(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -152,7 +152,7 @@ int main(void)
   
   /* USER CODE END RTOS_THREADS */
 
-  appMain();
+  APP_Start();
   /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
