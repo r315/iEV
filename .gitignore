@@ -16,3 +16,6 @@ iEV_Host/.vs/
 iEV_Host/iEV_Host/bin/
 iEV_Host/iEV_Host/obj/
 iEV_Host/packages/
+ui/generated/images
+ui/generated/fonts
+ui/generated/texts
