@@ -201,7 +201,7 @@ namespace iEV_Host
 
             if(args.Length > 0)
             {
-                FileMode(sender, args[1]);
+                FileMode(sender, args[0]);
             }
             else
             {
