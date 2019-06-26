@@ -24,6 +24,7 @@ extern "C" {
 
 #define DISP_QUEUE_LENGTH        5
 #define UPDATE_RATE             10 //ms
+#define LED_TIME                400
 
 #define LED3_TOGGLE             HAL_GPIO_TogglePin(LD_USER3_GPIO_Port, LD_USER3_Pin);
 
@@ -31,10 +32,16 @@ extern "C" {
  * Symbols defined on the assumption that the gear racio
  * of the vehicle allows 5000rpm@120km/h
  * */
-#define RPM_TS      0.01   //10ms
+#define RPM_TS      ((double)UPDATE_RATE/1000.0)
 #define RPM_REF     5000
 #define SPEED_REF   120
 
+/**
+ * Can messages id's
+ */
+#define CAN_MSG_SIZE        10
+#define CAN_MSG_01          0x601
+#define CAN_MSG_02          0x602
 
 typedef enum {Serial, Can} Mode_t;
 
@@ -52,14 +59,15 @@ typedef struct {
     double wheelCircumference;
     uint32_t speed;
     uint8_t updated;
-    invData_t invData;
+    invData_t *invData;
     SemaphoreHandle_t mutex;
     Mode_t mode;
     struct TM_struct tm;
 }SystemData_t;
 
-extern QueueHandle_t invDataQueue;
+extern QueueHandle_t dispData;
 extern SystemData_t cfgData;
+extern invData_t invData;
 extern StdOut uart;
 
 

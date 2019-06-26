@@ -13,15 +13,11 @@
 #define STACK_MINIMUM configMINIMAL_STACK_SIZE      // 128 * 4
 #define STACK_MEDIUM (configMINIMAL_STACK_SIZE * 8) // 128 * 8 * 4
 
-#define SECONDS_MINUTE 60
-#define ITERATIONS_SECOND (1000/UPDATE_RATE)
-#define SECONDS_HOUR 3600
+#define SECONDS_MINUTE      60
+#define ITERATIONS_SECOND   (1000/UPDATE_RATE)
+#define SECONDS_HOUR        3600
 
 #define DISP_QUEUE_ITEM_SIZE sizeof(SystemData_t)
-
-#define CAN_MSG_SIZE 10
-#define CAN_MSG_01   0x601
-#define CAN_MSG_02   0x602
 
 void GRAPHICS_MainTask(void);
 void GRAPHICS_Init(void);
@@ -29,8 +25,9 @@ void GRAPHICS_HW_Init(void);
 
 static const char prompt[] = "iEV>";
 
-QueueHandle_t invDataQueue;
+QueueHandle_t dispData;
 SystemData_t cfgData;
+invData_t invData;
 
 /**
  * Call back for processing received can messages
@@ -40,7 +37,7 @@ BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     //if(header.FilterMatchIndex == CAN_RPM_MSG){
         // Should discart message after 100ms???
         if (xSemaphoreTakeFromISR(cfgData.mutex, &xHigherPriorityTaskWoken) == pdPASS){
-            cfgData.invData.rpm = *((uint32_t*)data);
+            invData.rpm = *((uint32_t*)data);
             xSemaphoreGiveFromISR(cfgData.mutex, &xHigherPriorityTaskWoken);
         }
     //}
@@ -54,9 +51,9 @@ void updateTask(void *argument)
 {
     TickType_t lastTime = xTaskGetTickCount();
 
-    invDataQueue = xQueueCreate(DISP_QUEUE_LENGTH, DISP_QUEUE_ITEM_SIZE);
+    dispData = xQueueCreate(DISP_QUEUE_LENGTH, DISP_QUEUE_ITEM_SIZE);
 
-    if (invDataQueue == NULL)
+    if (dispData == NULL)
     {
         //console.log("Fail to create qdataQueue\n");
         return;
@@ -78,14 +75,15 @@ void updateTask(void *argument)
 
     cfgData.mode = Can; //Serial;
     cfgData.speed = 0;
-    cfgData.invData.rpm = 0;
-    cfgData.invData.battery = 20;
-    cfgData.invData.motorCurrent = 0;
-    cfgData.invData.motorTemp = 20;
-    cfgData.invData.controllerTemp = 24;    
+    invData.rpm = 0;
+    invData.battery = 20;
+    invData.motorCurrent = 0;
+    invData.motorTemp = 20;
+    invData.controllerTemp = 24;    
 
-    TM_ComputeDistance(cfgData.invData.rpm, RPM_TS, cfgData.tm);
+    TM_ComputeDistance(invData.rpm, RPM_TS, cfgData.tm);
 
+    cfgData.invData = &invData;
     cfgData.updated = true;
 
     while (true)
@@ -112,13 +110,13 @@ void updateTask(void *argument)
             if (cfgData.updated == true)
             {                
                 // send to display
-                xQueueSend(invDataQueue, &cfgData, pdMS_TO_TICKS(UPDATE_RATE));
+                xQueueSend(dispData, &cfgData, pdMS_TO_TICKS(UPDATE_RATE));
                 cfgData.updated = false;
             }
             
             #else
             // perform distance and speed calculation
-            double elapsedDistance = TM_ComputeDistance(cfgData.invData.rpm, RPM_TS, cfgData.tm);            
+            double elapsedDistance = TM_ComputeDistance(invData.rpm, RPM_TS, cfgData.tm);            
             int partialDistance =  (int)((cfgData.distance + elapsedDistance) * 10);
 
             if(partialDistance != (int)(cfgData.distance*10)){
@@ -132,7 +130,7 @@ void updateTask(void *argument)
             // check if an display update must be performed
             if(cfgData.updated == true){
                 cfgData.speed = TM_EstimateSpeed(elapsedDistance, RPM_TS, cfgData.tm);
-                xQueueSend(invDataQueue, &cfgData, pdMS_TO_TICKS(UPDATE_RATE)); 
+                xQueueSend(dispData, &cfgData, pdMS_TO_TICKS(UPDATE_RATE)); 
                 cfgData.updated = false;
             }
             #endif
@@ -154,7 +152,7 @@ void ledAliveTask(void *argument)
     for (;;)
     {
         BSP_LED_Toggle(LED2);
-        vTaskDelayUntil(&lastTime, pdMS_TO_TICKS(400));
+        vTaskDelayUntil(&lastTime, pdMS_TO_TICKS(LED_TIME));
         //vTaskDelay(pdMS_TO_TICKS(400));
     }
 }
@@ -220,10 +218,10 @@ void serialTask(void *argument)
                         case CAN_MSG_01:
                             if (xSemaphoreTake(cfgData.mutex, pdMS_TO_TICKS(UPDATE_RATE)) == pdPASS)
                             {
-                                cfgData.invData.rpm = (msg[2]<<8) | msg[3];
-                                cfgData.invData.motorTemp = msg[4];
-                                cfgData.invData.controllerTemp = msg[5];
-                                cfgData.invData.motorCurrent = (msg[6]<<8) | msg[7];
+                                invData.rpm = (msg[2]<<8) | msg[3];
+                                invData.motorTemp = msg[4];
+                                invData.controllerTemp = msg[5];
+                                invData.motorCurrent = (msg[6]<<8) | msg[7];
                                 cfgData.updated = true;
                                 xSemaphoreGive(cfgData.mutex);
                             }

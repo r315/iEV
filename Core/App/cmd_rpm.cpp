@@ -16,7 +16,7 @@ char Rpm::execute(void *ptr)
 
 		if (xSemaphoreTake(cfgData.mutex, portMAX_DELAY) == pdPASS)
 		{
-			cfgData.invData.rpm = rpm;
+			invData.rpm = rpm;
 			cfgData.updated = TRUE;
 			xSemaphoreGive(cfgData.mutex);
 		}

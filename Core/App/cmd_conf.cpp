@@ -24,7 +24,7 @@ double value;
         console->print("racio: %.2f\n", cfgData.gearRacio);		
 		console->print("wheel: %.8fm\n", cfgData.wheelCircumference);
 		console->print("speed: %dkm/h\n", cfgData.speed);
-		console->print("rpm: %d\n", cfgData.invData.rpm);
+		console->print("rpm: %d\n", invData.rpm);
 		console->print("hodometer: %.8fm\n", cfgData.distance);
 		console->xputchar('\n');
 	}else{
@@ -73,7 +73,7 @@ double value;
 					cfgData.wheelCircumference = value * PI;
 					break;
 				case OPT_OPER3:
-					cfgData.invData.battery = bval;
+					invData.battery = bval;
 					break;
 				case OPT_OPER4:
 					cfgData.mode = bval == 0 ? Can : Serial;

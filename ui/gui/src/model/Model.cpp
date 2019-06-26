@@ -17,15 +17,15 @@ void Model::tick()
 #if !defined(SIMULATOR) 
     SystemData_t cfgData = {};
 
-    if(xQueueReceive(invDataQueue, &cfgData, 0) == pdPASS){
+    if(xQueueReceive(dispData, &cfgData, 0) == pdPASS){
         // update ui
         modelListener->notifySpeedChange(cfgData.speed);
-        modelListener->notifyRpmChange(cfgData.invData.rpm);
+        modelListener->notifyRpmChange(cfgData.invData->rpm);
         modelListener->notifyDistanceChange(cfgData.distance);
-        modelListener->notifyBatteryChange(cfgData.invData.battery);
-        modelListener->notifyMotorTempChange(cfgData.invData.motorTemp);
-        modelListener->notifyControllerTempChange(cfgData.invData.controllerTemp);
-        modelListener->notifyMotorCurrentChange(cfgData.invData.motorCurrent);
+        modelListener->notifyBatteryChange(cfgData.invData->battery);
+        modelListener->notifyMotorTempChange(cfgData.invData->motorTemp);
+        modelListener->notifyControllerTempChange(cfgData.invData->controllerTemp);
+        modelListener->notifyMotorCurrentChange(cfgData.invData->motorCurrent);
     }
 #endif  
 }
