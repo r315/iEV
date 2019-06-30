@@ -19,7 +19,8 @@ void MainPresenter::deactivate()
 void MainPresenter::notifyRpmChange(int value){ view.setRpm(value); }
 void MainPresenter::notifySpeedChange(int value){ view.setSpeed(value); }
 void MainPresenter::notifyDistanceChange(double value){ view.setDistance(value); }    
-void MainPresenter::notifyBatteryChange(int percentage){ view.setBatteryLevel(percentage); }
+void MainPresenter::notifyBatteryLevelChange(int percentage){ view.setBatteryLevel(percentage); }
+void MainPresenter::notifyBatteryVoltageChange(double voltage){view.setBatteryVoltage(voltage);}
 void MainPresenter::notifyMotorTempChange(int temp){ view.setMotorTemp(temp); }
 void MainPresenter::notifyControllerTempChange(int temp){ view.setControllerTemp(temp); }
 void MainPresenter::notifyMotorCurrentChange(int temp){ view.setMotorCurrent(temp); }

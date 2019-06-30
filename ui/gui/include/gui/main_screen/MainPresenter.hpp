@@ -34,7 +34,8 @@ public:
     void notifyRpmChange(int value);
     void notifySpeedChange(int value);
     void notifyDistanceChange(double value);
-    void notifyBatteryChange(int percentage);
+    void notifyBatteryLevelChange(int percentage);
+    void notifyBatteryVoltageChange(double voltage);
     void notifyMotorTempChange(int temp);
     void notifyControllerTempChange(int temp);
     void notifyMotorCurrentChange(int temp);

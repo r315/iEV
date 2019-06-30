@@ -19,6 +19,7 @@ public:
     void setMotorTemp(int temp);
     void setControllerTemp(int temp);
     void setMotorCurrent(int temp);
+    void setBatteryVoltage(double voltage);
 protected:
     uint16_t batteryGaugeMaxHeight;
     Gauge dialKph, dialRpm;

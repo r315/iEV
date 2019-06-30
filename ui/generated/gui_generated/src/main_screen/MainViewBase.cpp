@@ -18,7 +18,7 @@ MainViewBase::MainViewBase() :
     GoToConfig.setBitmaps(Bitmap(BITMAP_DARK_ICONS_NEXT_ARROW_48_ID), Bitmap(BITMAP_DARK_ICONS_NEXT_ARROW_48_ID));
     GoToConfig.setAction(buttonCallback);
 
-    batteryGaugeContainer.setPosition(360, 150, 80, 300);
+    batteryGaugeContainer.setPosition(360, 182, 80, 268);
 
     batteryGauge.setXY(-20, -150);
     batteryGauge.setBitmap(Bitmap(BITMAP_BATTERY_GAUGE_ID));
@@ -85,6 +85,14 @@ MainViewBase::MainViewBase() :
     BatIcon.setXY(13, 2);
     BatIcon.setBitmap(Bitmap(BITMAP_BATTERY_ICON_ID));
     BatIconContainer.add(BatIcon);
+
+    BatteryVoltage.setPosition(0, 9, 80, 23);
+    BatteryVoltage.setColor(touchgfx::Color::getColorFrom24BitRGB(48, 194, 18));
+    BatteryVoltage.setLinespacing(0);
+    Unicode::snprintf(BatteryVoltageBuffer, BATTERYVOLTAGE_SIZE, "%s", TypedText(T_SINGLEUSEID15).getText());
+    BatteryVoltage.setWildcard(BatteryVoltageBuffer);
+    BatteryVoltage.setTypedText(TypedText(T_BATTERYVOLTAGE));
+    BatIconContainer.add(BatteryVoltage);
 
     Hodometer.setPosition(534, 400, 185, 50);
 

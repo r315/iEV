@@ -35,7 +35,7 @@ void MainView::setupScreen()
     // Add hodometer on top of the dial
     add(Hodometer);
 
-    batteryGaugeMaxHeight = batteryGaugeContainer.getHeight();
+    batteryGaugeMaxHeight = batteryGaugeContainer.getHeight();    
 }
 
 void MainView::tearDownScreen()
@@ -59,6 +59,11 @@ void MainView::setRpm(int value){
 
 void MainView::setSpeed(int value){
     dialKph.setValue(value);
+}
+
+void MainView::setBatteryVoltage(double voltage){
+    Unicode::snprintf(BatteryVoltageBuffer, BATTERYVOLTAGE_SIZE, "%d.%d", (int)voltage, (int)((voltage*10))%10);    
+    BatteryVoltage.invalidate();    
 }
 
 void MainView::setBatteryLevel(int value){

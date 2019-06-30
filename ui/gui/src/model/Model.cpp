@@ -22,7 +22,8 @@ void Model::tick()
         modelListener->notifySpeedChange(cfgData.speed);
         modelListener->notifyRpmChange(cfgData.invData->rpm);
         modelListener->notifyDistanceChange(cfgData.distance);
-        modelListener->notifyBatteryChange(cfgData.invData->battery);
+        modelListener->notifyBatteryLevelChange(cfgData.invData->battery);
+        modelListener->notifyBatteryVoltageChange(cfgData.batteryVoltage);
         modelListener->notifyMotorTempChange(cfgData.invData->motorTemp);
         modelListener->notifyControllerTempChange(cfgData.invData->controllerTemp);
         modelListener->notifyMotorCurrentChange(cfgData.invData->motorCurrent);

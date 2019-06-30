@@ -25,6 +25,7 @@ extern "C" {
 #define DISP_QUEUE_LENGTH        5
 #define UPDATE_RATE             10 //ms
 #define LED_TIME                400
+#define BATTERY_VOLTAGE_SCALE   0.1
 
 #define LED3_TOGGLE             HAL_GPIO_TogglePin(LD_USER3_GPIO_Port, LD_USER3_Pin);
 
@@ -57,6 +58,7 @@ typedef struct {
     double distance;
     double gearRacio;
     double wheelCircumference;
+    double batteryVoltage;
     uint32_t speed;
     uint8_t updated;
     invData_t *invData;

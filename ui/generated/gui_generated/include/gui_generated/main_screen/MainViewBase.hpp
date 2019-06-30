@@ -49,6 +49,7 @@ protected:
     touchgfx::Container BatIconContainer;
     touchgfx::BoxWithBorder BatIcon_BG;
     touchgfx::Image BatIcon;
+    touchgfx::TextAreaWithOneWildcard BatteryVoltage;
 
     touchgfx::Container Hodometer;
     touchgfx::TextAreaWithOneWildcard Kilometers;
@@ -64,6 +65,8 @@ protected:
     touchgfx::Unicode::UnicodeChar ControllerTempBuffer[CONTROLLERTEMP_SIZE];
     static const uint16_t MOTORCURRENT_SIZE = 6;
     touchgfx::Unicode::UnicodeChar MotorCurrentBuffer[MOTORCURRENT_SIZE];
+    static const uint16_t BATTERYVOLTAGE_SIZE = 5;
+    touchgfx::Unicode::UnicodeChar BatteryVoltageBuffer[BATTERYVOLTAGE_SIZE];
     static const uint16_t KILOMETERS_SIZE = 7;
     touchgfx::Unicode::UnicodeChar KilometersBuffer[KILOMETERS_SIZE];
     static const uint16_t TENTHSKILOMETER_SIZE = 7;

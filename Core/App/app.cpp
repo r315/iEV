@@ -119,7 +119,7 @@ void updateTask(void *argument)
             double elapsedDistance = TM_ComputeDistance(invData.rpm, RPM_TS, cfgData.tm);            
             int partialDistance =  (int)((cfgData.distance + elapsedDistance) * 10);
 
-            if(partialDistance != (int)(cfgData.distance*10)){
+            if(partialDistance != (int)(cfgData.distance * 10)){ // check if the 0.1 dial has changed
                 cfgData.updated = true;
                 cfgData.distance += elapsedDistance;      
                 NVData_Save(&cfgData.distance, sizeof(cfgData.distance));
@@ -130,6 +130,7 @@ void updateTask(void *argument)
             // check if an display update must be performed
             if(cfgData.updated == true){
                 cfgData.speed = TM_EstimateSpeed(elapsedDistance, RPM_TS, cfgData.tm);
+                cfgData.batteryVoltage = invData.battery * BATTERY_VOLTAGE_SCALE;
                 xQueueSend(dispData, &cfgData, pdMS_TO_TICKS(UPDATE_RATE)); 
                 cfgData.updated = false;
             }
@@ -222,6 +223,7 @@ void serialTask(void *argument)
                                 invData.motorTemp = msg[4];
                                 invData.controllerTemp = msg[5];
                                 invData.motorCurrent = (msg[6]<<8) | msg[7];
+                                invData.battery = (msg[8]<<8) | msg[9];
                                 cfgData.updated = true;
                                 xSemaphoreGive(cfgData.mutex);
                             }
