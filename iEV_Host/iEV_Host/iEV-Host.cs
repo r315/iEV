@@ -99,14 +99,15 @@ namespace iEV_Host
                     messages.Add(msg);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(e.Message);
                 messages = null;
-            }
+            }            
             finally
             {
-                file.Close();
+                if(file != null)
+                    file.Dispose();
             }
             return messages;
         }       
@@ -176,21 +177,21 @@ namespace iEV_Host
            
             List<CanMessage> messageList = null;
             
-            messageList = LoadFile(filename);               
+            messageList = LoadFile(filename);
+
 
             if(messageList != null)
             {
-                Console.WriteLine("Sending {0} messages...", messageList.Count);
+                Console.WriteLine("Ready to Send {0} messages", messageList.Count);
+                Console.WriteLine("Press any to start");
+                Console.Read();
+                Console.WriteLine("Sending messages...");
                 DateTime start = DateTime.Now;
                 sender.SendMsgList(messageList);
                 sender.Wait();
                 TimeSpan time = DateTime.Now.Subtract(start);
                 Console.WriteLine("Completed in {0} seconds", time.TotalSeconds);
-            }
-            else
-            {
-                Console.WriteLine("Fail to open file");
-            }
+            }            
         }
 
         static void Main(string[] args)
