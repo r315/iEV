@@ -85,7 +85,8 @@ flash-openocd: all
 test:
 #@echo ""; $(foreach d, $(c_source_files), echo $(d);)
 #@echo ""; $(foreach d, $(cpp_source_files), echo $(d);)
-	@echo ""; $(foreach d, $(board_include_paths), echo $(d);)
+#@echo ""; $(foreach d, $(board_include_paths), echo $(d);)
+	$(size) -B $(application_path)$(binary_output_path)/$(target_executable)
 
 # Directories containing application-specific source and header files.
 # Additional components can be added to this list. make will look for
@@ -185,6 +186,8 @@ objcopy := arm-none-eabi-objcopy
 archiver := arm-none-eabi-ar
 
 strip := arm-none-eabi-strip
+
+size := arm-none-eabi-size
 
 # Additional toolchain configuration for Cortex-M7 targets.
 
@@ -409,6 +412,7 @@ $(binary_output_path)/$(target_executable): $(object_files) $(object_asm_files)
 		$(patsubst %,-L%,$(library_include_paths)) \
 		@$(build_root_path)/objects.tmp $(object_asm_files) -o $@ \
 		-Wl,--start-group $(patsubst %,-l%,$(libraries)) -Wl,--end-group
+	@$(size) -A $(application_path)$(binary_output_path)/$(target_executable)
 	@rm -f $(build_root_path)/objects.tmp
 	@echo "Producing additional output formats..."
 	@echo "  target.hex   - Combined internal+external hex"
