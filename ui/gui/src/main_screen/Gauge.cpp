@@ -4,7 +4,7 @@
 Gauge::Gauge() :
     gaugeAnimationRunning(false),
     gaugeAnimationDuration(10),
-    easingEquation(EasingEquations::backEaseOut)
+    easingEquation(EasingEquations::circEaseOut)
 {
     add(background);
     add(needle);
